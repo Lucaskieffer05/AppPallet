@@ -1,4 +1,4 @@
-﻿using AppPallet.View;
+﻿using AppPallet.Views;
 
 namespace AppPallet
 {
@@ -7,8 +7,8 @@ namespace AppPallet
         public AppShell()
         {
             InitializeComponent();
-
-            Routing.RegisterRoute(nameof(ChequeModificarView), typeof(ChequeModificarView));
+            Routing.RegisterRoute(nameof(ChequeView), typeof(ChequeView));
+            Routing.RegisterRoute(nameof(EmpresaView), typeof(EmpresaView));
         }
     }
 }

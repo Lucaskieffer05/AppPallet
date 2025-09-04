@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="AppPallet.Views.ChequeCrearView"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    HorizontalOptions="Center"
+    VerticalOptions="Center"
+    Padding="10"
+    WidthRequest="500"
+    x:DataType="viewModels:ChequeCrearViewModel">
+
+    <VerticalStackLayout Spacing="20">
+
+        <material:TextField Title="Proveedor" Text="{Binding ChequeCreated.Proveedor, Mode=TwoWay}" />
+
+        <material:TextField Title="Tipo" Text="{Binding ChequeCreated.Tipo, Mode=TwoWay}" />
+
+        <material:TextField Title="Número de Cheque" Text="{Binding ChequeCreated.NumCheque, Mode=TwoWay}" />
+
+        <material:TextField Title="Monto" Text="{Binding ChequeCreated.Monto, Mode=TwoWay}" Keyboard="Numeric" />
+
+        <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
+                          AllowClear="True"
+                          Title="Fecha de Emisión"
+                          Date="{Binding ChequeCreated.FechaEmision, Mode=TwoWay}" 
+                          TextColor="Black"/>
+
+        <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
+                                  AllowClear="True"
+                                  Title="Fecha de Pago"
+                                  Date="{Binding ChequeCreated.FechaPago, Mode=TwoWay}" 
+                                  TextColor="Black"/>
+
+        <material:TextField Title="Estado" Text="{Binding ChequeCreated.Estado, Mode=TwoWay}" Keyboard="Numeric" />
+
+        <HorizontalStackLayout Spacing="10">
+            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Guardar" Command="{Binding GuardarPopupCommand}"/>
+            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Cancelar" Command="{Binding CerrarPopupCommand}"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+</ContentView>

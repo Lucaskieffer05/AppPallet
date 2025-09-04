@@ -1,7 +1,6 @@
 ﻿using AppPallet.Controllers;
 using AppPallet.Models;
-using AppPallet.View;
-using AppPallet.ViewModel;
+using AppPallet.Views;
 using AppPallet.ViewModels;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Services;
@@ -28,28 +27,47 @@ namespace AppPallet
                     fonts.AddFontAwesomeIconFonts();
                 });
 
+            /*
             builder.Services.AddDbContext<PalletContex>(options =>
             options.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True"));
+            */
 
+            builder.Services.AddSingleton<PalletContext>();
+
+            //builder.Services.AddTransient<AppShell>();
+            //builder.Services.AddTransient<IPopupService, PopupService>();
+
+            // Registro de Controladores
+            //builder.Services.AddSingleton<IPopupService, PopupService>();
+
+            builder.Services.AddTransient<ChequeController>();
+            builder.Services.AddTransient<EmpresaController>();
+
+            // Registro de Vistas y ViewModels
+
+            builder.Services.AddTransient<ChequeView>();
+            builder.Services.AddTransient<ChequeViewModel>();
+
+            builder.Services.AddTransient<EmpresaView>();
+            builder.Services.AddTransient<EmpresaViewModel>();
+
+            builder.Services.AddTransient<EmpresaCrearView>();
+            builder.Services.AddTransient<EmpresaCrearViewModel>();
+
+            builder.Services.AddTransient<EmpresaModificarView>();
+            builder.Services.AddTransient<EmpresaModificarViewModel>();
+
+
+            builder.Services.AddTransientPopup<ChequeCrearView, ChequeCrearViewModel>();
+            builder.Services.AddTransientPopup<ChequeModificarView, ChequeModificarViewModel>();
+            builder.Services.AddTransientPopup<EmpresaCrearView, EmpresaCrearViewModel>();
+            builder.Services.AddTransientPopup<EmpresaModificarView, EmpresaModificarViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddTransient<AppShell>();
-            builder.Services.AddTransient<IPopupService, PopupService>();
-
-            // Registro de Controladores
-
-            builder.Services.AddTransient<ChequeController>();
-
-            // Registro de Vistas y ViewModels
-
-            builder.Services.AddTransient<View.ChequeView>();
-            builder.Services.AddTransient<ViewModel.ChequeViewModel>();
-
-            builder.Services.AddTransientPopup<ChequeCrearView, ChequeCrearViewModel>();
-            builder.Services.AddTransientPopup<ChequeModificarView, ChequeModificarViewModel>();
+            
 
 
 

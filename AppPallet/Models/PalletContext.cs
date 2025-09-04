@@ -4,24 +4,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppPallet.Models;
 
-public partial class PalletContex : DbContext
+public partial class PalletContext : DbContext
 {
-    public PalletContex()
+    public PalletContext()
     {
     }
 
-    public PalletContex(DbContextOptions<PalletContex> options)
+    public PalletContext(DbContextOptions<PalletContext> options)
         : base(options)
     {
     }
 
+    public virtual DbSet<Area> Areas { get; set; }
+
     public virtual DbSet<Cheque> Cheques { get; set; }
 
-    public virtual DbSet<ClienteProveedor> ClienteProveedors { get; set; }
+    public virtual DbSet<ContactosEmpresa> ContactosEmpresas { get; set; }
 
     public virtual DbSet<CostoPorCamion> CostoPorCamions { get; set; }
 
     public virtual DbSet<CostoPorPallet> CostoPorPallets { get; set; }
+
+    public virtual DbSet<Empresa> Empresas { get; set; }
 
     public virtual DbSet<FichaTecnica> FichaTecnicas { get; set; }
 
@@ -29,7 +33,7 @@ public partial class PalletContex : DbContext
 
     public virtual DbSet<Lote> Lotes { get; set; }
 
-    public virtual DbSet<Mes> Mes { get; set; }
+    public virtual DbSet<Me> Mes { get; set; }
 
     public virtual DbSet<Pallet> Pallets { get; set; }
 
@@ -49,13 +53,21 @@ public partial class PalletContex : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Area>(entity =>
+        {
+            entity.ToTable("Area");
+
+            entity.Property(e => e.AreaId).HasColumnName("AreaID");
+            entity.Property(e => e.NomArea)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Cheque>(entity =>
         {
             entity.ToTable("Cheque");
 
             entity.Property(e => e.ChequeId).HasColumnName("ChequeID");
-            entity.Property(e => e.FechaEmision).HasColumnType("datetime");
-            entity.Property(e => e.FechaPago).HasColumnType("datetime");
             entity.Property(e => e.Monto).HasColumnType("money");
             entity.Property(e => e.NumCheque)
                 .HasMaxLength(50)
@@ -68,35 +80,23 @@ public partial class PalletContex : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<ClienteProveedor>(entity =>
+        modelBuilder.Entity<ContactosEmpresa>(entity =>
         {
-            entity.ToTable("ClienteProveedor");
+            entity.ToTable("ContactosEmpresa");
 
-            entity.Property(e => e.ClienteProveedorId).HasColumnName("ClienteProveedorID");
-            entity.Property(e => e.Area)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.ContactosEmpresaId).HasColumnName("ContactosEmpresaID");
+            entity.Property(e => e.AreaId).HasColumnName("AreaID");
             entity.Property(e => e.Comentario)
-                .HasMaxLength(200)
+                .HasMaxLength(250)
                 .IsUnicode(false);
-            entity.Property(e => e.Cuit)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("CUIT");
-            entity.Property(e => e.Domicilio)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Mail)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("MAIL");
-            entity.Property(e => e.NomEmpresa)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Nombres)
+            entity.Property(e => e.Contacto)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Pallets)
+            entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
+            entity.Property(e => e.Mail)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Pallet)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Sello)
@@ -105,10 +105,16 @@ public partial class PalletContex : DbContext
             entity.Property(e => e.Telefono)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Tipo)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength();
+
+            entity.HasOne(d => d.Area).WithMany(p => p.ContactosEmpresas)
+                .HasForeignKey(d => d.AreaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ContactosEmpresa_Area");
+
+            entity.HasOne(d => d.Empresa).WithMany(p => p.ContactosEmpresas)
+                .HasForeignKey(d => d.EmpresaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ContactosEmpresa_Empresa");
         });
 
         modelBuilder.Entity<CostoPorCamion>(entity =>
@@ -127,8 +133,8 @@ public partial class PalletContex : DbContext
             entity.ToTable("CostoPorPallet");
 
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
-            entity.Property(e => e.ClienteProveedorId).HasColumnName("ClienteProveedorID");
             entity.Property(e => e.CostoPorCamionId).HasColumnName("CostoPorCamionID");
+            entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
             entity.Property(e => e.MesId).HasColumnName("MesID");
             entity.Property(e => e.NombrePalletCliente)
                 .HasMaxLength(50)
@@ -136,14 +142,14 @@ public partial class PalletContex : DbContext
             entity.Property(e => e.PalletId).HasColumnName("PalletID");
             entity.Property(e => e.PrecioPallet).HasColumnType("decimal(18, 0)");
 
-            entity.HasOne(d => d.ClienteProveedor).WithMany(p => p.CostoPorPallets)
-                .HasForeignKey(d => d.ClienteProveedorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CostoPorPallet_ClienteProveedor1");
-
             entity.HasOne(d => d.CostoPorCamion).WithMany(p => p.CostoPorPallets)
                 .HasForeignKey(d => d.CostoPorCamionId)
                 .HasConstraintName("FK_CostoPorPallet_CostoPorCamion");
+
+            entity.HasOne(d => d.Empresa).WithMany(p => p.CostoPorPallets)
+                .HasForeignKey(d => d.EmpresaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CostoPorPallet_Empresa1");
 
             entity.HasOne(d => d.Mes).WithMany(p => p.CostoPorPallets)
                 .HasForeignKey(d => d.MesId)
@@ -154,6 +160,25 @@ public partial class PalletContex : DbContext
                 .HasForeignKey(d => d.PalletId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CostoPorPallet_Pallet");
+        });
+
+        modelBuilder.Entity<Empresa>(entity =>
+        {
+            entity.HasKey(e => e.EmpresaId).HasName("PK_ClienteProveedor");
+
+            entity.ToTable("Empresa");
+
+            entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
+            entity.Property(e => e.Cuit)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("CUIT");
+            entity.Property(e => e.Domicilio)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.NomEmpresa)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<FichaTecnica>(entity =>
@@ -209,7 +234,7 @@ public partial class PalletContex : DbContext
                 .HasConstraintName("FK_Lote_Pedido");
         });
 
-        modelBuilder.Entity<Mes>(entity =>
+        modelBuilder.Entity<Me>(entity =>
         {
             entity.HasKey(e => e.MesId);
 
@@ -337,13 +362,13 @@ public partial class PalletContex : DbContext
             entity.ToTable("Pedido");
 
             entity.Property(e => e.PedidoId).HasColumnName("PedidoID");
-            entity.Property(e => e.ClienteProveedorId).HasColumnName("ClienteProveedorID");
+            entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
             entity.Property(e => e.PalletId).HasColumnName("PalletID");
 
-            entity.HasOne(d => d.ClienteProveedor).WithMany(p => p.Pedidos)
-                .HasForeignKey(d => d.ClienteProveedorId)
+            entity.HasOne(d => d.Empresa).WithMany(p => p.Pedidos)
+                .HasForeignKey(d => d.EmpresaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Pedido_ClienteProveedor");
+                .HasConstraintName("FK_Pedido_Empresa");
 
             entity.HasOne(d => d.Pallet).WithMany(p => p.Pedidos)
                 .HasForeignKey(d => d.PalletId)

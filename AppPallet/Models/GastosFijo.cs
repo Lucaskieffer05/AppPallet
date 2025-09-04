@@ -13,5 +13,5 @@ public partial class GastosFijo
 
     public int MesId { get; set; }
 
-    public virtual Mes Mes { get; set; } = null!;
+    public virtual Me Mes { get; set; } = null!;
 }

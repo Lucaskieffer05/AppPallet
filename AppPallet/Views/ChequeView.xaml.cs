@@ -1,10 +1,10 @@
-using AppPallet.ViewModel;
+using AppPallet.ViewModels;
 using UraniumUI.Pages;
-namespace AppPallet.View;
+namespace AppPallet.Views;
 
 public partial class ChequeView : UraniumContentPage
 {
-    public ChequeView(ChequeViewModel viewModel)	{
+    public ChequeView(ChequeViewModel viewModel){
 		InitializeComponent();
         BindingContext = viewModel;
     }
@@ -14,7 +14,7 @@ public partial class ChequeView : UraniumContentPage
         base.OnAppearing();
         if (BindingContext is ChequeViewModel vm)
         {
-            await vm.GetAllCheques();
+            await vm.CargarListaCheques();
         }
     }
 

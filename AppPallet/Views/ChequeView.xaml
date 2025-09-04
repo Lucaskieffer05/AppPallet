@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                            x:Class="AppPallet.View.ChequeView"
+                            x:Class="AppPallet.Views.ChequeView"
                             Title="Cheques"
-                            xmlns:viewModels="clr-namespace:AppPallet.ViewModel"
+                            xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
                             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
                             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
                             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
@@ -48,7 +48,7 @@
                                     <DataTemplate>
                                         <Label Text="{Binding Proveedor}" 
                                                HorizontalOptions="Center" 
-                                               VerticalOptions="Center" HorizontalTextAlignment="Center" Padding="0,10,0,0"/>
+                                               VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                                     </DataTemplate>
                                 </dg:DataGridColumn.CellTemplate>
                             </dg:DataGridColumn>
@@ -57,7 +57,7 @@
                                     <DataTemplate>
                                         <Label Text="{Binding Tipo}" 
                                                HorizontalOptions="Center" 
-                                               VerticalOptions="Center" Padding="0,10,0,0"/>
+                                               VerticalOptions="Center" VerticalTextAlignment="Center"/>
                                     </DataTemplate>
                                 </dg:DataGridColumn.CellTemplate>
                             </dg:DataGridColumn>
@@ -66,16 +66,17 @@
                                     <DataTemplate>
                                         <Label Text="{Binding NumCheque}" 
                                                HorizontalOptions="Center" 
-                                               VerticalOptions="Center" Padding="0,10,0,0"/>
+                                               VerticalOptions="Center" VerticalTextAlignment="Center"/>
                                     </DataTemplate>
                                 </dg:DataGridColumn.CellTemplate>
                             </dg:DataGridColumn>
                             <dg:DataGridColumn Title="Monto">
                                 <dg:DataGridColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Text="{Binding Monto, StringFormat='${0:N2}'}"
+                                        <Label Text="{Binding Monto, StringFormat='${0:N2}' }"
                                                HorizontalOptions="Center"
-                                               VerticalOptions="Center"/>
+                                               VerticalOptions="Center"
+                                               VerticalTextAlignment="Center"/>
                                     </DataTemplate>
                                 </dg:DataGridColumn.CellTemplate>
                             </dg:DataGridColumn>
@@ -97,7 +98,15 @@
                                     </DataTemplate>
                                 </dg:DataGridColumn.CellTemplate>
                             </dg:DataGridColumn>
-                            <dg:DataGridColumn Title="Estado" PropertyName="Estado" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <dg:DataGridColumn Title="Estado">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding Estado, TargetNullValue='-'}"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
                         </dg:DataGrid.Columns>
                     </dg:DataGrid>
                 </Border>
@@ -105,9 +114,10 @@
 
                 <VerticalStackLayout Grid.Column="2" Spacing="10" >
                     
-                    <Button StyleClass="FilledButton" BackgroundColor="#46e06f" Text="Agregar cheque" Command="{Binding MostrarPopupChequeCommand}"  WidthRequest="180"/>
+                    <Button StyleClass="FilledButton"  Text="Agregar cheque" Command="{Binding MostrarPopupChequeCommand}"  WidthRequest="180"/>
 
-                    <Button StyleClass="OutlinedButton" BorderColor="#98c47e" TextColor="#98c47e" Text="Modificar cheque" Command="{Binding MostrarPopupChequeModificarCommand}"  WidthRequest="180"/>
+                    <Button StyleClass="OutlinedButton"  Text="Modificar cheque" Command="{Binding MostrarPopupChequeModificarCommand}"  WidthRequest="180"/>
+
 
                 </VerticalStackLayout>
                 

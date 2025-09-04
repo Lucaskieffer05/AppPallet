@@ -82,6 +82,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\EmpresaCrearView.xaml.cs">
+	    <DependentUpon>EmpresaCrearView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\EmpresaModificarView.xaml.cs">
+	    <DependentUpon>EmpresaModificarView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\EmpresaView.xaml.cs">
+	    <DependentUpon>EmpresaView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 	</ItemGroup>
 
@@ -89,13 +101,22 @@
 	  <MauiXaml Update="Resources\Styles\MyStyles.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ChequeCrearView.xaml">
+	  <MauiXaml Update="Views\ChequeCrearView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ChequeModificarView.xaml">
+	  <MauiXaml Update="Views\ChequeModificarView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ChequeView.xaml">
+	  <MauiXaml Update="Views\ChequeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EmpresaCrearView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EmpresaModificarView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EmpresaView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

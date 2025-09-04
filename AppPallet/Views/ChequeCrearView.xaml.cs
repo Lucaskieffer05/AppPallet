@@ -1,8 +1,6 @@
-using AppPallet.ViewModel;
 using AppPallet.ViewModels;
-using CommunityToolkit.Maui.Views;
 
-namespace AppPallet.View;
+namespace AppPallet.Views;
 
 public partial class ChequeCrearView : ContentView
 {

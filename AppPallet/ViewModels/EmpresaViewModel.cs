@@ -1,119 +1,108 @@
 ﻿using AppPallet.Controllers;
 using AppPallet.Models;
-using AppPallet.ViewModels;
 using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
-    public partial class ChequeViewModel : ObservableObject, INotifyPropertyChanged
+    public partial class EmpresaViewModel : ObservableObject, INotifyPropertyChanged
     {
-
         // -------------------------------------------------------------------
         // ----------------------- Definiciones ------------------------------
         // -------------------------------------------------------------------
 
-        readonly ChequeController _chequeController;
+        [ObservableProperty]
+        private bool isBusy;
+
+        readonly EmpresaController _EmpresaController;
 
         private readonly IPopupService _popupService;
 
         [ObservableProperty]
-        private ObservableCollection<Cheque> listaCheques = [];
+        private ObservableCollection<Empresa> listaEmpresas = [];
 
         [ObservableProperty]
-        public Cheque? chequeSeleccionado;
+        public Empresa? empresaSeleccionada;
 
-        [ObservableProperty]
-        private bool isBusy;
-
-        private bool _isLoading = false;
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public ChequeViewModel(IPopupService popupService, ChequeController chequeController)
-
+        public EmpresaViewModel(IPopupService popupService, EmpresaController chequeController)
         {
             _popupService = popupService;
-            _chequeController = chequeController;
+            _EmpresaController = chequeController;
         }
 
         // -------------------------------------------------------------------
         // ----------------------- Comandos y Consultas a DB -----------------
         // -------------------------------------------------------------------
 
-        public async Task CargarListaCheques()
+        public async Task CargarListaClientesProveedores()
         {
-            if (_isLoading) return;
-
             try
             {
-                _isLoading = true;
                 IsBusy = true;
-
-                ChequeSeleccionado = null;
-
-                var chequesList = await _chequeController.GetAllCheques();
-                ListaCheques = new ObservableCollection<Cheque>(chequesList);
+                var lista = await _EmpresaController.GetAllClientesProveedores();
+                ListaClientesProveedores = new ObservableCollection<Empresa>(lista);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
             finally
             {
                 IsBusy = false;
-                _isLoading = false;
             }
         }
 
-
         [RelayCommand]
-        public async Task MostrarPopupCheque()
+        public async Task MostrarPopupCrear()
         {
             await DisplayPopupCrear();
         }
 
         [RelayCommand]
-        public async Task MostrarPopupChequeModificar()
+        public async Task MostrarPopupModificar()
         {
-
-            if (ChequeSeleccionado == null)
+            if (EmpresaSeleccionada == null)
             {
                 await MostrarAlerta("Atención", "Debe seleccionar un cheque para modificar.");
+                return;
             }
-            else
-            {
-                await DisplayPopupModificar();
-            }
+            await DisplayPopupModificar();
         }
 
         public async Task DisplayPopupCrear()
         {
-            var popupResult = await _popupService.ShowPopupAsync<ChequeCrearViewModel>(
+            var popupResult = await _popupService.ShowPopupAsync<EmpresaCrearViewModel>(
                 Shell.Current,
                 options: PopupOptions.Empty);
         }
 
         public async Task DisplayPopupModificar()
         {
-            if (ChequeSeleccionado == null)
-                throw new InvalidOperationException("ChequeSeleccionado no puede ser nulo al modificar.");
-
-            var queryAttributes = new Dictionary<string, object>
+            var parameters = new Dictionary<string, object>
             {
-                ["ChequeSeleccionado"] = ChequeSeleccionado
+                { "Empresa", EmpresaSeleccionada! }
             };
-
-            var popupResult = await _popupService.ShowPopupAsync<ChequeModificarViewModel>(
+            var popupResult = await _popupService.ShowPopupAsync<EmpresaModificarViewModel>(
                 Shell.Current,
                 options: PopupOptions.Empty,
-                shellParameters: queryAttributes);
-
+                parameters);
         }
+
+
 
         private async Task MostrarAlerta(string titulo, string mensaje)
         {

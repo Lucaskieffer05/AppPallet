@@ -1,35 +1,37 @@
-﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Services;
+﻿using AppPallet.Controllers;
+using AppPallet.Models;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Intrinsics.X86;
+
 
 namespace AppPallet.ViewModels
 {
-    public partial class ChequeCrearViewModel : ObservableObject, IQueryAttributable
+    public partial class ChequeCrearViewModel : ObservableObject
     {
         // -------------------------------------------------------------------
         // ----------------------- Definiciones ------------------------------
         // ------------------------------------------------------------------
 
         [ObservableProperty]
-        public string name = string.Empty;
+        public Cheque? chequeCreated;
 
         readonly IPopupService _popupService;
 
+        readonly ChequeController _chequeController;
+
+        public bool IsBusy { get; private set; }
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public ChequeCrearViewModel(IPopupService popupService)
+        public ChequeCrearViewModel(IPopupService popupService, ChequeController chequeController)
         {
             _popupService = popupService;
+            _chequeController = chequeController;
+            ChequeCreated = new Cheque();
         }
 
 
@@ -38,23 +40,59 @@ namespace AppPallet.ViewModels
         // -------------------------------------------------------------------
 
         [RelayCommand]
-        async Task OnCancel()
+        async Task CerrarPopup()
         {
             await _popupService.ClosePopupAsync(Shell.Current);
         }
 
-        [RelayCommand(CanExecute = nameof(CanSave))]
-        async Task OnSave()
+        [RelayCommand]
+        async Task GuardarPopup()
         {
-            await _popupService.ClosePopupAsync(Shell.Current, Name);
+            if (ChequeCreated == null || !ValidarCheque(ChequeCreated))
+            {
+                await MostrarAlerta("Error", "Datos inválidos");
+                return;
+            }
+
+            try
+            {
+                var resultado = await _chequeController.CreateCheque(ChequeCreated);
+
+                if (resultado)
+                {
+                    await MostrarAlerta("Éxito", "Cheque creado correctamente");
+                }
+                else
+                {
+                    await MostrarAlerta("Error", "No se pudo crear el cheque");
+                }
+                ChequeCreated = new Cheque();
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error", ex.Message);
+            }
+
+            await CerrarPopup();
         }
 
-        bool CanSave() => string.IsNullOrWhiteSpace(Name) is false;
 
-
-        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        private async Task MostrarAlerta(string titulo, string mensaje)
         {
-            Name = (string)query[nameof(ChequeCrearViewModel.Name)];
+            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (mainPage != null)
+            {
+                await mainPage.DisplayAlert(titulo, mensaje, "OK");
+            }
+        }
+
+        bool ValidarCheque(Cheque cheque)
+        {
+            if (cheque.NumCheque == null || cheque.NumCheque.Trim() == "") return false;
+            if (cheque.Proveedor == null || cheque.Proveedor.Trim() == "") return false;
+            if (cheque.Tipo == null || cheque.Tipo.Trim() == "") return false;
+            if (cheque.Monto <= 0) return false;
+            return true;
         }
 
     }
