@@ -3,14 +3,9 @@ using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
@@ -48,13 +43,13 @@ namespace AppPallet.ViewModels
         // ----------------------- Comandos y Consultas a DB -----------------
         // -------------------------------------------------------------------
 
-        public async Task CargarListaClientesProveedores()
+        public async Task CargarListaEmpresas()
         {
             try
             {
                 IsBusy = true;
-                var lista = await _EmpresaController.GetAllClientesProveedores();
-                ListaClientesProveedores = new ObservableCollection<Empresa>(lista);
+                var lista = await _EmpresaController.GetAllEmpresas();
+                ListaEmpresas = new ObservableCollection<Empresa>(lista);
             }
             catch (Exception ex)
             {
@@ -73,8 +68,9 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
-        public async Task MostrarPopupModificar()
+        public async Task MostrarPopupModificar(int empresaID)
         {
+            EmpresaSeleccionada = ListaEmpresas.FirstOrDefault(e => e.EmpresaId == empresaID);
             if (EmpresaSeleccionada == null)
             {
                 await MostrarAlerta("Atención", "Debe seleccionar un cheque para modificar.");

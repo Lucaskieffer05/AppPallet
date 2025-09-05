@@ -1,10 +1,8 @@
 ﻿using AppPallet.Controllers;
 using AppPallet.Models;
-using AppPallet.Views;
 using AppPallet.ViewModels;
+using AppPallet.Views;
 using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UraniumUI;
 
@@ -19,7 +17,7 @@ namespace AppPallet
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseUraniumUI()
-                .UseUraniumUIMaterial() 
+                .UseUraniumUIMaterial()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -51,12 +49,6 @@ namespace AppPallet
             builder.Services.AddTransient<EmpresaView>();
             builder.Services.AddTransient<EmpresaViewModel>();
 
-            builder.Services.AddTransient<EmpresaCrearView>();
-            builder.Services.AddTransient<EmpresaCrearViewModel>();
-
-            builder.Services.AddTransient<EmpresaModificarView>();
-            builder.Services.AddTransient<EmpresaModificarViewModel>();
-
 
             builder.Services.AddTransientPopup<ChequeCrearView, ChequeCrearViewModel>();
             builder.Services.AddTransientPopup<ChequeModificarView, ChequeModificarViewModel>();
@@ -67,7 +59,7 @@ namespace AppPallet
             builder.Logging.AddDebug();
 #endif
 
-            
+
 
 
 

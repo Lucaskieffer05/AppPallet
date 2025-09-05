@@ -4,8 +4,9 @@ namespace AppPallet.Views;
 
 public partial class ChequeView : UraniumContentPage
 {
-    public ChequeView(ChequeViewModel viewModel){
-		InitializeComponent();
+    public ChequeView(ChequeViewModel viewModel)
+    {
+        InitializeComponent();
         BindingContext = viewModel;
     }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AppPallet.Models;
+﻿namespace AppPallet.Models;
 
 public partial class CostoPorPallet
 {
@@ -29,7 +26,7 @@ public partial class CostoPorPallet
 
     public virtual Empresa Empresa { get; set; } = null!;
 
-    public virtual Me Mes { get; set; } = null!;
+    public virtual Mes Mes { get; set; } = null!;
 
     public virtual Pallet Pallet { get; set; } = null!;
 }

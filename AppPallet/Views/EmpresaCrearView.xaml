@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.EmpresaCrearView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             x:Class="AppPallet.Views.EmpresaCrearView"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             HorizontalOptions="Center"
+             VerticalOptions="Center"
+             Padding="10"
+             WidthRequest="400"
+             x:DataType="viewModels:EmpresaCrearViewModel">
+
+
+    <VerticalStackLayout Spacing="20">
+
+
+        <material:TextField Title="Nombre de la Empresa" Text="{Binding EmpresaCreated.NomEmpresa, Mode=TwoWay}" />
+
+        <material:TextField Title="Domicilio" Text="{Binding EmpresaCreated.Domicilio, Mode=TwoWay}" />
+
+        <material:TextField Title="CUIL" Text="{Binding EmpresaCreated.Cuit, Mode=TwoWay}" />
+
+        
+        <HorizontalStackLayout Spacing="10">
+            
+            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Crear" Command="{Binding GuardarPopupCommand}"/>
+            <Button StyleClass="OutlinedButton" TextColor="#C352D6" Text="Cancelar" Command="{Binding CerrarPopupCommand}"/>
+            
+        </HorizontalStackLayout>
+        
+        
     </VerticalStackLayout>
+
+
 </ContentView>

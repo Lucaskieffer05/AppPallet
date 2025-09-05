@@ -1,10 +1,5 @@
 ﻿using AppPallet.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppPallet.Controllers
 {
@@ -62,8 +57,8 @@ namespace AppPallet.Controllers
             try
             {
                 var cheque = await _context.Cheques.Where(c => c.ChequeId == chequeModificado.ChequeId).FirstOrDefaultAsync();
-                
-                if(cheque == null)
+
+                if (cheque == null)
                 {
                     return false;
                 }
@@ -92,8 +87,8 @@ namespace AppPallet.Controllers
             try
             {
                 var cheque = await _context.Cheques.Where(c => c.ChequeId == chequeId).FirstOrDefaultAsync();
-                
-                if(cheque == null)
+
+                if (cheque == null)
                 {
                     return false;
                 }

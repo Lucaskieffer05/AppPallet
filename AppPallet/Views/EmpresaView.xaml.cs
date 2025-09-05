@@ -5,9 +5,9 @@ namespace AppPallet.Views;
 
 public partial class EmpresaView : UraniumContentPage
 {
-	public EmpresaView(EmpresaViewModel viewModel)
-	{
-		InitializeComponent();
+    public EmpresaView(EmpresaViewModel viewModel)
+    {
+        InitializeComponent();
         BindingContext = viewModel;
     }
 
@@ -17,7 +17,7 @@ public partial class EmpresaView : UraniumContentPage
         base.OnAppearing();
         if (BindingContext is EmpresaViewModel vm)
         {
-            await vm.CargarListaClientesProveedores();
+            await vm.CargarListaEmpresas();
         }
     }
 

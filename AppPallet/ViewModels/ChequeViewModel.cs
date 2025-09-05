@@ -1,14 +1,10 @@
 ﻿using AppPallet.Controllers;
 using AppPallet.Models;
-using AppPallet.ViewModels;
 using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace AppPallet.ViewModels
 {

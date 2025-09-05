@@ -6,6 +6,7 @@ namespace AppPallet.Controllers
     public class EmpresaController
     {
         private readonly PalletContext _context;
+
         public EmpresaController(PalletContext context)
         {
             _context = context;
@@ -13,11 +14,15 @@ namespace AppPallet.Controllers
         // Métodos para manejar empresa (CRUD) pueden ser añadidos aquí
 
         // Obtener todos los empresa
-        public async Task<List<Empresa>> GetAllClientesProveedores()
+        public async Task<List<Empresa>> GetAllEmpresas()
         {
             try
             {
-                return await _context.Empresas.AsNoTracking().ToListAsync();
+                return await _context.Empresas
+                    .AsNoTracking()
+                    .Include(e => e.ContactosEmpresas)
+                        .ThenInclude(c => c.Area)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -27,13 +32,37 @@ namespace AppPallet.Controllers
         }
 
         // Crear un nuevo cliente/proveedor
-        public async Task<bool> CreateEmpresa(Empresa nuevoEmpresa)
+        public async Task<bool> CreateEmpresa(Empresa nuevaEmpresa)
         {
             try
             {
-                _context.Empresas.Add(nuevoEmpresa);
+                // 1. Agregar la empresa
+                _context.Empresas.Add(nuevaEmpresa);
+                await _context.SaveChangesAsync();
+
+                // 2. Obtener las áreas fijas
+                var areasFijas = await _context.Areas
+                    .Where(a => a.NomArea == "VENTA" || a.NomArea == "ENTREGAS" || a.NomArea == "FACTURAS" || a.NomArea == "PAGOS")
+                    .ToListAsync();
+
+                // 3. Crear ContactosEmpresa vacíos para cada área
+                foreach (var area in areasFijas)
+                {
+                    var contacto = new ContactosEmpresa
+                    {
+                        EmpresaId = nuevaEmpresa.EmpresaId,
+                        AreaId = area.AreaId,
+                        Contacto = null,
+                        Mail = null,
+                        Telefono = null,
+                        Comentario = null,
+                        Pallet = null,
+                        Sello = null
+                    };
+                    _context.ContactosEmpresas.Add(contacto);
+                }
                 var result = await _context.SaveChangesAsync();
-                return result > 0; // SaveChangesAsync retorna el número de entradas afectadas
+                return result > 0;
             }
             catch (DbUpdateException dbEx)
             {

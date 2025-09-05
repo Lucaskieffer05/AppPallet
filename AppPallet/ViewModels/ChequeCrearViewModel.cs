@@ -3,7 +3,6 @@ using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Runtime.Intrinsics.X86;
 
 
 namespace AppPallet.ViewModels

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace AppPallet.Models;
 
@@ -33,7 +31,7 @@ public partial class PalletContext : DbContext
 
     public virtual DbSet<Lote> Lotes { get; set; }
 
-    public virtual DbSet<Me> Mes { get; set; }
+    public virtual DbSet<Mes> Mes { get; set; }
 
     public virtual DbSet<Pallet> Pallets { get; set; }
 
@@ -234,7 +232,7 @@ public partial class PalletContext : DbContext
                 .HasConstraintName("FK_Lote_Pedido");
         });
 
-        modelBuilder.Entity<Me>(entity =>
+        modelBuilder.Entity<Mes>(entity =>
         {
             entity.HasKey(e => e.MesId);
 

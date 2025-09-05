@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AppPallet.Models;
+﻿namespace AppPallet.Models;
 
 public partial class GastosFijo
 {
@@ -13,5 +10,5 @@ public partial class GastosFijo
 
     public int MesId { get; set; }
 
-    public virtual Me Mes { get; set; } = null!;
+    public virtual Mes Mes { get; set; } = null!;
 }

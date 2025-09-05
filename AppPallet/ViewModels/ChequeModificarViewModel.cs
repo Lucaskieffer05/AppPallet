@@ -3,11 +3,6 @@ using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
@@ -100,7 +95,7 @@ namespace AppPallet.ViewModels
 
             try
             {
-                var resultado = await _chequeController.DeleteCheque(ChequeSeleccionado.ChequeId.Value);
+                var resultado = await _chequeController.DeleteCheque(ChequeSeleccionado.ChequeId);
                 if (resultado)
                 {
                     await MostrarAlerta("Éxito", "Cheque eliminado correctamente");
@@ -123,10 +118,10 @@ namespace AppPallet.ViewModels
             ChequeSeleccionado = (Cheque)query["ChequeSeleccionado"];
         }
 
-        bool ValidarCheque() 
-        { 
+        bool ValidarCheque()
+        {
             if (ChequeSeleccionado == null) return false;
-            if (ChequeSeleccionado.NumCheque == null || ChequeSeleccionado.NumCheque.Trim() == "")return false;
+            if (ChequeSeleccionado.NumCheque == null || ChequeSeleccionado.NumCheque.Trim() == "") return false;
             if (ChequeSeleccionado.Proveedor == null || ChequeSeleccionado.Proveedor.Trim() == "") return false;
             if (ChequeSeleccionado.Tipo == null || ChequeSeleccionado.Tipo.Trim() == "") return false;
             if (ChequeSeleccionado.Monto <= 0) return false;

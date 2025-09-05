@@ -17,7 +17,7 @@
          Route="ChequeView"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Clientes y Proveedores" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.AddressBook}, Color=Black}">
+    <FlyoutItem Title="Empresas" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Building}, Color=Black}">
         <ShellContent 
          ContentTemplate="{DataTemplate local:EmpresaView}"
          Route="EmpresaView"/>
