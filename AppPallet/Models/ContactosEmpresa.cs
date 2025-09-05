@@ -1,4 +1,7 @@
-﻿namespace AppPallet.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AppPallet.Models;
 
 public partial class ContactosEmpresa
 {

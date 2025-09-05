@@ -1,4 +1,7 @@
-﻿namespace AppPallet.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AppPallet.Models;
 
 public partial class CostoPorPallet
 {
@@ -20,9 +23,7 @@ public partial class CostoPorPallet
 
     public int? GananciaPorCantPallet { get; set; }
 
-    public int? CostoPorCamionId { get; set; }
-
-    public virtual CostoPorCamion? CostoPorCamion { get; set; }
+    public virtual ICollection<CostoPorCamion> CostoPorCamions { get; set; } = new List<CostoPorCamion>();
 
     public virtual Empresa Empresa { get; set; } = null!;
 

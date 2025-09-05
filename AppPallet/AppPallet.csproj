@@ -82,13 +82,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\EmpresaCrearView.xaml.cs">
+	  <Compile Update="Views\CostoPorPallet\CostoPorPalletCrearView.xaml.cs">
+	    <DependentUpon>CostoPorPalletCrearView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Empresas\EmpresaCrearView.xaml.cs">
 	    <DependentUpon>EmpresaCrearView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\EmpresaModificarView.xaml.cs">
+	  <Compile Update="Views\Empresas\EmpresaModificarView.xaml.cs">
 	    <DependentUpon>EmpresaModificarView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\EmpresaView.xaml.cs">
+	  <Compile Update="Views\Empresas\EmpresaView.xaml.cs">
 	    <DependentUpon>EmpresaView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
@@ -101,22 +104,37 @@
 	  <MauiXaml Update="Resources\Styles\MyStyles.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ChequeCrearView.xaml">
+	  <MauiXaml Update="Views\Cheques\ChequeCrearView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ChequeModificarView.xaml">
+	  <MauiXaml Update="Views\Cheques\ChequeModificarView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ChequeView.xaml">
+	  <MauiXaml Update="Views\Cheques\ChequeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\EmpresaCrearView.xaml">
+	  <MauiXaml Update="Views\CostoPorPallet\CostoPorPalletCrearView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\EmpresaModificarView.xaml">
+	  <MauiXaml Update="Views\Empresas\EmpresaCrearView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\EmpresaView.xaml">
+	  <MauiXaml Update="Views\Empresas\EmpresaModificarView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Empresas\EmpresaView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\GastosFijos\GastosFijosCrearView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\GastosFijos\GastosFijosModificarView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\GastosFijos\GastosFijosView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Presupuestos\PresupuestoView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

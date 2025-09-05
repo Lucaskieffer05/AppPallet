@@ -23,4 +23,22 @@
          Route="EmpresaView"/>
     </FlyoutItem>
 
+    <FlyoutItem Title="Gastos Fijos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.MoneyBill}, Color=Black}">
+        <ShellContent
+             ContentTemplate="{DataTemplate local:GastosFijosView}"
+             Route="GastosFijoView"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="CostoPorPalletCrearView" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}">
+        <ShellContent 
+             ContentTemplate="{DataTemplate local:CostoPorPalletCrearView}"
+             Route="CostoPorPalletCrearView"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Presupuestos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Wallet}, Color=Black}">
+        <ShellContent 
+         ContentTemplate="{DataTemplate local:PresupuestoView}"
+         Route="PresupuestoView"/>
+    </FlyoutItem>
+
 </Shell>

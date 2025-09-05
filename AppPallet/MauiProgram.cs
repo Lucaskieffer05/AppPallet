@@ -40,6 +40,8 @@ namespace AppPallet
 
             builder.Services.AddTransient<ChequeController>();
             builder.Services.AddTransient<EmpresaController>();
+            builder.Services.AddTransient<GastosFijosController>();
+            builder.Services.AddTransient<CostoPorPalletController>();
 
             // Registro de Vistas y ViewModels
 
@@ -49,11 +51,23 @@ namespace AppPallet
             builder.Services.AddTransient<EmpresaView>();
             builder.Services.AddTransient<EmpresaViewModel>();
 
+            builder.Services.AddTransient<GastosFijosView>();
+            builder.Services.AddTransient<GastosFijosViewModel>();
+
+            builder.Services.AddTransient<CostoPorPalletCrearView>();
+            builder.Services.AddTransient<CostoPorPalletCrearViewModel>();
+
+            builder.Services.AddTransient<PresupuestoView>();
+            builder.Services.AddTransient<PresupuestoViewModel>();
+            
+
 
             builder.Services.AddTransientPopup<ChequeCrearView, ChequeCrearViewModel>();
             builder.Services.AddTransientPopup<ChequeModificarView, ChequeModificarViewModel>();
             builder.Services.AddTransientPopup<EmpresaCrearView, EmpresaCrearViewModel>();
             builder.Services.AddTransientPopup<EmpresaModificarView, EmpresaModificarViewModel>();
+            builder.Services.AddTransientPopup<GastosFijosCrearView, GastosFijosCrearViewModel>();
+            builder.Services.AddTransientPopup<GastosFijosModificarView, GastosFijosModificarViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();

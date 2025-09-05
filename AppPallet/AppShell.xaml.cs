@@ -9,6 +9,7 @@ namespace AppPallet
             InitializeComponent();
             Routing.RegisterRoute(nameof(ChequeView), typeof(ChequeView));
             Routing.RegisterRoute(nameof(EmpresaView), typeof(EmpresaView));
+            Routing.RegisterRoute(nameof(CostoPorPalletCrearView), typeof(CostoPorPalletCrearView));
         }
     }
 }

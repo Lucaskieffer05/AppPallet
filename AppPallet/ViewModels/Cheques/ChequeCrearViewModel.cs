@@ -31,6 +31,7 @@ namespace AppPallet.ViewModels
             _popupService = popupService;
             _chequeController = chequeController;
             ChequeCreated = new Cheque();
+            ChequeCreated.FechaEmision = DateTime.Today;
         }
 
 

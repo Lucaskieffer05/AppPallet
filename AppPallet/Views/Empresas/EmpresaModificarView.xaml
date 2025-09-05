@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPallet.Views.EmpresaModificarView"
+             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+             xmlns:models="clr-namespace:AppPallet.Models"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             WidthRequest="500">
+
+    <ScrollView>
+        
+    
+        <VerticalStackLayout Padding="20" Spacing="20">
+        
+        
+            <Label Text="Modificar Empresa" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+
+            <!-- Nombre de la empresa -->
+            <material:EditorField Text="{Binding EmpresaSeleccionada.NomEmpresa, Mode=TwoWay}" 
+                   Title="Nombre de la empresa" TextColor="Black"/>
+
+            <!-- CUIT -->
+            <material:EditorField Text="{Binding EmpresaSeleccionada.Cuit, Mode=TwoWay}" 
+                   Title="CUIT" TextColor="Black"/>
+
+            <!-- Domicilio -->
+            <material:EditorField Text="{Binding EmpresaSeleccionada.Domicilio, Mode=TwoWay}" 
+                   Title="Domicilio" TextColor="Black"/>
+
+            <!-- Contactos de la empresa -->
+            <Label Text="Contactos" FontAttributes="Bold" FontSize="18" />
+            <CollectionView ItemsSource="{Binding EmpresaSeleccionada.ContactosEmpresas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+
+                        <Border Stroke="#b0b0b0" Padding="10" Margin="0,5">
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"/>
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Area.NomArea}" FontAttributes="Bold" FontSize="16" TextColor="#2e7d32"/>
+                                <Entry Text="{Binding Contacto, Mode=TwoWay}" Placeholder="Contacto" />
+                                <Entry Text="{Binding Mail, Mode=TwoWay}" Placeholder="Mail" />
+                                <Entry Text="{Binding Telefono, Mode=TwoWay}" Placeholder="Teléfono" />
+                                <Entry Text="{Binding Comentario, Mode=TwoWay}" Placeholder="Comentario" />
+                                <Entry Text="{Binding Pallet, Mode=TwoWay}" Placeholder="Pallet" />
+                                <Entry Text="{Binding Sello, Mode=TwoWay}" Placeholder="Sello" />
+                            </VerticalStackLayout>
+                        </Border>
+                    
+                    
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Botones de acción -->
+            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                <Button Text="Guardar" Command="{Binding GuardarPopupCommand}" StyleClass="FilledButton" WidthRequest="120"/>
+                <Button Text="Cancelar" Command="{Binding CancelarPopupCommand}" StyleClass="OutlinedButton" WidthRequest="120"/>
+            </HorizontalStackLayout>
+        
+        
+        </VerticalStackLayout>
+        
+
+    </ScrollView>
+    
+    
+</ContentView>

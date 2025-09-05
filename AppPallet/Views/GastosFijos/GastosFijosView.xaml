@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPallet.Views.GastosFijosView"
+             Title="GastosFijosView"
+             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+            xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+            xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid">
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto">
+            <Grid Padding="20" ColumnSpacing="20" ColumnDefinitions="0.8*,*,0.5*">
+                <Border Stroke="green" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="0">
+                    <Label Text="Verde" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+                <Border Stroke="red" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="1">
+                    <Label Text="Rojo" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+                <Border Stroke="black" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="2">
+                    <Label Text="Negro" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="0.5*,*,0.5*">
+                <Border Stroke="Silver" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="0">
+                    <Label Text="Plata" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+
+                <Border Stroke="Silver" StrokeThickness="3" Grid.Column="1">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+
+
+                    <dg:DataGrid ItemsSource="{Binding ListaGastosFijos}"            
+                             IsRefreshing="{Binding IsBusy}" 
+                             PaginationEnabled="True"
+                             Style="{StaticResource TablaComun}"
+                             SelectedItem="{Binding GastosFijoSeleccionado, Mode=TwoWay}"
+                             PageSize="20" 
+                             PageNumber="1"
+                             SelectionMode="Single" 
+                             BorderColor="Transparent">
+
+                        <dg:DataGrid.Columns>
+                            
+                            
+                            <dg:DataGridColumn Title="Nombre del Gasto" PropertyName="NomGastosFijo" />
+
+                            <dg:DataGridColumn Title="Monto">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding Monto, StringFormat='${0:N2}' }"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               VerticalTextAlignment="Center"/>
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+                            
+                            
+                        </dg:DataGrid.Columns>
+
+                    </dg:DataGrid>
+                </Border>
+
+
+                <VerticalStackLayout Grid.Column="2" Spacing="10" >
+
+                    <Button StyleClass="FilledButton"  Text="Agregar cheque" Command="{Binding MostrarPopupGastosFijoCommand}"  WidthRequest="180"/>
+
+                    <Button StyleClass="OutlinedButton"  Text="Modificar cheque" Command="{Binding MostrarPopupGastosFijoModificarCommand}"  WidthRequest="180"/>
+
+
+                </VerticalStackLayout>
+
+            </Grid>
+        </Grid>
+    </ScrollView>
+
+</uranium:UraniumContentPage>

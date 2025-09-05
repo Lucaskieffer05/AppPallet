@@ -80,20 +80,41 @@ namespace AppPallet.Controllers
             }
         }
 
-        // Modificar un cliente/proveedor existente
+        // Modificar un empresa existente
         public async Task<bool> UpdateEmpresa(Empresa EmpresaModificado)
         {
             try
             {
-                var existingEntity = await _context.Empresas.FindAsync(EmpresaModificado.EmpresaId);
+                var existingEntity = await _context.Empresas
+                    .Include(e => e.ContactosEmpresas)
+                    .FirstOrDefaultAsync(e => e.EmpresaId == EmpresaModificado.EmpresaId);
+
                 if (existingEntity == null)
                 {
-                    Console.WriteLine("Cliente/Proveedor no encontrado.");
+                    Console.WriteLine("Empresa no encontrado.");
                     return false;
                 }
+
                 _context.Entry(existingEntity).CurrentValues.SetValues(EmpresaModificado);
+
+                foreach (var contactoModificado in EmpresaModificado.ContactosEmpresas)
+                {
+                    var contactoExistente = existingEntity.ContactosEmpresas
+                        .FirstOrDefault(c => c.ContactosEmpresaId == contactoModificado.ContactosEmpresaId);
+
+                    if (contactoExistente != null)
+                    {
+                        _context.Entry(contactoExistente).CurrentValues.SetValues(contactoModificado);
+                    }
+                    else
+                    {
+                        existingEntity.ContactosEmpresas.Add(contactoModificado);
+                    }
+                }
+
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
+
             }
             catch (DbUpdateException dbEx)
             {

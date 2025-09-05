@@ -3,57 +3,63 @@ using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
-    public partial class EmpresaViewModel : ObservableObject, INotifyPropertyChanged
+    public partial class GastosFijosViewModel : ObservableObject, INotifyPropertyChanged
     {
+
         // -------------------------------------------------------------------
         // ----------------------- Definiciones ------------------------------
         // -------------------------------------------------------------------
 
-        [ObservableProperty]
-        private bool isBusy;
+        readonly IPopupService _popupService;
 
-        readonly EmpresaController _EmpresaController;
-
-        private readonly IPopupService _popupService;
+        readonly GastosFijosController _gastosFijosController;
 
         [ObservableProperty]
-        private ObservableCollection<Empresa> listaEmpresas = [];
+        public ObservableCollection<GastosFijo> listaGastosFijos = [];
 
         [ObservableProperty]
-        public Empresa? empresaSeleccionada;
+        public GastosFijo? gastoFijoSeleccionado;
+
+        [ObservableProperty]
+        public bool isBusy;
 
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public EmpresaViewModel(IPopupService popupService, EmpresaController chequeController)
+        public GastosFijosViewModel(IPopupService popupService, GastosFijosController gastosFijosController)
         {
             _popupService = popupService;
-            _EmpresaController = chequeController;
+            _gastosFijosController = gastosFijosController;
         }
+
 
         // -------------------------------------------------------------------
         // ----------------------- Comandos y Consultas a DB -----------------
         // -------------------------------------------------------------------
 
-        public async Task CargarListaEmpresas()
+        public async Task CargarListaGastosFijos()
         {
+
             try
             {
                 IsBusy = true;
-                var lista = await _EmpresaController.GetAllEmpresas();
-                ListaEmpresas = new ObservableCollection<Empresa>(lista);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
+
+                GastoFijoSeleccionado = null;
+
+                var gastosFijoList = await _gastosFijosController.GetAllGastosFijos();
+                ListaGastosFijos = new ObservableCollection<GastosFijo>(gastosFijoList);
             }
             finally
             {
@@ -62,18 +68,17 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
-        public async Task MostrarPopupCrear()
+        public async Task MostrarPopupGastoFijo()
         {
             await DisplayPopupCrear();
         }
 
         [RelayCommand]
-        public async Task MostrarPopupModificar(int empresaID)
+        public async Task MostrarPopupModificarGastoFijo()
         {
-            EmpresaSeleccionada = ListaEmpresas.FirstOrDefault(e => e.EmpresaId == empresaID);
-            if (EmpresaSeleccionada == null)
+            if (GastoFijoSeleccionado == null)
             {
-                await MostrarAlerta("Atención", "Debe seleccionar un cheque para modificar.");
+                await MostrarAlerta("Error", "Seleccione un gasto fijo para modificar.");
                 return;
             }
             await DisplayPopupModificar();
@@ -81,24 +86,27 @@ namespace AppPallet.ViewModels
 
         public async Task DisplayPopupCrear()
         {
-            var popupResult = await _popupService.ShowPopupAsync<EmpresaCrearViewModel>(
+            var popupResult = await _popupService.ShowPopupAsync<GastosFijosCrearViewModel>(
                 Shell.Current,
                 options: PopupOptions.Empty);
+
         }
 
         public async Task DisplayPopupModificar()
         {
-            var parameters = new Dictionary<string, object>
+            if (GastoFijoSeleccionado == null)
+                throw new InvalidOperationException("ChequeSeleccionado no puede ser nulo al modificar.");
+
+            var queryAttributes = new Dictionary<string, object>
             {
-                { "Empresa", EmpresaSeleccionada! }
+                ["GastoFijoSeleccionado"] = GastoFijoSeleccionado
             };
-            var popupResult = await _popupService.ShowPopupAsync<EmpresaModificarViewModel>(
+
+            var popupResult = await _popupService.ShowPopupAsync<GastosFijosModificarViewModel>(
                 Shell.Current,
                 options: PopupOptions.Empty,
-                parameters);
+                shellParameters: queryAttributes);
         }
-
-
 
         private async Task MostrarAlerta(string titulo, string mensaje)
         {
@@ -108,6 +116,7 @@ namespace AppPallet.ViewModels
                 await mainPage.DisplayAlert(titulo, mensaje, "OK");
             }
         }
+
 
     }
 }

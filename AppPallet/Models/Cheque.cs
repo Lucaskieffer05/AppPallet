@@ -1,4 +1,7 @@
-﻿namespace AppPallet.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AppPallet.Models;
 
 public partial class Cheque
 {
@@ -12,9 +15,9 @@ public partial class Cheque
 
     public decimal Monto { get; set; }
 
-    public DateOnly FechaEmision { get; set; }
+    public DateTime FechaEmision { get; set; }
 
-    public DateOnly FechaPago { get; set; }
+    public DateTime? FechaPago { get; set; }
 
     public int? Estado { get; set; }
 }

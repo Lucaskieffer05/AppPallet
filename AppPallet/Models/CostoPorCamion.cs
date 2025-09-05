@@ -1,4 +1,7 @@
-﻿namespace AppPallet.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AppPallet.Models;
 
 public partial class CostoPorCamion
 {
@@ -8,5 +11,7 @@ public partial class CostoPorCamion
 
     public decimal Monto { get; set; }
 
-    public virtual ICollection<CostoPorPallet> CostoPorPallets { get; set; } = new List<CostoPorPallet>();
+    public int CostoPorPalletId { get; set; }
+
+    public virtual CostoPorPallet CostoPorPallet { get; set; } = null!;
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage  
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AppPallet.Views.PresupuestoView"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    Title="PresupuestoView">
+
+
+    <ScrollView>
+        
+        
+        <FlexLayout Direction="Row" Wrap="Wrap" BindableLayout.ItemsSource="{Binding ListaEmpresas}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Border WidthRequest="150" HeightRequest="200"  Margin="10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+
+
+                        <Grid RowDefinitions="Auto,*">
+                            <!-- Parte superior con color pastel -->
+                            <BoxView BackgroundColor="#ADD8E6" HeightRequest="80" />
+
+                            <!-- Parte inferior con texto -->
+                            <StackLayout Padding="10" >
+                                <Label Text="{Binding NomEmpresa}" FontAttributes="Bold" FontSize="16" />
+                                <Label Text="{Binding Cuit}" FontSize="14" />
+                            </StackLayout>
+                        </Grid>
+
+
+
+
+                    </Border>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>
+        
+
+    </ScrollView>
+
+
+</uranium:UraniumContentPage>

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppPallet.Models;
 
@@ -66,6 +68,8 @@ public partial class PalletContext : DbContext
             entity.ToTable("Cheque");
 
             entity.Property(e => e.ChequeId).HasColumnName("ChequeID");
+            entity.Property(e => e.FechaEmision).HasColumnType("datetime");
+            entity.Property(e => e.FechaPago).HasColumnType("datetime");
             entity.Property(e => e.Monto).HasColumnType("money");
             entity.Property(e => e.NumCheque)
                 .HasMaxLength(50)
@@ -120,10 +124,16 @@ public partial class PalletContext : DbContext
             entity.ToTable("CostoPorCamion");
 
             entity.Property(e => e.CostoPorCamionId).HasColumnName("CostoPorCamionID");
+            entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
             entity.Property(e => e.Monto).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.NombreCosto)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.CostoPorPallet).WithMany(p => p.CostoPorCamions)
+                .HasForeignKey(d => d.CostoPorPalletId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CostoPorCamion_CostoPorPallet");
         });
 
         modelBuilder.Entity<CostoPorPallet>(entity =>
@@ -131,7 +141,6 @@ public partial class PalletContext : DbContext
             entity.ToTable("CostoPorPallet");
 
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
-            entity.Property(e => e.CostoPorCamionId).HasColumnName("CostoPorCamionID");
             entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
             entity.Property(e => e.MesId).HasColumnName("MesID");
             entity.Property(e => e.NombrePalletCliente)
@@ -139,10 +148,6 @@ public partial class PalletContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.PalletId).HasColumnName("PalletID");
             entity.Property(e => e.PrecioPallet).HasColumnType("decimal(18, 0)");
-
-            entity.HasOne(d => d.CostoPorCamion).WithMany(p => p.CostoPorPallets)
-                .HasForeignKey(d => d.CostoPorCamionId)
-                .HasConstraintName("FK_CostoPorPallet_CostoPorCamion");
 
             entity.HasOne(d => d.Empresa).WithMany(p => p.CostoPorPallets)
                 .HasForeignKey(d => d.EmpresaId)
