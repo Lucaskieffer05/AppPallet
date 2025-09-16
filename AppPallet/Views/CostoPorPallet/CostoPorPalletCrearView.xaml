@@ -58,6 +58,8 @@
 
                 <material:EditorField TextColor="Black" Title="Carga maxima del camion" Text="{Binding CostoPorPalletCreated.CargaCamion, Mode=TwoWay}" />
 
+                <material:EditorField TextColor="Black" Title="Cantidad de horas por mes" Text="{Binding CostoPorPalletCreated.HorasPorMes, Mode=TwoWay}" />
+
                 <VerticalStackLayout>
                     <Label Text="Costos por Camión:" FontAttributes="Bold" FontSize="16" HorizontalTextAlignment="Center" Padding="0,0,0,20"/>
 

@@ -63,16 +63,13 @@ namespace AppPallet.Controllers
 
         public async Task<bool> UpdateCostoPorPallet(CostoPorPallet costoPorPalletSeleccionada)
         {
-            try {
-
-                // Buscar la entidad existente en el contexto
+            try
+            {
                 var costo = await _context.CostoPorPallets
                     .FirstOrDefaultAsync(c => c.CostoPorPalletId == costoPorPalletSeleccionada.CostoPorPalletId);
 
                 if (costo == null)
-                {
                     return false;
-                }
 
                 costo.NombrePalletCliente = costoPorPalletSeleccionada.NombrePalletCliente;
                 costo.CantidadPorDia = costoPorPalletSeleccionada.CantidadPorDia;
@@ -84,59 +81,47 @@ namespace AppPallet.Controllers
                 costo.Mes = costoPorPalletSeleccionada.Mes;
                 costo.HorasPorMes = costoPorPalletSeleccionada.HorasPorMes;
 
-                // Actualizar la entidad en el contexto
-
-                _context.CostoPorPallets.Update(costo);
+                // ❌ No poner null aquí
+                // costo.CostoPorCamions = null!;
 
                 var respuesta = await _context.SaveChangesAsync();
-
-
                 if (respuesta <= 0)
-                {
                     return false;
-                }
 
                 // Actualizar CostoPorCamions asociados
-                // Traer los costos asociado a este pallet
                 var costosExistentes = await _context.CostoPorCamions
                     .Where(cc => cc.CostoPorPalletId == costo.CostoPorPalletId)
                     .ToListAsync();
-                // Eliminar los costos que ya no están en la lista
+
                 foreach (var costoExistente in costosExistentes)
                 {
-                    if (!costoPorPalletSeleccionada.CostoPorCamions.Any(cc => cc.CostoPorCamionId == costoExistente.CostoPorCamionId))
+                    if (!costoPorPalletSeleccionada.CostoPorCamions
+                        .Any(cc => cc.CostoPorCamionId == costoExistente.CostoPorCamionId))
                     {
                         _context.CostoPorCamions.Remove(costoExistente);
                     }
                 }
 
-                // Agregar o actualizar los costos en la lista
                 foreach (var costoCamion in costoPorPalletSeleccionada.CostoPorCamions)
                 {
                     if (costoCamion.CostoPorCamionId == 0)
                     {
-                        // Nuevo costo, agregarlo
-                        costoCamion.CostoPorPalletId = costo.CostoPorPalletId; 
+                        costoCamion.CostoPorPalletId = costo.CostoPorPalletId;
                         _context.CostoPorCamions.Add(costoCamion);
                     }
                     else
                     {
-                        // Costo existente, actualizarlo
                         var existingCostoCamion = await _context.CostoPorCamions
                             .FirstOrDefaultAsync(cc => cc.CostoPorCamionId == costoCamion.CostoPorCamionId);
                         if (existingCostoCamion != null)
                         {
                             existingCostoCamion.NombreCosto = costoCamion.NombreCosto;
                             existingCostoCamion.Monto = costoCamion.Monto;
-                            _context.CostoPorCamions.Update(existingCostoCamion);
                         }
                     }
                 }
 
                 await _context.SaveChangesAsync();
-
-
-
                 return true;
             }
             catch (Exception ex)
@@ -144,7 +129,7 @@ namespace AppPallet.Controllers
                 Console.WriteLine($"Error al actualizar el costo por pallet: {ex.Message}");
                 return false;
             }
-
         }
+
     }
 }

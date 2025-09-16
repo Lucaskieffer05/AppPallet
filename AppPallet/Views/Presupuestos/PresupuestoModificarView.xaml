@@ -15,7 +15,7 @@
 
     <ScrollView>
 
-        <Grid ColumnDefinitions="*,*,*,*">
+        <Grid ColumnDefinitions="0.5*,*,*,0.5*">
             
             
             <VerticalStackLayout Grid.Column="1" Padding="20" Spacing="15">

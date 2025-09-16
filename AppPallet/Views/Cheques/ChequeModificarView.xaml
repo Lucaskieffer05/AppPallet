@@ -15,40 +15,42 @@
         <converts:DecimalToStringConverter x:Key="DecimalToStringConverter" />
     </ContentView.Resources>
 
-    <VerticalStackLayout Spacing="20">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20">
 
-        <material:EditorField TextColor="Black" Title="Proveedor" Text="{Binding ChequeSeleccionado.Proveedor, Mode=TwoWay}" />
+            <material:EditorField TextColor="Black" Title="Proveedor" Text="{Binding ChequeSeleccionado.Proveedor, Mode=TwoWay}" />
 
-        <material:EditorField TextColor="Black" Title="Tipo" Text="{Binding ChequeSeleccionado.Tipo, Mode=TwoWay}" />
+            <material:EditorField TextColor="Black" Title="Tipo" Text="{Binding ChequeSeleccionado.Tipo, Mode=TwoWay}" />
 
-        <material:EditorField TextColor="Black" Title="Número de Cheque" Text="{Binding ChequeSeleccionado.NumCheque, Mode=TwoWay}" />
+            <material:EditorField TextColor="Black" Title="Número de Cheque" Text="{Binding ChequeSeleccionado.NumCheque, Mode=TwoWay}" />
 
-        <material:EditorField TextColor="Black" Title="Monto" Text="{Binding ChequeSeleccionado.Monto, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}" Keyboard="Numeric" />
+            <material:EditorField TextColor="Black" Title="Monto" Text="{Binding ChequeSeleccionado.Monto, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}" Keyboard="Numeric" />
         
-        <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                          AllowClear="True"
-                          Title="Fecha de Emisión"
-                          Date="{Binding ChequeSeleccionado.FechaEmision, Mode=TwoWay}" 
-                          TextColor="Black"/>
+            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
+                              AllowClear="True"
+                              Title="Fecha de Emisión"
+                              Date="{Binding ChequeSeleccionado.FechaEmision, Mode=TwoWay}" 
+                              TextColor="Black"/>
 
-        <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                                  AllowClear="True"
-                                  Title="Fecha de Pago"
-                                  Date="{Binding ChequeSeleccionado.FechaPago, Mode=TwoWay}" 
-                                  TextColor="Black"/>
+            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
+                                      AllowClear="True"
+                                      Title="Fecha de Pago"
+                                      Date="{Binding ChequeSeleccionado.FechaPago, Mode=TwoWay}" 
+                                      TextColor="Black"/>
 
-        <material:EditorField TextColor="Black" Title="Estado" Text="{Binding ChequeSeleccionado.Estado, Mode=TwoWay}" Keyboard="Numeric" />
+            <material:EditorField TextColor="Black" Title="Estado" Text="{Binding ChequeSeleccionado.Estado, Mode=TwoWay}" Keyboard="Numeric" />
 
-        <Grid ColumnDefinitions="*,*">
-            <HorizontalStackLayout Spacing="10" Grid.Column="0">
-                <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Guardar" Command="{Binding GuardarPopupCommand}"/>
-                <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Cancelar" Command="{Binding CancelarPopupCommand}"/>
-            </HorizontalStackLayout>
+            <Grid ColumnDefinitions="*,*">
+                <HorizontalStackLayout Spacing="10" Grid.Column="0">
+                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Guardar" Command="{Binding GuardarPopupCommand}"/>
+                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Cancelar" Command="{Binding CancelarPopupCommand}"/>
+                </HorizontalStackLayout>
 
-            <Button Grid.Column="1" HorizontalOptions="End" StyleClass="OutlinedButton" BorderColor="#d65265" TextColor="#d65265" Text="Eliminar Cheque" Command="{Binding EliminarChequeCommand}"/>
+                <Button Grid.Column="1" HorizontalOptions="End" StyleClass="OutlinedButton" BorderColor="#d65265" TextColor="#d65265" Text="Eliminar Cheque" Command="{Binding EliminarChequeCommand}"/>
 
-        </Grid>
+            </Grid>
         
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentView>

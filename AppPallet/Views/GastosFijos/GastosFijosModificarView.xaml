@@ -48,7 +48,7 @@
                     <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Cancelar" Command="{Binding CancelarPopupCommand}"/>
                 </HorizontalStackLayout>
 
-                <Button Grid.Column="1" HorizontalOptions="End" StyleClass="OutlinedButton" BorderColor="#d65265" TextColor="#d65265" Text="Eliminar Cheque" Command="{Binding EliminarGastosFijoCommand}"/>
+                <Button Grid.Column="1" HorizontalOptions="End" StyleClass="OutlinedButton" BorderColor="#d65265" TextColor="#d65265" Text="Eliminar Gasto" Command="{Binding EliminarGastosFijoCommand}"/>
 
             </Grid>
 
