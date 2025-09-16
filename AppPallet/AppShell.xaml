@@ -9,7 +9,13 @@
     Title="Sistema Pallet"
     Shell.FlyoutBackdrop="#50000000"
     FlyoutBackgroundImage="logo.png"
-    FlyoutBackgroundImageAspect="AspectFill">
+    FlyoutBackgroundImageAspect="AspectFill"
+    
+    Shell.TitleColor="Black"
+    Shell.ForegroundColor="#A5A5A5"
+    Shell.BackgroundColor="#CCCCCC">
+
+
 
     <FlyoutItem Title="Cheques" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.MoneyCheck}, Color=Black}">
         <ShellContent 
@@ -28,17 +34,18 @@
              ContentTemplate="{DataTemplate local:GastosFijosView}"
              Route="GastosFijoView"/>
     </FlyoutItem>
-
-    <FlyoutItem Title="CostoPorPalletCrearView" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}">
-        <ShellContent 
-             ContentTemplate="{DataTemplate local:CostoPorPalletCrearView}"
-             Route="CostoPorPalletCrearView"/>
-    </FlyoutItem>
-
+    
     <FlyoutItem Title="Presupuestos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Wallet}, Color=Black}">
         <ShellContent 
          ContentTemplate="{DataTemplate local:PresupuestoView}"
          Route="PresupuestoView"/>
     </FlyoutItem>
+
+    <FlyoutItem Title="Crear nuevo Presupuesto" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}">
+        <ShellContent 
+             ContentTemplate="{DataTemplate local:CostoPorPalletCrearView}"
+             Route="CostoPorPalletCrearView"/>
+    </FlyoutItem>
+
 
 </Shell>

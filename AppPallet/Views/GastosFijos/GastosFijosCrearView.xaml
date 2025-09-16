@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.GastosFijosCrearView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AppPallet.Views.GastosFijosCrearView"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:converts="clr-namespace:AppPallet.Converters"
+    x:DataType="viewModels:GastosFijosCrearViewModel"
+    HorizontalOptions="Center"
+    VerticalOptions="Center"
+    Padding="10"
+    WidthRequest="500">
+
+    <ContentView.Resources>
+        <converts:DecimalToStringConverter x:Key="DecimalToStringConverter" />
+    </ContentView.Resources>
+
+
+    <VerticalStackLayout >
+
+        <material:TextField Title="Nombre Gasto Fijo" Text="{Binding GastosFijosCreated.NombreGastoFijo, Mode=TwoWay}" Padding="10"/>
+
+        <material:TextField Title="Monto" Text="{Binding GastosFijosCreated.Monto, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}" Padding="10"/>
+
+        <HorizontalStackLayout>
+            <material:PickerField 
+        x:Name="MesPicker"
+        Title="Mes"
+        ItemsSource="{Binding Meses}"
+        SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" />
+
+            <material:PickerField 
+        x:Name="AñoPicker"
+        Title="Año"
+        ItemsSource="{Binding Años}"
+        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"/>
+        </HorizontalStackLayout>
+
+
+        <HorizontalStackLayout Spacing="10" Padding="10">
+            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Guardar" Command="{Binding GuardarPopupCommand}"/>
+            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Cancelar" Command="{Binding CerrarPopupCommand}"/>
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
+    
+    
 </ContentView>

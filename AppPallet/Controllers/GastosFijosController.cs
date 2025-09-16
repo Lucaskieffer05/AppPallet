@@ -20,13 +20,14 @@ namespace AppPallet.Controllers
 
         // ...resto del código...
 
-        public async Task<List<GastosFijo>> GetAllGastosFijos()
+        public async Task<List<GastosFijo>> GetAllGastosFijos(DateTime mes)
         {
             try
             {
                 return await _context.GastosFijos
-                    .Include(g => g.Mes)
-                    .AsNoTracking().ToListAsync();
+                    .AsNoTracking()
+                    .Where(g => g.Mes.Year == mes.Year && g.Mes.Month == mes.Month)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -35,16 +36,35 @@ namespace AppPallet.Controllers
             }
         }
 
+        //Obtener totales de gasto fijo por mes
+        public async Task<List<TotalGastoFijoPorMes>> GetTotalGastoFijoPorMes()
+        {
+            try
+            {
+                var result = await _context.GastosFijos
+                    .GroupBy(g => g.Mes)
+                    .Select(g => new TotalGastoFijoPorMes
+                    {
+                        Mes = g.Key,
+                        TotalGastoFijo = g.Sum(x => x.Monto)
+                    })
+                    .OrderBy(t => t.Mes)
+                    .AsNoTracking()
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<TotalGastoFijoPorMes>();
+            }
+        }
+
         // Crear un nuevo cheque
         public async Task<bool> CreateGastoFijo(GastosFijo nuevoGastoFijo)
         {
             try
             {
-                var mesId = _context.Mes.Where(m => m.FechaMes.Month == nuevoGastoFijo.Mes.FechaMes.Month && m.FechaMes.Year == nuevoGastoFijo.Mes.FechaMes.Year)
-                                        .Select(m => m.MesId)
-                                        .FirstOrDefault();
-
-                nuevoGastoFijo.MesId = mesId;
 
                 _context.GastosFijos.Add(nuevoGastoFijo);
 
@@ -79,11 +99,40 @@ namespace AppPallet.Controllers
 
                 gastoFijo.NombreGastoFijo = gastoFijoModificado.NombreGastoFijo;
                 gastoFijo.Monto = gastoFijoModificado.Monto;
+                gastoFijo.Mes = gastoFijoModificado.Mes;
 
                 _context.GastosFijos.Update(gastoFijo);
 
                 var result = await _context.SaveChangesAsync();
 
+                return result > 0;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                Console.WriteLine($"Error de base de datos: {dbEx.Message}");
+                if (dbEx.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Eliminar un cheque por su ID
+        public async Task<bool> DeleteGastoFijo(int gastoFijoId)
+        {
+            try
+            {
+                var gastoFijo = await _context.GastosFijos.Where(g => g.GastosFijosId == gastoFijoId).FirstOrDefaultAsync();
+                if (gastoFijo == null)
+                    return false;
+                _context.GastosFijos.Remove(gastoFijo);
+                var result = await _context.SaveChangesAsync();
                 return result > 0;
             }
             catch (DbUpdateException dbEx)

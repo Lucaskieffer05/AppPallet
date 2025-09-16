@@ -4,10 +4,12 @@
                             x:Class="AppPallet.Views.ChequeView"
                             Title="Cheques"
                             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+                            xmlns:models="clr-namespace:AppPallet.Models"
                             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
                             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
                             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-                            xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid">
+                            xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+                            x:DataType="viewModels:ChequeViewModel">
 
 
     <ScrollView>
@@ -45,7 +47,7 @@
                         <dg:DataGrid.Columns>
                             <dg:DataGridColumn Title="Proveedor">
                                 <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="models:Cheque">
                                         <Label Text="{Binding Proveedor}" 
                                                HorizontalOptions="Center" 
                                                VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
@@ -54,7 +56,7 @@
                             </dg:DataGridColumn>
                             <dg:DataGridColumn Title="Tipo">
                                 <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="models:Cheque">
                                         <Label Text="{Binding Tipo}" 
                                                HorizontalOptions="Center" 
                                                VerticalOptions="Center" VerticalTextAlignment="Center"/>
@@ -63,7 +65,7 @@
                             </dg:DataGridColumn>
                             <dg:DataGridColumn Title="N° de cheque">
                                 <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="models:Cheque">
                                         <Label Text="{Binding NumCheque}" 
                                                HorizontalOptions="Center" 
                                                VerticalOptions="Center" VerticalTextAlignment="Center"/>
@@ -72,7 +74,7 @@
                             </dg:DataGridColumn>
                             <dg:DataGridColumn Title="Monto">
                                 <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="models:Cheque">
                                         <Label Text="{Binding Monto, StringFormat='${0:N2}' }"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center"
@@ -82,7 +84,7 @@
                             </dg:DataGridColumn>
                             <dg:DataGridColumn Title="Fecha de Emision">
                                 <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="models:Cheque">
                                         <Label Text="{Binding FechaEmision, StringFormat='{0:dd/MM/yyyy}'}"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center"/>
@@ -91,7 +93,7 @@
                             </dg:DataGridColumn>
                             <dg:DataGridColumn Title="Fecha de Pago">
                                 <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="models:Cheque">
                                         <Label Text="{Binding FechaPago, StringFormat='{0:dd/MM/yyyy}'}"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center"/>
@@ -100,7 +102,7 @@
                             </dg:DataGridColumn>
                             <dg:DataGridColumn Title="Estado">
                                 <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="models:Cheque">
                                         <Label Text="{Binding Estado, TargetNullValue='-'}"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center"/>

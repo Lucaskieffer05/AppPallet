@@ -1,9 +1,12 @@
+using AppPallet.ViewModels;
+
 namespace AppPallet.Views;
 
 public partial class GastosFijosModificarView : ContentView
 {
-	public GastosFijosModificarView()
+	public GastosFijosModificarView(GastosFijosModificarViewModel viewModel)
 	{
-		InitializeComponent();
+        InitializeComponent();
+		BindingContext = viewModel;
 	}
 }

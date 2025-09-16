@@ -6,6 +6,8 @@
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    x:DataType="viewModels:PresupuestoViewModel"
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     Title="PresupuestoView">
 
@@ -15,22 +17,61 @@
         
         <FlexLayout Direction="Row" Wrap="Wrap" BindableLayout.ItemsSource="{Binding ListaEmpresas}">
             <BindableLayout.ItemTemplate>
-                <DataTemplate>
-                    <Border WidthRequest="150" HeightRequest="200"  Margin="10">
+                <DataTemplate x:DataType="models:Empresa">
+                    <Border WidthRequest="400" HeightRequest="200"  Margin="10">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="12"/>
                         </Border.StrokeShape>
 
 
-                        <Grid RowDefinitions="Auto,*">
+                        <Grid RowDefinitions="Auto,*,30">
                             <!-- Parte superior con color pastel -->
-                            <BoxView BackgroundColor="#ADD8E6" HeightRequest="80" />
+                            <BoxView BackgroundColor="#D0B595" HeightRequest="80" />
 
                             <!-- Parte inferior con texto -->
                             <StackLayout Padding="10" >
-                                <Label Text="{Binding NomEmpresa}" FontAttributes="Bold" FontSize="16" />
+                                <Label Text="{Binding NomEmpresa}" FontAttributes="Bold" FontSize="16"/>
                                 <Label Text="{Binding Cuit}" FontSize="14" />
                             </StackLayout>
+
+                            <VerticalStackLayout Grid.Row="1"  HorizontalOptions="Center">
+
+                                <Label Text="Presupuesto de este mes:" FontSize="15" 
+                                       HorizontalTextAlignment="Center" FontAttributes="Bold"
+                                       TextColor="#A2A2A2" Padding="0,5,0,0"/>
+
+                                <CollectionView ItemsSource="{Binding CostoPorPallets}" Margin="20" HorizontalOptions="Center">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:CostoPorPallet">
+                                            <HorizontalStackLayout Spacing="15" Padding="0,0,0,5">
+                                                <Label Text="{Binding NombrePalletCliente}" FontSize="13"
+                                                       TextColor="#90894A"/>
+                                                <HorizontalStackLayout>
+                                                    <Label Text="Precio:" FontSize="13" Padding="0,0,5,0"/>
+                                                    <Label Text="$" FontSize="13"/>
+                                                    <Label Text="{Binding PrecioPallet}" FontSize="13"/>
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout>
+                                                    <Label Text="Ganancia:" FontSize="13" Padding="0,0,5,0"/>
+                                                    <Label Text="$" FontSize="13"/>
+                                                    <Label Text="{Binding GananciaPorCantPallet}" FontSize="13"/>
+                                                </HorizontalStackLayout>
+                                            </HorizontalStackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+
+
+                            <Button HorizontalOptions="End" Grid.Row="2" StyleClass="TextButton" Text="Ver" TextColor="#D0B595" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoViewModel}}, Path=MostrarPresupuestoCommand}"
+                                    CommandParameter="{Binding EmpresaId}"/>
+
+
+
                         </Grid>
 
 

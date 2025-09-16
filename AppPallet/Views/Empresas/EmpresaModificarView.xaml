@@ -7,7 +7,8 @@
              xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-             WidthRequest="500">
+             WidthRequest="500"
+             x:DataType="viewModels:EmpresaModificarViewModel">
 
     <ScrollView>
         
@@ -33,7 +34,7 @@
             <Label Text="Contactos" FontAttributes="Bold" FontSize="18" />
             <CollectionView ItemsSource="{Binding EmpresaSeleccionada.ContactosEmpresas}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="models:ContactosEmpresa">
 
 
                         <Border Stroke="#b0b0b0" Padding="10" Margin="0,5">

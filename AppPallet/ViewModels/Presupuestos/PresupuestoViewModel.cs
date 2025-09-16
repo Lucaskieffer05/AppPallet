@@ -1,6 +1,8 @@
 ﻿using AppPallet.Controllers;
 using AppPallet.Models;
+using AppPallet.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,6 +26,7 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         public Empresa? empresaSeleccionada;
 
+
         [ObservableProperty]
         private bool isBusy;
 
@@ -45,7 +48,7 @@ namespace AppPallet.ViewModels
             try
             {
                 IsBusy = true;
-                var lista = await _empresaController.GetAllEmpresas();
+                var lista = await _empresaController.GetAllEmpresasCostoPallet();
                 ListaEmpresas = new ObservableCollection<Empresa>(lista);
             }
             catch (Exception ex)
@@ -56,6 +59,18 @@ namespace AppPallet.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        [RelayCommand]
+        public async Task MostrarPresupuesto(int empresaId)
+        {
+            await Shell.Current.GoToAsync(
+                nameof(PresupuestoMostrarView),
+                new Dictionary<string, object>
+                {
+                    { "EmpresaId", empresaId }
+                });
+
         }
     }
 }

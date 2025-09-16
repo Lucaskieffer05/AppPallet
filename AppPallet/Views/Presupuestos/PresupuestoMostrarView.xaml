@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AppPallet.Views.PresupuestoMostrarView"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    x:DataType="viewModels:PresupuestoMostrarViewModel"
+    Title="{Binding Titulo}">
+
+    <ScrollView>
+
+
+        <VerticalStackLayout Padding="20" Spacing="16" >
+
+
+            <Label Text="{Binding Titulo}" 
+               FontSize="24" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#90894A"
+               Margin="0,0,0,10"/>
+
+            <CollectionView ItemsSource="{Binding Resultado}">
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:GastosYCostos">
+
+
+                        <Border Padding="16" Margin="0,0,0,12" BackgroundColor="#F8F6F2">
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14" />
+                            </Border.StrokeShape>
+
+
+                            <VerticalStackLayout>
+
+                                <HorizontalStackLayout VerticalOptions="Center">
+                                    <Label Text="{Binding Costo.NombrePalletCliente}" FontSize="18" FontAttributes="Bold" TextColor="#90894A" VerticalTextAlignment="Center"/>
+
+                                    <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=MostrarPresupuestoCommand}"
+                                                 CommandParameter="{Binding .}"
+                                                 VerticalOptions="Center"
+                                                 StyleClass="OutlinedButton">
+                                        <ImageButton.Source>
+                                            <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.PenToSquare}" Color="#B5B28E" Size="17"/>
+                                        </ImageButton.Source>
+                                    </ImageButton>
+
+                                </HorizontalStackLayout>
+
+                                <Label Text="{Binding Costo.Mes, StringFormat='Mes: {0:MM-yyyy}'}" FontSize="14" TextColor="#A2A2A2" Margin="0,2,0,0"/>
+
+                                <HorizontalStackLayout Spacing="16" Margin="0,8,0,0" VerticalOptions="Center">
+                                    <HorizontalStackLayout VerticalOptions="Center">
+                                        <Label Text="Precio: $" VerticalTextAlignment="Center" />
+                                        <Editor Text="{Binding Costo.PrecioPallet}"  FontSize="16" TextColor="#6D6D6D" VerticalTextAlignment="Center" HorizontalTextAlignment="End" WidthRequest="70"/>
+                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=GuardarPrecioCommand}"
+                                                     CommandParameter="{Binding .}"
+                                                     VerticalOptions="Center"
+                                                     StyleClass="OutlinedButton">
+                                            <ImageButton.Source>
+                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.FloppyDisk}" Color="#8DB58F" Size="17"/>
+                                            </ImageButton.Source>
+                                        </ImageButton>
+
+                                    </HorizontalStackLayout>
+                                    <Label Padding="10,0,0,0" Text="{Binding Costo.GananciaPorCantPallet, StringFormat='Ganancia: ${0:N2}'}" FontSize="16" TextColor="#6D6D6D" VerticalTextAlignment="Center"/>
+                                    <Label Padding="10,0,0,0" Text="{Binding GananciaPorCamion, StringFormat='Ganancia por camión: ${0:N2}'}" FontSize="16" TextColor="#6D6D6D" VerticalTextAlignment="Center"/>
+                                </HorizontalStackLayout>
+                                
+                                <Label Text="{Binding CostoFinalPallet, StringFormat='Costo final del Pallet: ${0:N2}'}" FontSize="14" Padding="0,10,0,10"/>
+
+                                <HorizontalStackLayout Spacing="16" Margin="0,4,0,0">
+                                    <Label Text="{Binding Costo.CantidadPorDia, StringFormat='Cantidad/día: {0}'}" FontSize="14" TextColor="#A2A2A2"/>
+                                    <Label Text="{Binding Costo.HorasPorMes, StringFormat='Horas/mes: {0}'}" FontSize="14" TextColor="#A2A2A2"/>
+                                    <Label Text="{Binding TotalGasto.TotalGastoFijo, StringFormat='Gasto Fijo Total: ${0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
+
+                                    <Label Text="{Binding CantDiasCamion, StringFormat='Dias/Camion: {0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
+                                    <Label Text="{Binding HacenPorMes, StringFormat='Cantidad/Mes: {0:N0}'}" FontSize="14" TextColor="#A2A2A2"/>
+                                    <Label Text="{Binding GastoDelPallet, StringFormat='Gasto del Pallet: ${0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
+                                    <Label Text="{Binding CostoTotalCamion, StringFormat='Costo por Camión: ${0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
+
+
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+
+
+                        </Border>
+
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+
+            </CollectionView>
+
+
+        </VerticalStackLayout>
+
+
+    </ScrollView>
+
+</uranium:UraniumContentPage>

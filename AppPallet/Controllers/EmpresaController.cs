@@ -31,6 +31,51 @@ namespace AppPallet.Controllers
             }
         }
 
+        public async Task<List<Empresa>> GetAllEmpresasCostoPallet()
+        {
+            try
+            {
+                var mesActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+                return await _context.Empresas
+                    .AsNoTracking()
+                    .Select(e => new Empresa
+                    {
+                        EmpresaId = e.EmpresaId,
+                        NomEmpresa = e.NomEmpresa,
+                        Cuit = e.Cuit,
+                        Domicilio = e.Domicilio,
+                        CostoPorPallets = e.CostoPorPallets
+                            .Where(cp => cp.Mes.Year == mesActual.Year && cp.Mes.Month == mesActual.Month)
+                            .ToList(),
+                    })
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return [];
+            }
+        }
+
+
+        // Obtener un empresa por ID
+        public async Task<Empresa?> GetEmpresaById(int empresaId) {             
+            try
+            {
+                return await _context.Empresas
+                    .AsNoTracking()
+                    .Include(e => e.CostoPorPallets.OrderByDescending(cp => cp.Mes))
+                    .ThenInclude(cp => cp.CostoPorCamions)
+                    .FirstOrDefaultAsync(e => e.EmpresaId == empresaId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
         // Crear un nuevo cliente/proveedor
         public async Task<bool> CreateEmpresa(Empresa nuevaEmpresa)
         {

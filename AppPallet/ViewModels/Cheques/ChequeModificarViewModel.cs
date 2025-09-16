@@ -74,7 +74,7 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         async Task EliminarCheque()
         {
-            if (ChequeSeleccionado == null || ChequeSeleccionado.ChequeId == null)
+            if (ChequeSeleccionado == null || ChequeSeleccionado.ChequeId == 0)
             {
                 await MostrarAlerta("Error", "Datos inválidos");
                 return;

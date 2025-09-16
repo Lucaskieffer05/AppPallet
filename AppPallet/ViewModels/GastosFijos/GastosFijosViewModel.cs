@@ -31,6 +31,9 @@ namespace AppPallet.ViewModels
         public GastosFijo? gastoFijoSeleccionado;
 
         [ObservableProperty]
+        public DateTime mesFiltro = DateTime.Now;
+
+        [ObservableProperty]
         public bool isBusy;
 
 
@@ -58,13 +61,33 @@ namespace AppPallet.ViewModels
 
                 GastoFijoSeleccionado = null;
 
-                var gastosFijoList = await _gastosFijosController.GetAllGastosFijos();
+                var gastosFijoList = await _gastosFijosController.GetAllGastosFijos(MesFiltro);
                 ListaGastosFijos = new ObservableCollection<GastosFijo>(gastosFijoList);
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+
+
+
+        partial void OnMesFiltroChanged(DateTime value)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    await CargarListaGastosFijos();
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
         }
 
         [RelayCommand]
@@ -95,11 +118,11 @@ namespace AppPallet.ViewModels
         public async Task DisplayPopupModificar()
         {
             if (GastoFijoSeleccionado == null)
-                throw new InvalidOperationException("ChequeSeleccionado no puede ser nulo al modificar.");
+                throw new InvalidOperationException("El Gasto no puede ser nulo al modificar.");
 
             var queryAttributes = new Dictionary<string, object>
             {
-                ["GastoFijoSeleccionado"] = GastoFijoSeleccionado
+                ["GastosFijoSeleccionado"] = GastoFijoSeleccionado
             };
 
             var popupResult = await _popupService.ShowPopupAsync<GastosFijosModificarViewModel>(

@@ -1,11 +1,58 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.GastosFijosModificarView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentView 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AppPallet.Views.GastosFijosModificarView"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:converts="clr-namespace:AppPallet.Converters"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    x:DataType="viewModels:GastosFijosModificarViewModel"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    WidthRequest="500">
+
+    <ContentView.Resources>
+        <converts:DecimalToStringConverter x:Key="DecimalToStringConverter" />
+    </ContentView.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20">
+
+            <material:EditorField TextColor="Black" Title="Proveedor" Text="{Binding GastosFijoSeleccionado.NombreGastoFijo, Mode=TwoWay}" />
+
+            <material:EditorField 
+                TextColor="Black" 
+                Title="Monto $:" 
+                Text="{Binding GastosFijoSeleccionado.Monto, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}" 
+                Keyboard="Numeric">
+            </material:EditorField>
+
+            <HorizontalStackLayout>
+                <material:PickerField 
+                    x:Name="MesPicker"
+                    Title="Mes"
+                    ItemsSource="{Binding Meses}"
+                    SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" />
+
+                <material:PickerField 
+                    x:Name="AñoPicker"
+                    Title="Año"
+                    ItemsSource="{Binding Años}"
+                    SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"/>
+            </HorizontalStackLayout>
+
+            <Grid ColumnDefinitions="*,*">
+                <HorizontalStackLayout Spacing="10" Grid.Column="0">
+                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Guardar" Command="{Binding GuardarPopupCommand}"/>
+                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Cancelar" Command="{Binding CancelarPopupCommand}"/>
+                </HorizontalStackLayout>
+
+                <Button Grid.Column="1" HorizontalOptions="End" StyleClass="OutlinedButton" BorderColor="#d65265" TextColor="#d65265" Text="Eliminar Cheque" Command="{Binding EliminarGastosFijoCommand}"/>
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentView>

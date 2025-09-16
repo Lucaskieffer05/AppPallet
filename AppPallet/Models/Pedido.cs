@@ -11,7 +11,7 @@ public partial class Pedido
 
     public int PalletId { get; set; }
 
-    public DateOnly FechaEntrega { get; set; }
+    public DateTime FechaEntrega { get; set; }
 
     public int Cantidad { get; set; }
 

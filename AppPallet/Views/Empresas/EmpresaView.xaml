@@ -9,7 +9,8 @@
                             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
                             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
                             xmlns:models="clr-namespace:AppPallet.Models"
-                            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+                            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                            x:DataType="viewModels:EmpresaViewModel">
     <ScrollView>
         <Grid RowDefinitions="Auto,Auto">
 
@@ -40,8 +41,9 @@
 
                     <CollectionView ItemsSource="{Binding ListaEmpresas}" Margin="20" SelectedItem="{Binding EmpresaSeleccionada, Mode=TwoWay}">
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Stroke="#D68152" StrokeThickness="2" >
+                            <DataTemplate x:DataType="models:Empresa">
+                                <Grid Padding="0,0,0,20">
+                                <Border Stroke="#D0B595" StrokeThickness="2">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="10"/>
                                     </Border.StrokeShape>
@@ -81,7 +83,7 @@
                                         <!-- Áreas y contactos -->
                                         <CollectionView ItemsSource="{Binding ContactosEmpresas}">
                                             <CollectionView.ItemTemplate>
-                                                <DataTemplate>
+                                                <DataTemplate x:DataType="models:ContactosEmpresa">
                                                     <Border Stroke="#848484" Padding="10">
                                                         <Border.StrokeShape>
                                                             <RoundRectangle CornerRadius="8"/>
@@ -131,6 +133,7 @@
 
                                     </VerticalStackLayout>
                                 </Border>
+                                </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>

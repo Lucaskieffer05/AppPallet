@@ -27,13 +27,9 @@ public partial class PalletContext : DbContext
 
     public virtual DbSet<Empresa> Empresas { get; set; }
 
-    public virtual DbSet<FichaTecnica> FichaTecnicas { get; set; }
-
     public virtual DbSet<GastosFijo> GastosFijos { get; set; }
 
     public virtual DbSet<Lote> Lotes { get; set; }
-
-    public virtual DbSet<Mes> Mes { get; set; }
 
     public virtual DbSet<Pallet> Pallets { get; set; }
 
@@ -48,11 +44,13 @@ public partial class PalletContext : DbContext
     public virtual DbSet<Pedido> Pedidos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True");
+    {
+        optionsBuilder.UseSqlServer("Server=tcp:sqlserver-pallet.database.windows.net,1433;Initial Catalog=Pallet-db;Persist Security Info=False;User ID=admin-pallet;Password=lk_42559251;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<Area>(entity =>
         {
             entity.ToTable("Area");
@@ -142,7 +140,6 @@ public partial class PalletContext : DbContext
 
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
             entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
-            entity.Property(e => e.MesId).HasColumnName("MesID");
             entity.Property(e => e.NombrePalletCliente)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -153,11 +150,6 @@ public partial class PalletContext : DbContext
                 .HasForeignKey(d => d.EmpresaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CostoPorPallet_Empresa1");
-
-            entity.HasOne(d => d.Mes).WithMany(p => p.CostoPorPallets)
-                .HasForeignKey(d => d.MesId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CostoPorPallet_Mes");
 
             entity.HasOne(d => d.Pallet).WithMany(p => p.CostoPorPallets)
                 .HasForeignKey(d => d.PalletId)
@@ -184,33 +176,15 @@ public partial class PalletContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<FichaTecnica>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("FichaTecnica");
-
-            entity.Property(e => e.Asdasd)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("asdasd");
-        });
-
         modelBuilder.Entity<GastosFijo>(entity =>
         {
             entity.HasKey(e => e.GastosFijosId);
 
             entity.Property(e => e.GastosFijosId).HasColumnName("GastosFijosID");
-            entity.Property(e => e.MesId).HasColumnName("MesID");
             entity.Property(e => e.Monto).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.NombreGastoFijo)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-
-            entity.HasOne(d => d.Mes).WithMany(p => p.GastosFijos)
-                .HasForeignKey(d => d.MesId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_GastosFijos_Mes");
         });
 
         modelBuilder.Entity<Lote>(entity =>
@@ -235,13 +209,6 @@ public partial class PalletContext : DbContext
                 .HasForeignKey(d => d.PedidoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Lote_Pedido");
-        });
-
-        modelBuilder.Entity<Mes>(entity =>
-        {
-            entity.HasKey(e => e.MesId);
-
-            entity.Property(e => e.MesId).HasColumnName("MesID");
         });
 
         modelBuilder.Entity<Pallet>(entity =>

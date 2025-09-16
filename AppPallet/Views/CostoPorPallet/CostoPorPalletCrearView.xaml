@@ -3,90 +3,98 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="AppPallet.Views.CostoPorPalletCrearView"
-    Title="CostoPorPalletCrear"
+    Title="Crear Presupuesto"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:models="clr-namespace:AppPallet.Models"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid">
+    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+    x:DataType="viewModels:CostoPorPalletCrearViewModel">
 
 
+    <ScrollView>
+
+        <Grid ColumnDefinitions="*,*,*">
+            
+            <VerticalStackLayout Spacing="20"  Grid.Column="1" Padding="0,80,0,80">
 
 
+                <Label Text="Crear un nuevo costo para presupuesto" TextColor="#424242" FontSize="26" LineBreakMode="WordWrap" VerticalOptions="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" Padding="0,0,0,20"/>
 
-    <VerticalStackLayout Spacing="20">
 
+                <HorizontalStackLayout  >
+                    <material:PickerField 
+                        x:Name="MesPicker"
+                        Title="Mes"
+                        ItemsSource="{Binding Meses}"
+                        SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" />
 
-        <HorizontalStackLayout WidthRequest="300" HorizontalOptions="Center">
-            <Entry
-                Placeholder="Mes (número)"
-                Keyboard="Numeric"
-                Text="{Binding MesIngresado, Mode=TwoWay}" />
-
-            <Entry
-                Placeholder="Año"
-                Keyboard="Numeric"
-                Text="{Binding AñoIngresado, Mode=TwoWay}" />
-        </HorizontalStackLayout>
+                    <material:PickerField 
+                        x:Name="AñoPicker"
+                        Title="Año"
+                        ItemsSource="{Binding Años}"
+                        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"/>
+                </HorizontalStackLayout>
         
 
-        <material:PickerField
-            Title="Selecciona la Empresa"
-            ItemsSource="{Binding ListEmpresas}"
-            ItemDisplayBinding="{Binding NomEmpresa}"
-            SelectedItem="{Binding EmpresaIngresada, Mode=TwoWay}" />
+                <material:PickerField
+                    Title="Selecciona la Empresa"
+                    ItemsSource="{Binding ListEmpresas}"
+                    ItemDisplayBinding="{Binding NomEmpresa}"
+                    x:DataType="{x:Null}"
+                    SelectedItem="{Binding EmpresaIngresada, Mode=TwoWay}" />
 
-        <material:PickerField
-            Title="Selecciona el Pallet"
-            ItemsSource="{Binding ListPallets}"
-            ItemDisplayBinding="{Binding Nombre}"
-            SelectedItem="{Binding PalletIngresado, Mode=TwoWay}" />
+                <material:PickerField
+                    Title="Selecciona el Pallet"
+                    ItemsSource="{Binding ListPallets}"
+                    ItemDisplayBinding="{Binding Nombre}"
+                    x:DataType="{x:Null}"
+                    SelectedItem="{Binding PalletIngresado, Mode=TwoWay}" />
 
-        <material:EditorField TextColor="Black" Title="Nombre del Costo al Pallet" Text="{Binding CostoPorPalletCreated.NombrePalletCliente, Mode=TwoWay}" />
+                <material:EditorField TextColor="Black" Title="Nombre del Costo al Pallet" Text="{Binding CostoPorPalletCreated.NombrePalletCliente, Mode=TwoWay}" />
 
-        <material:EditorField TextColor="Black" Title="Cantidad de pallet por dia" Text="{Binding CostoPorPalletCreated.CantidadPorDia, Mode=TwoWay}" />
+                <material:EditorField TextColor="Black" Title="Cantidad de pallet por dia" Text="{Binding CostoPorPalletCreated.CantidadPorDia, Mode=TwoWay}" />
 
-        <material:EditorField TextColor="Black" Title="Carga maxima del camion" Text="{Binding CostoPorPalletCreated.CargaCamion, Mode=TwoWay}" />
+                <material:EditorField TextColor="Black" Title="Carga maxima del camion" Text="{Binding CostoPorPalletCreated.CargaCamion, Mode=TwoWay}" />
 
-        <material:EditorField TextColor="Black" Title="Ganancia" Text="{Binding CostoPorPalletCreated.GananciaPorCantPallet, Mode=TwoWay}" Keyboard="Numeric" />
-        
-        <material:EditorField TextColor="Black" Title="Precio" Text="{Binding CostoPorPalletCreated.PrecioPallet, Mode=TwoWay}" Keyboard="Numeric" />
+                <VerticalStackLayout>
+                    <Label Text="Costos por Camión:" FontAttributes="Bold" FontSize="16" HorizontalTextAlignment="Center" Padding="0,0,0,20"/>
 
+                    <Grid ColumnDefinitions="*,*" Padding="0,0,0,20">
+                        <Label Grid.Column="0" Text="Nombre Costo" BackgroundColor="#E6E6E6"/>
+                        <Label Grid.Column="1" Text="Monto" BackgroundColor="#D6D6D6" />
+                    </Grid>
 
-        <VerticalStackLayout>
-            <Label Text="Costos por Camión" FontAttributes="Bold" />
+                    <CollectionView ItemsSource="{Binding ListCostoPorCamions}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:CostoPorCamion">
+                                <Grid ColumnDefinitions="*,*" Padding="0,0,0,20">
+                                    <Entry Grid.Column="0" Text="{Binding NombreCosto, Mode=TwoWay}" Placeholder="Nombre del costo" />
+                                    <Entry Grid.Column="1" Text="{Binding Monto, Mode=TwoWay}" Keyboard="Numeric" Placeholder="Monto"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-            <Grid ColumnDefinitions="*,*">
-                <Label Grid.Column="0" Text="Nombre Costo" />
-                <Label Grid.Column="1" Text="Monto" />
-            </Grid>
-
-            <CollectionView ItemsSource="{Binding ListCostoPorCamions}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="*,*">
-                            <Entry Grid.Column="0" Text="{Binding NombreCosto, Mode=TwoWay}" Placeholder="Nombre del costo" />
-                            <Entry Grid.Column="1" Text="{Binding Monto, Mode=TwoWay}" Keyboard="Numeric" Placeholder="Monto"/>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <Button Text="Agregar costo por camión" 
-                    Command="{Binding AgregarCostoPorCamionCommand}" 
-                    StyleClass="OutlinedButton"
-                    BorderColor="#d65265" TextColor="#d65265"/>
-        </VerticalStackLayout>
+                    <Button Text="Agregar costo por camión" 
+                            Command="{Binding AgregarCostoPorCamionCommand}" 
+                            StyleClass="OutlinedButton"
+                            BorderColor="#52D681" TextColor="#52D681"/>
+                </VerticalStackLayout>
 
 
-        <HorizontalStackLayout Spacing="10">
-            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Crear Costo del Pallet" Command="{Binding CrearCostoPorPalletCommand}"/>
-            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Volver" Command="{Binding VolverCommand}"/>
-        </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10">
+                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Crear Costo del Pallet" Command="{Binding CrearCostoPorPalletCommand}"/>
+                </HorizontalStackLayout>
 
 
-    </VerticalStackLayout>
-    
+            </VerticalStackLayout>
+        </Grid>
+
+
+    </ScrollView>
+
 
 
 

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage  
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AppPallet.Views.PresupuestoModificarView"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    Title="PresupuestoModificarView"
+    x:DataType="viewModels:PresupuestoModificarViewModel">
+
+
+
+    <ScrollView>
+
+        <Grid ColumnDefinitions="*,*,*,*">
+            
+            
+            <VerticalStackLayout Grid.Column="1" Padding="20" Spacing="15">
+
+                <!-- Campos editables -->
+
+
+                <material:EditorField TextColor="Black" Title="Nombre Pallet Cliente" Text="{Binding CostoPorPalletSeleccionada.NombrePalletCliente}" />
+
+
+                <material:EditorField TextColor="Black" Title="Cantidad Por Día" Text="{Binding CostoPorPalletSeleccionada.CantidadPorDia}" Keyboard="Numeric" />
+
+
+                <material:EditorField TextColor="Black" Title="Carga Camión" Text="{Binding CostoPorPalletSeleccionada.CargaCamion}" Keyboard="Numeric" />
+
+
+                <Button StyleClass="FilledButton" Text="Guardar Cambios" Command="{Binding GuardarCambiosCommand}" />
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="2" Padding="20" Spacing="15">
+
+
+                <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
+                          Title="Mes del presupuesto"
+                          Date="{Binding CostoPorPalletSeleccionada.Mes, Mode=TwoWay}" 
+                          TextColor="Black"/>
+
+
+                <material:EditorField TextColor="Black" Title="Horas Por Mes" Text="{Binding CostoPorPalletSeleccionada.HorasPorMes}" Keyboard="Numeric" />
+
+                <Label Text="Costos por camión" TextColor="Gray" FontSize="19" HorizontalTextAlignment="Center"/>
+
+                <CollectionView ItemsSource="{Binding CostoPorPalletSeleccionada.CostoPorCamions}">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:CostoPorCamion">
+
+                            <VerticalStackLayout>
+
+                                <Grid ColumnDefinitions="*,*,0.2*">
+                                    <Entry Grid.Column="0" Text="{Binding NombreCosto, Mode=TwoWay}" Placeholder="Nombre del costo" />
+                                    <HorizontalStackLayout Grid.Column="1">
+                                        <Label Text="$" VerticalTextAlignment="Center"/>
+                                        <Entry  Text="{Binding Monto, Mode=TwoWay}" Keyboard="Numeric" Placeholder="Monto"/>
+
+                                    </HorizontalStackLayout>
+                                    <ImageButton Grid.Column="2"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoModificarViewModel}}, Path=EliminarCostoPorCamionCommand}"
+                                                 CommandParameter="{Binding .}"
+                                                 VerticalOptions="Center"
+                                                 StyleClass="OutlinedButton">
+                                        <ImageButton.Source>
+                                            <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.DeleteLeft}" Color="#F78D9C" Size="17"/>
+                                        </ImageButton.Source>
+                                    </ImageButton>
+                                </Grid>
+
+
+                            </VerticalStackLayout>
+
+
+
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <Button Text="Agregar costo por camión" 
+                        Command="{Binding AgregarCostoPorCamionCommand}"
+                        StyleClass="OutlinedButton"
+                        BorderColor="#d65265" TextColor="#d65265"/>
+
+
+
+            </VerticalStackLayout>
+
+
+
+
+        </Grid>
+        
+    </ScrollView>
+
+</uranium:UraniumContentPage>

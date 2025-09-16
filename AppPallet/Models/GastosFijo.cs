@@ -11,7 +11,5 @@ public partial class GastosFijo
 
     public decimal Monto { get; set; }
 
-    public int MesId { get; set; }
-
-    public virtual Mes Mes { get; set; } = null!;
+    public DateTime Mes { get; set; }
 }

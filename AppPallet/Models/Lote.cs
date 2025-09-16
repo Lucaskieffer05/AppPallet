@@ -9,9 +9,9 @@ public partial class Lote
 
     public int NumLote { get; set; }
 
-    public DateOnly FechaSolicitada { get; set; }
+    public DateTime FechaSolicitada { get; set; }
 
-    public DateOnly? FechaEntrega { get; set; }
+    public DateTime? FechaEntrega { get; set; }
 
     public string NomProveedor { get; set; } = null!;
 

@@ -10,4 +10,15 @@ public partial class GastosFijosView : UraniumContentPage
 		InitializeComponent();
 		BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is GastosFijosViewModel vm)
+        {
+            await vm.CargarListaGastosFijos();
+        }
+    }
+
+
 }

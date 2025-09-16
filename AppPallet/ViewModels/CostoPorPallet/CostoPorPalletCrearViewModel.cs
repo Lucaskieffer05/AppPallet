@@ -29,7 +29,7 @@ namespace AppPallet.ViewModels
         public Pallet palletIngresado = new();
 
         [ObservableProperty]
-        public ObservableCollection<Empresa> listEmpresas = new();
+        public ObservableCollection<Empresa> listEmpresas = [];
 
         [ObservableProperty]
         public Empresa empresaIngresada = new();
@@ -39,6 +39,18 @@ namespace AppPallet.ViewModels
 
         [ObservableProperty]
         private int añoIngresado;
+
+
+        public ObservableCollection<string> Meses { get; } = new()
+            {
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            };
+
+        public ObservableCollection<int> Años { get; } = new()
+            {
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            };
 
         readonly CostoPorPalletController _costoPorPalletController;
 
@@ -54,6 +66,15 @@ namespace AppPallet.ViewModels
             ListEmpresas = _context.Empresas.AsNoTracking().ToList().ToObservableCollection();
             _costoPorPalletController = controller;
             CostoPorPalletCreated = new CostoPorPallet();
+            MesIngresado = DateTime.Today.Month - 1;
+            AñoIngresado = DateTime.Today.Year;
+            
+            if (ListEmpresas.Count > 0)
+                EmpresaIngresada = ListEmpresas.FirstOrDefault()!;
+
+            if (ListPallets.Count > 0)
+                PalletIngresado = ListPallets.FirstOrDefault()!;
+
         }
 
         // -------------------------------------------------------------------
@@ -77,23 +98,8 @@ namespace AppPallet.ViewModels
         {
             // Buscar el mes en la base de datos
 
-            if(MesIngresado < 1 || MesIngresado > 12 || AñoIngresado < 1)
-            {
-                await MostrarAlerta("Error", "Por favor, ingrese un mes (1-12) y un año válidos.");
-                return;
-            }
+            CostoPorPalletCreated.Mes = new DateTime(AñoIngresado, MesIngresado+1, 1);
 
-            var mesDb = await _context.Mes
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.FechaMes.Month == MesIngresado && m.FechaMes.Year == AñoIngresado);
-
-            if (mesDb == null)
-            {
-                await MostrarAlerta("Error", "No se encontró el mes ingresado en la base de datos.");
-                return;
-            }
-
-            CostoPorPalletCreated.MesId = mesDb.MesId;
             CostoPorPalletCreated.EmpresaId = EmpresaIngresada.EmpresaId;
             CostoPorPalletCreated.PalletId = PalletIngresado.PalletId;
 
@@ -108,7 +114,6 @@ namespace AppPallet.ViewModels
             if (string.IsNullOrWhiteSpace(CostoPorPalletCreated.NombrePalletCliente) ||
                 CostoPorPalletCreated.CantidadPorDia <= 0 ||
                 CostoPorPalletCreated.CargaCamion <= 0 ||
-                CostoPorPalletCreated.MesId <= 0 ||
                 CostoPorPalletCreated.PalletId <= 0 ||
                 CostoPorPalletCreated.EmpresaId <= 0)
             {
