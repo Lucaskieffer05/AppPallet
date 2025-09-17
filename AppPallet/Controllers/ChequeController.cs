@@ -17,7 +17,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Cheques.AsNoTracking().ToListAsync();
+                return await _context.Cheques.AsNoTracking().OrderBy(c => c.FechaPago).ToListAsync();
             }
             catch (Exception ex)
             {

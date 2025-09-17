@@ -106,12 +106,7 @@ namespace AppPallet.ViewModels
                 {
                     gastosYCostos.Costo.GananciaPorCantPallet = (int?)(gastosYCostos.Costo.PrecioPallet - gastosYCostos.CostoFinalPallet);
                 }
-                bool response = await _costoPorPalletController.UpdateCostoPorPallet(gastosYCostos.Costo);
-                if (!response)
-                {
-                    await MostrarAlerta("Error", "Ocurrió un error al guardar el precio del pallet.");
-                    return;
-                }
+                bool response = await _costoPorPalletController.UpdatePrecioCostoPorPallet(gastosYCostos.Costo);
             }
 
             if (EmpresaSeleccionada == null)

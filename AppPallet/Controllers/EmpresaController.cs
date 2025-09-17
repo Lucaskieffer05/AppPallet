@@ -64,9 +64,9 @@ namespace AppPallet.Controllers
             try
             {
                 return await _context.Empresas
-                    .AsNoTracking()
                     .Include(e => e.CostoPorPallets.OrderByDescending(cp => cp.Mes))
                     .ThenInclude(cp => cp.CostoPorCamions)
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(e => e.EmpresaId == empresaId);
             }
             catch (Exception ex)

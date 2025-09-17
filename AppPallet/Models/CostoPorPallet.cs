@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace AppPallet.Models;
 
@@ -26,11 +25,9 @@ public partial class CostoPorPallet
 
     public int HorasPorMes { get; set; }
 
-    public virtual ObservableCollection<CostoPorCamion> CostoPorCamions { get; set; } = new ObservableCollection<CostoPorCamion>();
+    public virtual ICollection<CostoPorCamion> CostoPorCamions { get; set; } = new List<CostoPorCamion>();
 
     public virtual Empresa Empresa { get; set; } = null!;
 
     public virtual Pallet Pallet { get; set; } = null!;
-
-
 }

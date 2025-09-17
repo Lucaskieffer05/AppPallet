@@ -94,14 +94,22 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
+        public Task EliminarCostoPorCamion(CostoPorCamion costoPorCamion)
+        {
+            if (costoPorCamion == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            ListCostoPorCamions?.Remove(costoPorCamion);
+
+            return Task.CompletedTask;
+        }
+
+
+        [RelayCommand]
         public async Task CrearCostoPorPallet()
         {
-            // Buscar el mes en la base de datos
-
-            CostoPorPalletCreated.Mes = new DateTime(AñoIngresado, MesIngresado+1, 1);
-
-            CostoPorPalletCreated.EmpresaId = EmpresaIngresada.EmpresaId;
-            CostoPorPalletCreated.PalletId = PalletIngresado.PalletId;
 
             if (ListCostoPorCamions.Count == 0)
             {
@@ -113,18 +121,42 @@ namespace AppPallet.ViewModels
 
             if (string.IsNullOrWhiteSpace(CostoPorPalletCreated.NombrePalletCliente) ||
                 CostoPorPalletCreated.CantidadPorDia <= 0 ||
-                CostoPorPalletCreated.CargaCamion <= 0 ||
-                CostoPorPalletCreated.PalletId <= 0 ||
-                CostoPorPalletCreated.EmpresaId <= 0)
+                CostoPorPalletCreated.CargaCamion <= 0 )
             {
                 await MostrarAlerta("Error", "Por favor, complete todos los campos obligatorios.");
                 return;
             }
+
+            // Crear una nueva instancia para cada registro
+            var nuevoCostoPorPallet = new CostoPorPallet
+            {
+                // ...asigna los datos necesarios
+                Mes = new DateTime(AñoIngresado, MesIngresado + 1, 1),
+                EmpresaId = EmpresaIngresada.EmpresaId,
+                PalletId = PalletIngresado.PalletId,
+                NombrePalletCliente = CostoPorPalletCreated.NombrePalletCliente,
+                CantidadPorDia = CostoPorPalletCreated.CantidadPorDia,
+                CargaCamion = CostoPorPalletCreated.CargaCamion,
+                HorasPorMes = CostoPorPalletCreated.HorasPorMes,
+                CostoPorCamions = new ObservableCollection<CostoPorCamion>(
+                    ListCostoPorCamions.Select(c => new CostoPorCamion
+                    {
+                        NombreCosto = c.NombreCosto,
+                        Monto = c.Monto
+                        // No asignes CostoPorPalletId ni CostoPorPallet aquí
+                    })
+                )
+            };
+
+
+
+
+
             try
             {
-                
+
                 // Guardar el CostoPorPallet
-                var resultado = await _costoPorPalletController.CreateCostoPorPallet(CostoPorPalletCreated);
+                var resultado = await _costoPorPalletController.CreateCostoPorPallet(nuevoCostoPorPallet);
 
                 if (!resultado)
                 {
@@ -134,8 +166,8 @@ namespace AppPallet.ViewModels
 
                 await MostrarAlerta("Éxito", "Costo por pallet y costos por camión guardados correctamente.");
 
+                ListCostoPorCamions = new ObservableCollection<CostoPorCamion>();
                 CostoPorPalletCreated = new CostoPorPallet();
-                ListCostoPorCamions.Clear();
             }
             catch (Exception ex)
             {

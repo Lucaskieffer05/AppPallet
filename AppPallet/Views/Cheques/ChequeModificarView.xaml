@@ -13,6 +13,7 @@
 
     <ContentView.Resources>
         <converts:DecimalToStringConverter x:Key="DecimalToStringConverter" />
+        <converts:IndexToBoolConverter x:Key="IndexToBoolConverter" />
     </ContentView.Resources>
 
     <ScrollView>
@@ -38,7 +39,38 @@
                                       Date="{Binding ChequeSeleccionado.FechaPago, Mode=TwoWay}" 
                                       TextColor="Black"/>
 
-            <material:EditorField TextColor="Black" Title="Estado" Text="{Binding ChequeSeleccionado.Estado, Mode=TwoWay}" Keyboard="Numeric" />
+
+ <!-- Radio Button para Estado -->
+            <Label Text="Estado" TextColor="Black" FontAttributes="Bold"/>
+            <HorizontalStackLayout Spacing="20">
+                <VerticalStackLayout >
+                    <RadioButton GroupName="EstadoGroup" 
+                               Content="Sin Estado" 
+                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=0}"
+                               Value="0"/>
+                    <RadioButton GroupName="EstadoGroup" 
+                               Content="Cobrado" 
+                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=1}"
+                               Value="1"/>
+                    <RadioButton GroupName="EstadoGroup" 
+                               Content="Vencido" 
+                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=2}"
+                               Value="2"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout >
+                    <RadioButton GroupName="EstadoGroup" 
+                               Content="Pago inmediato" 
+                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=3}"
+                               Value="3"/>
+                    <RadioButton GroupName="EstadoGroup" 
+                                   Content="Proximo a pagar" 
+                                   IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=4}"
+                                   Value="4"/>
+                </VerticalStackLayout>
+
+            </HorizontalStackLayout>
+
+
 
             <Grid ColumnDefinitions="*,*">
                 <HorizontalStackLayout Spacing="10" Grid.Column="0">

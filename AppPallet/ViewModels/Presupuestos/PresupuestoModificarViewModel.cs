@@ -115,6 +115,58 @@ namespace AppPallet.ViewModels
             }
         }
 
+        [RelayCommand]
+        public async Task EliminarCostoPorPallet()
+        {
+            if (CostoPorPalletSeleccionada == null)
+            {
+                await MostrarAlerta("Error", "No hay un costo por pallet seleccionado.");
+                return;
+            }
+
+            // Obtener la página principal de forma compatible con la nueva API
+            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (mainPage == null)
+            {
+                await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                return;
+            }
+
+            // Confirmar eliminación
+            bool confirmar = await mainPage.DisplayAlert("Confirmar", "¿Está seguro de que desea eliminar este presupuesto?. Los costos por camión de este presupuesto también serán eliminados", "Sí", "No");
+            if (!confirmar)
+                return;
+
+
+            try
+            {
+                var respuesta = await _costoPorPalletController.DeleteCostoPorPallet(CostoPorPalletSeleccionada.CostoPorPalletId);
+                if (!respuesta)
+                {
+                    await MostrarAlerta("Error", "Ocurrió un error al eliminar el costo por pallet.");
+                    return;
+                }
+                await MostrarAlerta("Éxito", "El costo por pallet se ha eliminado correctamente.");
+                //Volver atras
+                await Shell.Current.GoToAsync("..");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                await MostrarAlerta("Error", "Ocurrió un error al eliminar el costo por pallet.");
+            }
+        }
+
+
+
+
+        [RelayCommand]
+        public async Task CancelarCambios()
+        {
+            //Volver atras
+            await Shell.Current.GoToAsync("..");
+        }
+
 
         private async Task MostrarAlerta(string titulo, string mensaje)
         {

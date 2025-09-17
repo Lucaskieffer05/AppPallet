@@ -32,7 +32,12 @@
                 <material:EditorField TextColor="Black" Title="Carga Camión" Text="{Binding CostoPorPalletSeleccionada.CargaCamion}" Keyboard="Numeric" />
 
 
-                <Button StyleClass="FilledButton" Text="Guardar Cambios" Command="{Binding GuardarCambiosCommand}" />
+                <HorizontalStackLayout Spacing="10">
+                    <Button StyleClass="FilledButton" Text="Guardar Cambios" Command="{Binding GuardarCambiosCommand}" />
+                    <Button StyleClass="OutlinedButton" Text="Cancelar Cambios" Command="{Binding CancelarCambiosCommand}" />
+                    <Button StyleClass="OutlinedButton" Text="Eliminar Presupuesto"  BorderColor="#d65265" TextColor="#d65265" Command="{Binding EliminarCostoPorPalletCommand}" />
+                </HorizontalStackLayout>
+                
 
             </VerticalStackLayout>
 
@@ -84,7 +89,7 @@
                     </CollectionView.ItemTemplate>
 
                 </CollectionView>
-
+                   
                 <Button Text="Agregar costo por camión" 
                         Command="{Binding AgregarCostoPorCamionCommand}"
                         StyleClass="OutlinedButton"

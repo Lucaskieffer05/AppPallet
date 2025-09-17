@@ -7,9 +7,18 @@
                             xmlns:models="clr-namespace:AppPallet.Models"
                             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
                             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+                            xmlns:converters="clr-namespace:AppPallet.Converters"
                             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
                             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
                             x:DataType="viewModels:ChequeViewModel">
+
+
+
+    <uranium:UraniumContentPage.Resources>
+        <ResourceDictionary>
+            <converters:EstadoToColorConverter x:Key="EstadoToColor" />
+        </ResourceDictionary>
+    </uranium:UraniumContentPage.Resources>
 
 
     <ScrollView>
@@ -26,16 +35,13 @@
                 </Border>
             </Grid>
 
-            <Grid Grid.Row="1" ColumnDefinitions="0.5*,*,0.5*">
-                <Border Stroke="Silver" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="0">
-                    <Label Text="Plata" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Grid Grid.Row="1" ColumnDefinitions="0.2*,*,0.3*">
+                <Border Stroke="Silver" StrokeThickness="3" HeightRequest="50" WidthRequest="100" >
+                    <Label Text="Plata" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
 
-                <Border Stroke="Silver" StrokeThickness="3" Grid.Column="1">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10"/>
-                    </Border.StrokeShape>
-                    <dg:DataGrid ItemsSource="{Binding ListaCheques}"            
+
+                <dg:DataGrid ItemsSource="{Binding ListaCheques}"            
                                  IsRefreshing="{Binding IsBusy}" 
                                  PaginationEnabled="True"
                                  Style="{StaticResource TablaComun}"
@@ -43,79 +49,83 @@
                                  PageSize="20" 
                                  PageNumber="1"
                                  SelectionMode="Single" 
-                                 BorderColor="Transparent">
-                        <dg:DataGrid.Columns>
-                            <dg:DataGridColumn Title="Proveedor">
-                                <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate x:DataType="models:Cheque">
-                                        <Label Text="{Binding Proveedor}" 
-                                               HorizontalOptions="Center" 
-                                               VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                    </DataTemplate>
-                                </dg:DataGridColumn.CellTemplate>
-                            </dg:DataGridColumn>
-                            <dg:DataGridColumn Title="Tipo">
-                                <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate x:DataType="models:Cheque">
-                                        <Label Text="{Binding Tipo}" 
-                                               HorizontalOptions="Center" 
-                                               VerticalOptions="Center" VerticalTextAlignment="Center"/>
-                                    </DataTemplate>
-                                </dg:DataGridColumn.CellTemplate>
-                            </dg:DataGridColumn>
-                            <dg:DataGridColumn Title="N° de cheque">
-                                <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate x:DataType="models:Cheque">
-                                        <Label Text="{Binding NumCheque}" 
-                                               HorizontalOptions="Center" 
-                                               VerticalOptions="Center" VerticalTextAlignment="Center"/>
-                                    </DataTemplate>
-                                </dg:DataGridColumn.CellTemplate>
-                            </dg:DataGridColumn>
-                            <dg:DataGridColumn Title="Monto">
-                                <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate x:DataType="models:Cheque">
-                                        <Label Text="{Binding Monto, StringFormat='${0:N2}' }"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               VerticalTextAlignment="Center"/>
-                                    </DataTemplate>
-                                </dg:DataGridColumn.CellTemplate>
-                            </dg:DataGridColumn>
-                            <dg:DataGridColumn Title="Fecha de Emision">
-                                <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate x:DataType="models:Cheque">
-                                        <Label Text="{Binding FechaEmision, StringFormat='{0:dd/MM/yyyy}'}"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"/>
-                                    </DataTemplate>
-                                </dg:DataGridColumn.CellTemplate>
-                            </dg:DataGridColumn>
-                            <dg:DataGridColumn Title="Fecha de Pago">
-                                <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate x:DataType="models:Cheque">
-                                        <Label Text="{Binding FechaPago, StringFormat='{0:dd/MM/yyyy}'}"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"/>
-                                    </DataTemplate>
-                                </dg:DataGridColumn.CellTemplate>
-                            </dg:DataGridColumn>
-                            <dg:DataGridColumn Title="Estado">
-                                <dg:DataGridColumn.CellTemplate>
-                                    <DataTemplate x:DataType="models:Cheque">
-                                        <Label Text="{Binding Estado, TargetNullValue='-'}"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"/>
-                                    </DataTemplate>
-                                </dg:DataGridColumn.CellTemplate>
-                            </dg:DataGridColumn>
-                        </dg:DataGrid.Columns>
-                    </dg:DataGrid>
-                </Border>
+                                 BorderColor="Transparent"
+                                 Grid.Column="1">
+                    <dg:DataGrid.Columns>
+                        <dg:DataGridColumn Title="Proveedor">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:Cheque">
+                                    <Label Text="{Binding Proveedor}" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                        <dg:DataGridColumn Title="Tipo">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:Cheque">
+                                    <Label Text="{Binding Tipo}" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center" VerticalTextAlignment="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                        <dg:DataGridColumn Title="N° de cheque">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:Cheque">
+                                    <Label Text="{Binding NumCheque}" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center" VerticalTextAlignment="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                        <dg:DataGridColumn Title="Monto">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:Cheque">
+                                    <Label Text="{Binding Monto, StringFormat='${0:N2}' }"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           VerticalTextAlignment="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                        <dg:DataGridColumn Title="Fecha de Emision">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:Cheque">
+                                    <Label Text="{Binding FechaEmision, StringFormat='{0:dd/MM/yyyy}'}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                        <dg:DataGridColumn Title="Fecha de Pago">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:Cheque">
+                                    <Label Text="{Binding FechaPago, StringFormat='{0:dd/MM/yyyy}'}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                        <dg:DataGridColumn Title="Estado">
+                            <dg:DataGridColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:Cheque">
+                                    <BoxView
+                                                WidthRequest="24"
+                                                HeightRequest="24"
+                                                CornerRadius="12"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                BackgroundColor="{Binding Estado, Converter={StaticResource EstadoToColor}}"/>
+                                </DataTemplate>
+                            </dg:DataGridColumn.CellTemplate>
+                        </dg:DataGridColumn>
+                    </dg:DataGrid.Columns>
+                </dg:DataGrid>
 
 
-                <VerticalStackLayout Grid.Column="2" Spacing="10" >
-                    
+                <VerticalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
+
                     <Button StyleClass="FilledButton"  Text="Agregar cheque" Command="{Binding MostrarPopupChequeCommand}"  WidthRequest="180"/>
 
                     <Button StyleClass="OutlinedButton"  Text="Modificar cheque" Command="{Binding MostrarPopupChequeModificarCommand}"  WidthRequest="180"/>

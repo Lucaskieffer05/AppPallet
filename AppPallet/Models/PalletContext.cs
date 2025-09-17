@@ -25,9 +25,13 @@ public partial class PalletContext : DbContext
 
     public virtual DbSet<CostoPorPallet> CostoPorPallets { get; set; }
 
+    public virtual DbSet<Egreso> Egresos { get; set; }
+
     public virtual DbSet<Empresa> Empresas { get; set; }
 
     public virtual DbSet<GastosFijo> GastosFijos { get; set; }
+
+    public virtual DbSet<Ingreso> Ingresos { get; set; }
 
     public virtual DbSet<Lote> Lotes { get; set; }
 
@@ -44,13 +48,11 @@ public partial class PalletContext : DbContext
     public virtual DbSet<Pedido> Pedidos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True");
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.Entity<Area>(entity =>
         {
             entity.ToTable("Area");
@@ -123,7 +125,7 @@ public partial class PalletContext : DbContext
 
             entity.Property(e => e.CostoPorCamionId).HasColumnName("CostoPorCamionID");
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
-            entity.Property(e => e.Monto).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Monto).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.NombreCosto)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -140,6 +142,8 @@ public partial class PalletContext : DbContext
 
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
             entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
+            entity.Property(e => e.GananciaPorCantPallet).HasColumnType("decimal(18, 4)");
+            entity.Property(e => e.Mes).HasColumnType("datetime");
             entity.Property(e => e.NombrePalletCliente)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -155,6 +159,29 @@ public partial class PalletContext : DbContext
                 .HasForeignKey(d => d.PalletId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CostoPorPallet_Pallet");
+        });
+
+        modelBuilder.Entity<Egreso>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Egreso");
+
+            entity.Property(e => e.Comentario)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.DescripEgreso)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Factura)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Fecha).HasColumnType("datetime");
+            entity.Property(e => e.Mes).HasColumnType("datetime");
+            entity.Property(e => e.Monto).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.SumaIva)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("SumaIVA");
         });
 
         modelBuilder.Entity<Empresa>(entity =>
@@ -181,8 +208,35 @@ public partial class PalletContext : DbContext
             entity.HasKey(e => e.GastosFijosId);
 
             entity.Property(e => e.GastosFijosId).HasColumnName("GastosFijosID");
-            entity.Property(e => e.Monto).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Mes).HasColumnType("datetime");
+            entity.Property(e => e.Monto).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.NombreGastoFijo)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Ingreso>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Ingreso");
+
+            entity.Property(e => e.Comentario)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.DescripIngreso)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Factura)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Fecha).HasColumnType("datetime");
+            entity.Property(e => e.Monto).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Op)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("OP");
+            entity.Property(e => e.Remito)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
@@ -192,6 +246,8 @@ public partial class PalletContext : DbContext
             entity.ToTable("Lote");
 
             entity.Property(e => e.LoteId).HasColumnName("LoteID");
+            entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
+            entity.Property(e => e.FechaSolicitada).HasColumnType("datetime");
             entity.Property(e => e.NomCamionero)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -202,8 +258,8 @@ public partial class PalletContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.PedidoId).HasColumnName("PedidoID");
-            entity.Property(e => e.PrecioCamionero).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.PrecioProveedor).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.PrecioCamionero).HasColumnType("decimal(18, 4)");
+            entity.Property(e => e.PrecioProveedor).HasColumnType("decimal(18, 4)");
 
             entity.HasOne(d => d.Pedido).WithMany(p => p.Lotes)
                 .HasForeignKey(d => d.PedidoId)
@@ -333,11 +389,11 @@ public partial class PalletContext : DbContext
 
             entity.Property(e => e.PedidoId).HasColumnName("PedidoID");
             entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
+            entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
             entity.Property(e => e.PalletId).HasColumnName("PalletID");
 
             entity.HasOne(d => d.Empresa).WithMany(p => p.Pedidos)
                 .HasForeignKey(d => d.EmpresaId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Pedido_Empresa");
 
             entity.HasOne(d => d.Pallet).WithMany(p => p.Pedidos)

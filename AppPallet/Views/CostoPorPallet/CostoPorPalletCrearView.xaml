@@ -71,9 +71,20 @@
                     <CollectionView ItemsSource="{Binding ListCostoPorCamions}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:CostoPorCamion">
-                                <Grid ColumnDefinitions="*,*" Padding="0,0,0,20">
+                                <Grid ColumnDefinitions="*,*,0.2*" Padding="0,0,0,20">
                                     <Entry Grid.Column="0" Text="{Binding NombreCosto, Mode=TwoWay}" Placeholder="Nombre del costo" />
                                     <Entry Grid.Column="1" Text="{Binding Monto, Mode=TwoWay}" Keyboard="Numeric" Placeholder="Monto"/>
+
+                                    <ImageButton Grid.Column="2"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CostoPorPalletCrearViewModel}}, Path=EliminarCostoPorCamionCommand}"
+                                                 CommandParameter="{Binding .}"
+                                                 VerticalOptions="Center"
+                                                 StyleClass="OutlinedButton">
+                                        <ImageButton.Source>
+                                            <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.DeleteLeft}" Color="#F78D9C" Size="17"/>
+                                        </ImageButton.Source>
+                                    </ImageButton>
+
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

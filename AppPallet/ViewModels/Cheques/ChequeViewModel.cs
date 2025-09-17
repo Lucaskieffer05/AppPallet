@@ -70,13 +70,13 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         public async Task MostrarPopupCheque()
         {
+            
             await DisplayPopupCrear();
         }
 
         [RelayCommand]
         public async Task MostrarPopupChequeModificar()
         {
-
             if (ChequeSeleccionado == null)
             {
                 await MostrarAlerta("Atención", "Debe seleccionar un cheque para modificar.");

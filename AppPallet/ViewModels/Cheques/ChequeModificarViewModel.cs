@@ -16,6 +16,20 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         public Cheque? chequeSeleccionado;
 
+        [ObservableProperty]
+        public int estadoSeleccionado;
+        public List<int> OpcionesEstado { get; } = new List<int> { 0, 1, 2, 3, 4 };
+
+        public Dictionary<int, string> DescripcionesEstado { get; } = new Dictionary<int, string>
+        {
+            { 0, "Pendiente" },
+            { 1, "En proceso" },
+            { 2, "Pagado" },
+            { 3, "Rechazado" },
+            { 4, "Anulado" }
+        };
+
+
         readonly IPopupService _popupService;
 
         readonly ChequeController _chequeController;
@@ -28,6 +42,7 @@ namespace AppPallet.ViewModels
         {
             _popupService = popupService;
             _chequeController = chequeController;
+            EstadoSeleccionado = 0; 
         }
 
         // -------------------------------------------------------------------
@@ -48,6 +63,8 @@ namespace AppPallet.ViewModels
                 await MostrarAlerta("Error", "Datos inválidos");
                 return;
             }
+
+            ChequeSeleccionado.Estado = EstadoSeleccionado;
 
             try
             {
@@ -116,6 +133,11 @@ namespace AppPallet.ViewModels
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             ChequeSeleccionado = (Cheque)query["ChequeSeleccionado"];
+            // Establecer el estado seleccionado basado en el estado del cheque
+            if (ChequeSeleccionado != null && ChequeSeleccionado.Estado.HasValue)
+            {
+                EstadoSeleccionado = ChequeSeleccionado.Estado.Value;
+            }
         }
 
         bool ValidarCheque()

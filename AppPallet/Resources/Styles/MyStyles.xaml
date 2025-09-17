@@ -65,15 +65,7 @@
         <Setter Property="Margin" Value="1"/>
         <Setter Property="HeaderBordersVisible" Value="True"/>
         <Setter Property="ActiveRowColor" Value="#e4f2e2"/>
-        <Setter Property="HeaderBackground" Value="#E7F1FF"/>
-        <Setter Property="RowsBackgroundColorPalette">
-            <Setter.Value>
-                <dg:PaletteCollection>
-                    <Color>#F2F2F2</Color>
-                    <Color>#FFFFFF</Color>
-                </dg:PaletteCollection>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="HeaderBackground" Value="#D0B595"/>
         <Setter Property="PaginationStepperStyle">
             <Setter.Value>
                 <Style TargetType="Stepper">
