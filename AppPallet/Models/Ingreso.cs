@@ -18,4 +18,6 @@ public partial class Ingreso
     public decimal Monto { get; set; }
 
     public string? Comentario { get; set; }
+
+    public int IngresoId { get; set; }
 }

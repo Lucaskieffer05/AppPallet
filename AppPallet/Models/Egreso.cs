@@ -18,4 +18,6 @@ public partial class Egreso
     public DateTime? Mes { get; set; }
 
     public string? Comentario { get; set; }
+
+    public int EgresoId { get; set; }
 }

@@ -8,8 +8,17 @@
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
     xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
     x:DataType="viewModels:PresupuestoMostrarViewModel"
     Title="{Binding Titulo}">
+
+
+
+    <ContentPage.Resources>
+        <converters:NullToZeroConverter x:Key="NullToZeroConverter"/>
+    </ContentPage.Resources>
+
+
 
     <ScrollView>
 
@@ -44,19 +53,63 @@
 
                             <VerticalStackLayout>
 
-                                <HorizontalStackLayout VerticalOptions="Center">
-                                    <Label Text="{Binding Costo.NombrePalletCliente}" FontSize="18" FontAttributes="Bold" TextColor="#90894A" VerticalTextAlignment="Center"/>
+                                <Grid ColumnDefinitions="*,*">
+                                    
+                                    <HorizontalStackLayout VerticalOptions="Center" Grid.Column="0">
+                                        <Label Text="{Binding Costo.NombrePalletCliente}" FontSize="18" FontAttributes="Bold" TextColor="#90894A" VerticalTextAlignment="Center"/>
 
-                                    <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=MostrarPresupuestoCommand}"
-                                                 CommandParameter="{Binding .}"
-                                                 VerticalOptions="Center"
-                                                 StyleClass="OutlinedButton">
-                                        <ImageButton.Source>
-                                            <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.PenToSquare}" Color="#B5B28E" Size="17"/>
-                                        </ImageButton.Source>
-                                    </ImageButton>
+                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=MostrarPresupuestoCommand}"
+                                                     CommandParameter="{Binding .}"
+                                                     VerticalOptions="Center"
+                                                     StyleClass="OutlinedButton">
+                                            <ImageButton.Source>
+                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.PenToSquare}" Color="#B5B28E" Size="17"/>
+                                            </ImageButton.Source>
+                                        </ImageButton>
 
-                                </HorizontalStackLayout>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
+                                        <material:PickerField
+                                            x:DataType="{x:Null}"
+                                            x:Name="MesPicker"
+                                            FontSize="12"
+                                            BorderThickness="1"
+                                            AllowClear="False"
+                                            WidthRequest="90"
+                                            HeightRequest="60"
+                                            BorderColor="#C9C9C9"
+                                            Title="Mes"
+                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Meses}"
+                                            SelectedIndex="{Binding MesToCopy, Mode=TwoWay}" />
+
+                                        <material:PickerField 
+                                            x:DataType="{x:Null}"
+                                            x:Name="AñoPicker"
+                                            FontSize="12"
+                                            AllowClear="False"
+                                            WidthRequest="100"
+                                            HeightRequest="60"
+                                            BorderColor="#C9C9C9"
+                                            Title="Año"
+                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Años}"
+                                            SelectedIndex="{Binding AñoToCopyIndex, Mode=TwoWay}"  />
+                                        
+                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=CopiarPresupuestoCommand}"
+                                                     CommandParameter="{Binding .}"
+                                                     HorizontalOptions="End"
+                                                     VerticalOptions="Center"
+                                                     StyleClass="OutlinedButton">
+                                            <ImageButton.Source>
+                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.ShareFromSquare}" Color="#B5B28E" Size="17"/>
+                                            </ImageButton.Source>
+                                        </ImageButton>
+                                        
+                                    </HorizontalStackLayout>
+
+
+                                </Grid>
+
 
                                 <Label Text="{Binding Costo.Mes, StringFormat='Mes: {0:MM-yyyy}'}" FontSize="14" TextColor="#A2A2A2" Margin="0,2,0,0"/>
 

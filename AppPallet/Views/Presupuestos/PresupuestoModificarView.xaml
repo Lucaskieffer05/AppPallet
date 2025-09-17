@@ -39,6 +39,7 @@
                 </HorizontalStackLayout>
                 
 
+
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="2" Padding="20" Spacing="15">
@@ -54,7 +55,7 @@
 
                 <Label Text="Costos por camión" TextColor="Gray" FontSize="19" HorizontalTextAlignment="Center"/>
 
-                <CollectionView ItemsSource="{Binding CostoPorPalletSeleccionada.CostoPorCamions}">
+                <CollectionView ItemsSource="{Binding ListCostoPorCamions}">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:CostoPorCamion">

@@ -163,10 +163,9 @@ public partial class PalletContext : DbContext
 
         modelBuilder.Entity<Egreso>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Egreso");
+            entity.ToTable("Egreso");
 
+            entity.Property(e => e.EgresoId).HasColumnName("EgresoID");
             entity.Property(e => e.Comentario)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -217,10 +216,9 @@ public partial class PalletContext : DbContext
 
         modelBuilder.Entity<Ingreso>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Ingreso");
+            entity.ToTable("Ingreso");
 
+            entity.Property(e => e.IngresoId).HasColumnName("IngresoID");
             entity.Property(e => e.Comentario)
                 .HasMaxLength(100)
                 .IsUnicode(false);

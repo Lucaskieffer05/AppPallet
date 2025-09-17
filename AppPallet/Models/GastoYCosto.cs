@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,10 @@ namespace AppPallet.Models
     {
         public CostoPorPallet? Costo { get; set; }
         public TotalGastoFijoPorMes? TotalGasto { get; set; }
+
+        public int MesToCopy { get; set; } = DateTime.Now.Month;
+        public int AñoToCopy { get; set; } = DateTime.Now.Year;
+        public int AñoToCopyIndex { get; set; } = 1;
 
         public decimal CantDiasCamion
         {

@@ -24,6 +24,9 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         public CostoPorPallet? costoPorPalletSeleccionada;
 
+        [ObservableProperty]
+        public ObservableCollection<CostoPorCamion> listCostoPorCamions = [];
+
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
@@ -49,6 +52,8 @@ namespace AppPallet.ViewModels
                     {
                         return;
                     }
+                    ListCostoPorCamions = new ObservableCollection<CostoPorCamion>(CostoPorPalletSeleccionada.CostoPorCamions);
+
                 }
             }
         }
@@ -61,7 +66,7 @@ namespace AppPallet.ViewModels
                 return Task.CompletedTask;
             }
 
-            CostoPorPalletSeleccionada?.CostoPorCamions.Remove(costoPorCamion);
+            ListCostoPorCamions.Remove(costoPorCamion);
 
             return Task.CompletedTask;
         }
@@ -69,7 +74,12 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         public Task AgregarCostoPorCamion()
         {
-            CostoPorPalletSeleccionada?.CostoPorCamions.Add(new CostoPorCamion
+            if (CostoPorPalletSeleccionada == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            ListCostoPorCamions.Add(new CostoPorCamion
             {
                 NombreCosto = string.Empty,
                 Monto = 0,
@@ -89,9 +99,7 @@ namespace AppPallet.ViewModels
 
             try
             {
-                var filtro = CostoPorPalletSeleccionada.CostoPorCamions
-                    .Where(c => !string.IsNullOrWhiteSpace(c.NombreCosto) && c.Monto > 0)
-                    .ToList();
+                var filtro = ListCostoPorCamions.Where(c => !string.IsNullOrWhiteSpace(c.NombreCosto) && c.Monto > 0).ToList();
 
                 CostoPorPalletSeleccionada.CostoPorCamions = new ObservableCollection<CostoPorCamion>(filtro);
 

@@ -45,6 +45,8 @@ namespace AppPallet
             builder.Services.AddTransient<ContactosEmpresaController>();
             builder.Services.AddTransient<AreaController>();
             builder.Services.AddTransient<CostoPorCamionController>();
+            builder.Services.AddTransient<IngresoController>();
+            builder.Services.AddTransient<EgresoController>();
 
             // Registro de Vistas y ViewModels
 
@@ -68,6 +70,9 @@ namespace AppPallet
 
             builder.Services.AddTransient<PresupuestoModificarView>();
             builder.Services.AddTransient<PresupuestoModificarViewModel>();
+
+            builder.Services.AddTransient<IngresoEgresoView>();
+            builder.Services.AddTransient<IngresoEgresoViewModel>();
 
 
             builder.Services.AddTransientPopup<ChequeCrearView, ChequeCrearViewModel>();

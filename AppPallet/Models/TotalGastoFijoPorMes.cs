@@ -11,7 +11,7 @@ namespace AppPallet.Models
         public TotalGastoFijoPorMes()
         {
         }
-        public decimal TotalGastoFijo { get; set; }
+        public decimal TotalGastoFijo { get; set; } = 0;
         public DateTime Mes { get; set; }
     }
 }
