@@ -96,6 +96,18 @@
 	  <Compile Update="Views\Empresas\EmpresaView.xaml.cs">
 	    <DependentUpon>EmpresaView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\IngresosEgresos\EgresoCrearView.xaml.cs">
+	    <DependentUpon>EgresoCrearView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\IngresosEgresos\EgresoModificarView.xaml.cs">
+	    <DependentUpon>EgresoModificarView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\IngresosEgresos\IngresoCrearView.xaml.cs">
+	    <DependentUpon>IngresoCrearView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\IngresosEgresos\IngresoModificarView.xaml.cs">
+	    <DependentUpon>IngresoModificarView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -136,7 +148,19 @@
 	  <MauiXaml Update="Views\GastosFijos\GastosFijosView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\IngresosEgresos\EgresoCrearView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IngresosEgresos\EgresoModificarView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IngresosEgresos\IngresoCrearView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\IngresosEgresos\IngresoEgresoView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IngresosEgresos\IngresoModificarView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Presupuestos\PresupuestoModificarView.xaml">

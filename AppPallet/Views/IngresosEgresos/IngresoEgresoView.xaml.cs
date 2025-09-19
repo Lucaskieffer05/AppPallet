@@ -10,4 +10,15 @@ public partial class IngresoEgresoView : UraniumContentPage
 		InitializeComponent();
 		BindingContext = viewModel;
     }
+
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is IngresoEgresoViewModel vm)
+        {
+            await vm.CargarListaIngresosEgresos();
+        }
+    }
+
 }

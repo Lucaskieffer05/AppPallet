@@ -18,11 +18,11 @@ namespace AppPallet.Controllers
         }
 
         // Obtener todos los ingresos
-        public async Task<List<Ingreso>> GetAllIngresos(int mes)
+        public async Task<List<Ingreso>> GetAllIngresos(DateTime mes)
         {
             try
             {
-                return await _context.Ingresos.AsNoTracking().Where(i => i.Fecha.HasValue && i.Fecha.Value.Month == mes).OrderBy(i => i.Fecha).ToListAsync();
+                return await _context.Ingresos.AsNoTracking().Where(c => c.Fecha.HasValue && c.Fecha.Value.Month == mes.Month && c.Fecha.Value.Year == mes.Year).OrderByDescending(c => c.Fecha).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -36,7 +36,20 @@ namespace AppPallet.Controllers
         {
             try
             {
-                _context.Ingresos.Add(nuevoIngreso);
+                // crear el nuevo ingreso
+                Ingreso ingresoCreated = new()
+                {
+                    Fecha = nuevoIngreso.Fecha,
+                    DescripIngreso = nuevoIngreso.DescripIngreso,
+                    Op = nuevoIngreso.Op,
+                    Remito = nuevoIngreso.Remito,
+                    Factura = nuevoIngreso.Factura,
+                    Monto = nuevoIngreso.Monto,
+                    Comentario = nuevoIngreso.Comentario
+                };
+
+
+                _context.Ingresos.Add(ingresoCreated);
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
             }
@@ -93,6 +106,35 @@ namespace AppPallet.Controllers
             }
         }
 
+        public async Task<bool> DeleteIngreso(int id)
+        {
+            try
+            {
+                var ingreso = await _context.Ingresos.Where(i => i.IngresoId == id).FirstOrDefaultAsync();
+                if (ingreso == null)
+                {
+                    Console.WriteLine("Ingreso no encontrado.");
+                    return false;
+                }
+                _context.Ingresos.Remove(ingreso);
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                Console.WriteLine($"Error de base de datos: {dbEx.Message}");
+                if (dbEx.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general: {ex.Message}");
+                return false;
+            }
 
+        }
     }
 }

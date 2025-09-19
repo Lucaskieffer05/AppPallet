@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPallet.Views.IngresoCrearView"
+             Title="Registrar un ingreso"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+             x:DataType="viewModels:IngresoCrearViewModel">
+
+
+    <ScrollView HorizontalOptions="Center">
+
+        <VerticalStackLayout Padding="20" Spacing="15" WidthRequest="500">
+
+            <Label Text="Registrar un Ingreso:" TextColor="Black" FontSize="20" HorizontalTextAlignment="Center" FontAttributes="Bold" HorizontalOptions="Center" />
+
+            <material:EditorField TextColor="Black" Title="Descripción" Text="{Binding IngresoCreated.DescripIngreso}" />
+
+            
+            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
+                          Title="Fecha del ingreso"
+                          Date="{Binding IngresoCreated.Fecha, Mode=TwoWay}" 
+                          TextColor="Black"/>
+
+            <material:EditorField TextColor="Black" Title="Operación" Text="{Binding IngresoCreated.Op}" />
+
+            <material:EditorField TextColor="Black" Title="Remito" Text="{Binding IngresoCreated.Remito}" />
+
+            <material:EditorField TextColor="Black" Title="Factura" Text="{Binding IngresoCreated.Factura}" />
+
+            <material:EditorField TextColor="Black" Title="Monto $" Text="{Binding IngresoCreated.Monto}" Keyboard="Numeric" />
+
+            <material:EditorField TextColor="Black" Title="Comentario" Text="{Binding IngresoCreated.Comentario}"/>
+
+            <HorizontalStackLayout Spacing="10">
+                <Button StyleClass="FilledButton" Text="Guardar Ingreso" Command="{Binding CrearIngresoCommand}" />
+                <Button StyleClass="OutlinedButton" Text="Cancelar" Command="{Binding VolverAtrasCommand}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+    </ScrollView>
+    
+</ContentPage>

@@ -11,15 +11,171 @@
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
     x:DataType="viewModels:IngresoEgresoViewModel">
-    
-    
-    
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+
+
+    <ScrollView>
+
+        <Grid RowDefinitions="0.1*,*" Padding="0,50,0,0">
+
+            <HorizontalStackLayout Grid.Row="0" Spacing="30" Margin="90,0,0,0" VerticalOptions="Center">
+
+                <material:PickerField 
+                    x:Name="MesPicker"
+                    Title="Mes"
+                    ItemsSource="{Binding Meses}"
+                    SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" />
+
+                <material:PickerField 
+                    x:Name="AñoPicker"
+                    Title="Año"
+                    ItemsSource="{Binding Años}"
+                    SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"/>
+
+                <Button StyleClass="OutlinedButton" Text="Cargar" Command="{Binding FiltrarPorMesCommand}" WidthRequest="100" VerticalOptions="Center"/>
+
+            </HorizontalStackLayout>
+
+
+            <Grid Grid.Row="1" ColumnDefinitions="0.1*,*,*,0.1*" >
+
+
+                <VerticalStackLayout Grid.Column="1">
+
+                    <HorizontalStackLayout>
+                        <Button WidthRequest="90"
+                                HeightRequest="70"
+                                Command="{Binding CrearEgresoCommand}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.CirclePlus}" Color="#53D681" Size="38"/>
+                            </Button.ImageSource>
+                        </Button>
+                        <Button StyleClass="OutlinedButton"  Text="Modificar Egreso" Command="{Binding ModificarEgresoCommand}"  WidthRequest="180"/>
+
+                    </HorizontalStackLayout>
+
+
+                    <dg:DataGrid RowHeight="50"
+                                 ItemsSource="{Binding ListEgresos}"            
+                                 IsRefreshing="{Binding IsBusy}" 
+                                 PaginationEnabled="False"
+                                 Padding="0,0,15,0"
+                                 Style="{StaticResource TablaComun}"
+                                 SelectedItem="{Binding EgresoSeleccionado, Mode=TwoWay}"
+                                 SelectionMode="Single">
+
+                        <dg:DataGrid.Columns>
+
+                            <dg:DataGridColumn Title="Fecha" PropertyName="Fecha" StringFormat="{}{0:dd-MM-yyyy}"/>
+                            <dg:DataGridColumn Title="Factura" PropertyName="Factura" />
+                            <dg:DataGridColumn Title="Descripción" PropertyName="DescripEgreso" />
+
+                            <dg:DataGridColumn Title="Monto">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate x:DataType="models:Egreso">
+                                        <Label Text="{Binding Monto, StringFormat='${0:N2}' }"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                VerticalTextAlignment="Center"/>
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+
+                            <dg:DataGridColumn Title="Factura" PropertyName="Factura" />
+                            <dg:DataGridColumn Title="IVA" PropertyName="SumaIva" />
+
+                        </dg:DataGrid.Columns>
+
+
+                    </dg:DataGrid>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="2">
+
+                    <HorizontalStackLayout Margin="15,0,0,0">
+                        <Button WidthRequest="90"
+                                HeightRequest="70"
+                                Command="{Binding CrearIngresoCommand}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.CirclePlus}" Color="#53D681" Size="38"/>
+                            </Button.ImageSource>
+                        </Button>
+                        <Button StyleClass="OutlinedButton"  Text="Modificar Ingreso" Command="{Binding ModificarIngresoCommand}"  WidthRequest="180"/>
+
+                    </HorizontalStackLayout>
+
+                    <dg:DataGrid 
+                                 ItemsSource="{Binding ListIngresos}"            
+                                 IsRefreshing="{Binding IsBusy}" 
+                                 PaginationEnabled="False"
+                                 Padding="15,0,0,0"
+                                 Style="{StaticResource TablaComun}"
+                                 SelectedItem="{Binding IngresoSeleccionado, Mode=TwoWay}"
+                                 RowHeight="50"
+                                 SelectionMode="Single">
+
+                        <dg:DataGrid.Columns>
+
+                            
+
+                            <dg:DataGridColumn Title="Fecha" PropertyName="Fecha" StringFormat="{}{0:dd-MM-yyyy}"/>
+                            <dg:DataGridColumn Title="OP" PropertyName="Op" />
+                            <dg:DataGridColumn Title="Remito" PropertyName="Remito" />
+                            <dg:DataGridColumn Title="Factura" PropertyName="Factura" />
+                            <dg:DataGridColumn Title="Descripción" PropertyName="DescripIngreso" />
+
+                            <dg:DataGridColumn Title="Monto">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate x:DataType="models:Ingreso">
+                                        <Label Text="{Binding Monto, StringFormat='${0:N2}' }"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                VerticalTextAlignment="Center"/>
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+
+                            <dg:DataGridColumn Title="Comentario" Width="1.5*">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate x:DataType="models:Ingreso">
+                                        <Label Text="{Binding Comentario}"
+                                                VerticalOptions="Center"
+                                                VerticalTextAlignment="Center"
+                                               HorizontalOptions="Center"/>
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+
+
+                        </dg:DataGrid.Columns>
+
+
+                    </dg:DataGrid>
+                </VerticalStackLayout>
+
+
+
+
+
+
+
+
+
+            </Grid>
+            
+            
+            
+            
+        </Grid>
+        
+        
+        
+    </ScrollView>
+   
     
     
     

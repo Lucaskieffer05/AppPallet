@@ -19,11 +19,11 @@ namespace AppPallet.Controllers
         }
 
         // Obtener todos los egresos
-        public async Task<List<Egreso>> GetAllEgresos(int mes)
+        public async Task<List<Egreso>> GetAllEgresos(DateTime mes)
         {
             try
             {
-                return await _context.Egresos.AsNoTracking().Where(i => i.Fecha.HasValue && i.Fecha.Value.Month == mes).OrderBy(i => i.Fecha).ToListAsync();
+                return await _context.Egresos.AsNoTracking().Where(c => c.Mes.HasValue && c.Mes.Value.Month == mes.Month && c.Mes.Value.Year == mes.Year).OrderByDescending(c => c.Fecha).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -37,6 +37,19 @@ namespace AppPallet.Controllers
         {
             try
             {
+                // crear el nuevo egreso
+                Egreso egreso = new Egreso
+                {
+                    DescripEgreso = nuevoEgreso.DescripEgreso,
+                    Fecha = nuevoEgreso.Fecha,
+                    Factura = nuevoEgreso.Factura,
+                    Monto = nuevoEgreso.Monto,
+                    SumaIva = nuevoEgreso.SumaIva,
+                    Mes = nuevoEgreso.Mes,
+                    Comentario = nuevoEgreso.Comentario
+                };
+
+
                 _context.Egresos.Add(nuevoEgreso);
                 var result = await _context.SaveChangesAsync();
                 return result > 0;

@@ -74,6 +74,18 @@ namespace AppPallet
             builder.Services.AddTransient<IngresoEgresoView>();
             builder.Services.AddTransient<IngresoEgresoViewModel>();
 
+            builder.Services.AddTransient<IngresoCrearView>();
+            builder.Services.AddTransient<IngresoCrearViewModel>();
+
+            builder.Services.AddTransient<IngresoModificarView>();
+            builder.Services.AddTransient<IngresoModificarViewModel>();
+
+            builder.Services.AddTransient<EgresoCrearView>();
+            builder.Services.AddTransient<EgresoCrearViewModel>();
+
+            builder.Services.AddTransient<EgresoModificarView>();
+            builder.Services.AddTransient<EgresoModificarViewModel>();
+
 
             builder.Services.AddTransientPopup<ChequeCrearView, ChequeCrearViewModel>();
             builder.Services.AddTransientPopup<ChequeModificarView, ChequeModificarViewModel>();

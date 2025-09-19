@@ -47,5 +47,11 @@
              Route="CostoPorPalletCrearView"/>
     </FlyoutItem>
 
+    <FlyoutItem Title="Ingreso - Egresos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Coins}, Color=Black}">
+        <ShellContent 
+         ContentTemplate="{DataTemplate local:IngresoEgresoView}"
+         Route="IngresoEgresoView"/>
+    </FlyoutItem>
+
 
 </Shell>

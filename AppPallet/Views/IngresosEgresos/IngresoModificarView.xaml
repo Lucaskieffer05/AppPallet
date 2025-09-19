@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPallet.Views.IngresoModificarView"
+             Title="Modificar Ingreso"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+             x:DataType="viewModels:IngresoModificarViewModel">
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="20" Spacing="15" WidthRequest="500">
+            <Label Text="Modificar Ingreso:" TextColor="Black" FontSize="20" HorizontalTextAlignment="Center" FontAttributes="Bold" HorizontalOptions="Center" />
+            <material:EditorField TextColor="Black" Title="Descripción" Text="{Binding IngresoModificar.DescripIngreso, Mode=TwoWay}" />
+
+            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
+                          Title="Fecha del ingreso"
+                          Date="{Binding IngresoModificar.Fecha, Mode=TwoWay}" 
+                          TextColor="Black"/>
+            <material:EditorField TextColor="Black" Title="Operación" Text="{Binding IngresoModificar.Op, Mode=TwoWay}" />
+            <material:EditorField TextColor="Black" Title="Remito" Text="{Binding IngresoModificar.Remito, Mode=TwoWay}" />
+            <material:EditorField TextColor="Black" Title="Factura" Text="{Binding IngresoModificar.Factura, Mode=TwoWay}" />
+            <material:EditorField TextColor="Black" Title="Monto $" Text="{Binding IngresoModificar.Monto, Mode=TwoWay}" Keyboard="Numeric" />
+            <material:EditorField TextColor="Black" Title="Comentario" Text="{Binding IngresoModificar.Comentario, Mode=TwoWay}"/>
+            <HorizontalStackLayout Spacing="10">
+                <Button StyleClass="FilledButton" Text="Guardar Cambios" Command="{Binding ModificarIngresoCommand}" />
+                <Button StyleClass="OutlinedButton" BorderColor="#d65265" TextColor="#d65265" Text="Eliminar Ingreso" Command="{Binding EliminarIngresoCommand}" />
+                <Button StyleClass="OutlinedButton" Text="Cancelar" Command="{Binding VolverAtrasCommand}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+    </ScrollView>
+    
+    
+</ContentPage>
