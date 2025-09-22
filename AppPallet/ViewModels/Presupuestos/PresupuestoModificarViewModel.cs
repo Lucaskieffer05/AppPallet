@@ -43,7 +43,7 @@ namespace AppPallet.ViewModels
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (query.TryGetValue("gastosYCostos", out var _gastosYCostos) && _gastosYCostos is GastosYCostos gastosYCostos)
+            if (query.TryGetValue("gastosYCostos", out var _gastosYCostos) && _gastosYCostos is GastosYCostosDTO gastosYCostos)
             {
                 if (gastosYCostos.Costo != null)
                 {

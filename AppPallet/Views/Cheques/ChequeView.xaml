@@ -16,7 +16,7 @@
 
     <uranium:UraniumContentPage.Resources>
         <ResourceDictionary>
-            <converters:EstadoToColorConverter x:Key="EstadoToColor" />
+            <converters:EstadoChequeToColorConverter x:Key="EstadoChequeToColor" />
         </ResourceDictionary>
     </uranium:UraniumContentPage.Resources>
 
@@ -116,7 +116,7 @@
                                                 CornerRadius="12"
                                                 HorizontalOptions="Center"
                                                 VerticalOptions="Center"
-                                                BackgroundColor="{Binding Estado, Converter={StaticResource EstadoToColor}}"/>
+                                                BackgroundColor="{Binding Estado, Converter={StaticResource EstadoChequeToColor}}"/>
                                 </DataTemplate>
                             </dg:DataGridColumn.CellTemplate>
                         </dg:DataGridColumn>

@@ -79,6 +79,49 @@ namespace AppPallet.ViewModels
 
         }
 
+        [RelayCommand]
+        async Task EliminarEgreso()
+        {
+            if (EgresoModificar == null)
+            {
+                await MostrarAlerta("Error", "No hay egreso seleccionado para eliminar.");
+                return;
+            }
+
+            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (mainPage == null)
+            {
+                await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                return;
+            }
+
+            bool confirmar = await mainPage.DisplayAlert("Confirmar", "¿Está seguro de que desea eliminar este egreso?", "Sí", "No");
+
+            if (!confirmar) return;
+            try
+            {
+                bool exito = await _egresoController.DeleteEgreso(EgresoModificar.EgresoId);
+                if (exito)
+                {
+                    await MostrarAlerta("Éxito", "Egreso eliminado correctamente.");
+                    await VolverAtras();
+                }
+                else
+                {
+                    await MostrarAlerta("Error", "No se pudo eliminar el egreso. Intente nuevamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error", $"Ocurrió un error: {ex.Message}");
+            }
+
+            await VolverAtras();
+
+        }
+
+
+
         private async Task MostrarAlerta(string titulo, string mensaje)
         {
             var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;

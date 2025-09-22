@@ -2,8 +2,9 @@
 
 namespace AppPallet.Converters
 {
-    public class EstadoToColorConverter : IValueConverter
+    public class EstadoChequeToColorConverter : IValueConverter
     {
+        // Converter para Cheques
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is int estado)
@@ -26,4 +27,31 @@ namespace AppPallet.Converters
             throw new NotImplementedException();
         }
     }
+
+
+    // Converter para Ventas
+    public class EstadoVentaToColorConverter : IValueConverter
+    {
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if (value is string estado)
+            {
+                return estado switch
+                {
+                    "En Producción" => Color.FromArgb("#F1E500"), // Amarillo 
+                    "Entregado" => Color.FromArgb("#00EB5A"), // Verde 
+                    _ => Colors.Transparent
+                };
+            }
+            return Colors.Transparent;
+        }
+
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
 }

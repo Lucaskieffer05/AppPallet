@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                            x:Class="AppPallet.Views.VentaView"
+                            Title="Gestión de Ventas"
+                            xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+                            xmlns:models="clr-namespace:AppPallet.Models"
+                            xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+                            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+                            xmlns:converters="clr-namespace:AppPallet.Converters"
+                            x:DataType="viewModels:VentaViewModel">
+
+    <uranium:UraniumContentPage.Resources>
+        <ResourceDictionary>
+            <converters:EstadoVentaToColorConverter x:Key="EstadoVentaToColor" />
+
+            <!-- Estilos personalizados -->
+            <Style x:Key="HeaderLabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource UraniumPrimaryColor}" />
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,10,0,20" />
+            </Style>
+
+            <!-- Cambiado TargetType de Frame a Border -->
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="Background" Value="White" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="15" />
+                <Setter Property="Margin" Value="10,5" />
+                <Setter Property="Shadow" Value="Default" />
+            </Style>
+
+            <Style x:Key="StatusIndicatorStyle" TargetType="Border">
+                <Setter Property="StrokeThickness" Value="2" />
+                <Setter Property="HeightRequest" Value="60" />
+                <Setter Property="WidthRequest" Value="110" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+            </Style>
+
+            <Style x:Key="ActionButtonStyle" TargetType="Button">
+                <Setter Property="HeightRequest" Value="45" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+        </ResourceDictionary>
+    </uranium:UraniumContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" RowSpacing="10" Padding="15">
+
+        <!-- Encabezado -->
+        <Label Text="📊 Panel de Ventas" Style="{StaticResource HeaderLabelStyle}" Grid.Row="0" />
+
+        <!-- Indicadores de Estado -->
+        <Border Style="{StaticResource CardStyle}" Grid.Row="1" BackgroundColor="#F8F9FA">
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                <Border Grid.Column="0" Style="{StaticResource StatusIndicatorStyle}" Stroke="#4CAF50" BackgroundColor="#E8F5E8">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="✅" FontSize="16" HorizontalOptions="Center"/>
+                        <Label Text="Activas" TextColor="#2E7D32" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource StatusIndicatorStyle}" Stroke="#F44336" BackgroundColor="#FFEBEE">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="❌" FontSize="16" HorizontalOptions="Center"/>
+                        <Label Text="Pendientes" TextColor="#C62828" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource StatusIndicatorStyle}" Stroke="#607D8B" BackgroundColor="#ECEFF1">
+                    <Button Text="➕ Agregar Nueva Venta" 
+                            Command="{Binding CrearVentaCommand}" 
+                            Style="{StaticResource ActionButtonStyle}"
+                            BackgroundColor="#4CAF50" TextColor="White"
+                            WidthRequest="210"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Lista de Ventas -->
+        <Border Style="{StaticResource CardStyle}" Grid.Row="2" BackgroundColor="White">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Lista de Ventas" TextColor="{StaticResource UraniumPrimaryColor}" 
+                       FontSize="20" FontAttributes="Bold" Margin="0,0,0,10"/>
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" 
+                                   Color="{StaticResource UraniumPrimaryColor}" HorizontalOptions="Center"/>
+
+
+                <Grid ColumnDefinitions="2*,1*,1*,2*,2*,2*" ColumnSpacing="8">
+                    <Label Grid.Column="0" Text="Fecha de Venta" VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD"/>
+                    <Label Grid.Column="1" Text="Cantidad Pallets"  VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD" />
+                    <Label Grid.Column="2" Text="Estado"  VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD" />
+                    <Label Grid.Column="3" Text="Comentario"  VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD" />
+                    <Label Grid.Column="4" Text="Fecha de Entrega" VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD"/>
+                    <Label Grid.Column="5" Text="Acción" TextColor="#BDBDBD"/>
+                </Grid>
+
+
+                <ScrollView HeightRequest="500">
+                    <CollectionView ItemsSource="{Binding ListaVentas}" 
+                                  SelectionMode="Single" 
+                                  SelectedItem="{Binding VentaSeleccionada, Mode=TwoWay}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Venta">
+                                <Border Style="{StaticResource CardStyle}"
+                                       Padding="10" Margin="5">
+                                    <Grid ColumnDefinitions="2*,1*,1*,2*,2*,2*" ColumnSpacing="8">
+                                        <Label Grid.Column="0" Text="{Binding FechaVenta, StringFormat='{0:dd/MM/yyyy} 📅'}" 
+                                               VerticalOptions="Center" FontSize="16" TextColor="#333"/>
+                                        <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="5">
+                                            <Label Text="{Binding CantPallets}"
+                                                   VerticalOptions="Center"
+                                                   FontSize="16"
+                                                   TextColor="#333"/>
+                                            <Image Source="pallet.png"
+                                                   HeightRequest="15"
+                                                   WidthRequest="15"
+                                                   VerticalOptions="Center"/>
+                                        </HorizontalStackLayout>
+                                        <Label Grid.Column="2" Text="{Binding Estado}" TextColor="{Binding Estado, Converter={StaticResource EstadoVentaToColor}}"
+                                               VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
+                                        <Label Grid.Column="3" Text="{Binding Comentario, StringFormat='💬 {0}'}" 
+                                               VerticalOptions="Center" FontSize="16" TextColor="#333"/>
+                                        <Label Grid.Column="4" Text="{Binding FechaEntrega, StringFormat='🚚 {0:dd/MM/yyyy}'}" 
+                                               VerticalOptions="Center" FontSize="16" TextColor="#333"/>
+                                        <Button Grid.Column="5" Text="✏️ Editar" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VentaViewModel}}, Path=ModificarVentaCommand}" 
+                                                CommandParameter="{Binding VentaId}" 
+                                                Style="{StaticResource ActionButtonStyle}"
+                                                BackgroundColor="#2196F3" TextColor="White"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Panel de Acciones -->
+        <!-- 
+        <Border Style="{StaticResource CardStyle}" Grid.Row="3" BackgroundColor="#F3F4F6">
+            <VerticalStackLayout>
+                <Label Text="Acciones" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" Padding="0,0,0,15"/>
+                <HorizontalStackLayout Spacing="15" HorizontalOptions="Center" VerticalOptions="Center">
+                    
+
+                    
+
+                    <Button Text="✏️ Modificar Venta Seleccionada" 
+                            Command="{Binding ModificarVentaCommand}" 
+                            CommandParameter="{Binding VentaSeleccionada.VentaId}"
+                            Style="{StaticResource ActionButtonStyle}"
+                            BackgroundColor="#FF9800" TextColor="White"
+                            WidthRequest="200"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+        -->
+
+    </Grid>
+</uranium:UraniumContentPage>

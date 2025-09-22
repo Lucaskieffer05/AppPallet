@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPallet.Views.ActivoPasivoView"
+             x:Name="RootPage"
+             Title="Activos y Pasivos"
+             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+             xmlns:converters="clr-namespace:AppPallet.Converters"
+             xmlns:models="clr-namespace:AppPallet.Models"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             x:DataType="viewModels:ActivoPasivoViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ColorByValueConverter x:Key="ColorByValueConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*" Padding="20" ColumnSpacing="20">
+
+            <!-- Fila 0: Selectores de Mes y Año -->
+            <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2" 
+                                   HorizontalOptions="Center" VerticalOptions="Center"
+                                   Spacing="30" Margin="0,10" >
+                <material:PickerField 
+                    x:Name="MesPicker"
+                    Title="Mes"
+                    ItemsSource="{Binding Meses}"
+                    SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" 
+                    WidthRequest="150"/>
+
+                <material:PickerField 
+                    x:Name="AñoPicker"
+                    Title="Año"
+                    ItemsSource="{Binding Años}"
+                    SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
+                    WidthRequest="100"/>
+
+                <Button StyleClass="FilledButton" Text="Registrar Activo/Pasivo" Command="{Binding CrearActivoPasivoCommand}" />
+
+            </HorizontalStackLayout>
+
+            <!-- Fila 1: Totales Netos por Quincena -->
+            <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="2" 
+                                 HorizontalOptions="Center" VerticalOptions="Center"
+                                 Margin="0,20">
+                <Label Text="Totales Netos por Quincena" 
+                       FontAttributes="Bold" FontSize="20" 
+                       HorizontalOptions="Center" Margin="0,0,0,10"/>
+
+                <CollectionView ItemsSource="{Binding ListQuincenasNetas}" 
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:QuincenaNetoDTO">
+                            <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+                                <Label Text="{Binding Titulo}" 
+                                       FontAttributes="Bold" 
+                                       VerticalOptions="Center"/>
+                                <Label Text="{Binding DisplayTotalNeto}" 
+                                       TextColor="{Binding TotalNeto, Converter={StaticResource ColorByValueConverter}}"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <!-- Fila 2: Pasivos (Izquierda) -->
+            <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="25">
+                <Label Text="Pasivos por Quincena" 
+                       FontAttributes="Bold" FontSize="23" 
+                       HorizontalOptions="Center"/>
+                <CollectionView ItemsSource="{Binding ListQuinsenasPasivos}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:QuincenaDTO">
+                            <Grid RowDefinitions="Auto,Auto,Auto" Margin="0,0,0,15">
+                                <Label Grid.Row="0" Text="{Binding Titulo}" 
+                                       FontAttributes="Bold" HorizontalOptions="Center" 
+                                       Padding="5" FontSize="18" TextColor="#828282"/>
+
+                                <dg:DataGrid Grid.Row="1" ItemsSource="{Binding Items}"
+                                             RowHeight="35"
+                                             PaginationEnabled="False"
+                                             IsRefreshing="{Binding BindingContext.IsBusy, Source={x:Reference RootPage}}"
+                                             Style="{StaticResource TablaComun}">
+                                    <dg:DataGrid.Columns>
+                                        <dg:DataGridColumn Title="Acciones" Width="0.5*">
+                                            <dg:DataGridColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ActivoPasivo">
+                                                    <HorizontalStackLayout HorizontalOptions="Center">
+                                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ActivoPasivoViewModel}}, Path=ModificarActivoPasivoCommand}"
+                                                         CommandParameter="{Binding .}"
+                                                         VerticalOptions="Center"
+                                                         StyleClass="OutlinedButton">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.PenToSquare}" Color="#6AF078" Size="15"/>
+                                                            </ImageButton.Source>
+                                                        </ImageButton>
+                                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ActivoPasivoViewModel}}, Path=EliminarActivoPasivoCommand}"
+                                                                     CommandParameter="{Binding .}"
+                                                                     VerticalOptions="Center"
+                                                                     StyleClass="OutlinedButton">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.Trash}" Color="#F06A6A" Size="15"/>
+                                                            </ImageButton.Source>
+                                                        </ImageButton>
+                                                    </HorizontalStackLayout>
+                                                </DataTemplate>
+                                            </dg:DataGridColumn.CellTemplate>
+                                        </dg:DataGridColumn>
+                                        <dg:DataGridColumn Title="Fecha" PropertyName="Fecha" StringFormat="{}{0:dd-MM-yyyy}"/>
+                                        <dg:DataGridColumn Title="Descripción" PropertyName="Descripcion"/>
+                                        <dg:DataGridColumn Title="Monto">
+                                            <dg:DataGridColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ActivoPasivo">
+                                                    <Label Text="{Binding Monto, StringFormat='${0:N2}'}"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"/>
+                                                </DataTemplate>
+                                            </dg:DataGridColumn.CellTemplate>
+                                        </dg:DataGridColumn>
+                                    </dg:DataGrid.Columns>
+                                </dg:DataGrid>
+
+                                <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                                    <BoxView Grid.ColumnSpan="2" HeightRequest="1" Color="LightGray" VerticalOptions="End"/>
+                                    <Label Grid.Column="1" Text="{Binding Total, StringFormat='Total: ${0:N2}'}"
+                                           FontAttributes="Bold"
+                                           FontSize="15"
+                                           TextColor="DarkRed"
+                                           HorizontalOptions="End"
+                                           Margin="0,10,0,0"
+                                           BackgroundColor="White"
+                                           Padding="5,0,0,0"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <!-- Fila 2: Activos (Derecha) -->
+            <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="25">
+                <Label Text="Activos por Quincena" 
+                       FontAttributes="Bold" FontSize="23" 
+                       HorizontalOptions="Center"/>
+                <CollectionView ItemsSource="{Binding ListQuinsenasActivos}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:QuincenaDTO">
+                            <Grid RowDefinitions="Auto,Auto,Auto" Margin="0,0,0,15">
+                                <Label Grid.Row="0" Text="{Binding Titulo}" 
+                                       FontAttributes="Bold" HorizontalOptions="Center" 
+                                       Padding="5" FontSize="18" TextColor="#828282"/>
+
+                                <dg:DataGrid Grid.Row="1" ItemsSource="{Binding Items}"
+                                             RowHeight="35"
+                                             PaginationEnabled="False"
+                                             IsRefreshing="{Binding BindingContext.IsBusy, Source={x:Reference RootPage}}"
+                                             Style="{StaticResource TablaComun}">
+                                    <dg:DataGrid.Columns>
+                                        <dg:DataGridColumn Title="Acciones" Width="0.5*">
+                                            <dg:DataGridColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ActivoPasivo">
+                                                    <HorizontalStackLayout HorizontalOptions="Center">
+                                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ActivoPasivoViewModel}}, Path=ModificarActivoPasivoCommand}"
+                                                                    CommandParameter="{Binding .}"
+                                                                    VerticalOptions="Center"
+                                                                    StyleClass="OutlinedButton">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.PenToSquare}" Color="#6AF078" Size="15" />
+                                                            </ImageButton.Source>
+                                                        </ImageButton>
+                                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ActivoPasivoViewModel}}, Path=EliminarActivoPasivoCommand}"
+                                                                      CommandParameter="{Binding .}"
+                                                                      VerticalOptions="Center"
+                                                                      StyleClass="OutlinedButton">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.Trash}" Color="#F06A6A" Size="15"/>
+                                                            </ImageButton.Source>
+                                                        </ImageButton>
+                                                    </HorizontalStackLayout>
+                                                </DataTemplate>
+                                            </dg:DataGridColumn.CellTemplate>
+                                        </dg:DataGridColumn>
+                                        <dg:DataGridColumn Title="Fecha" PropertyName="Fecha" StringFormat="{}{0:dd-MM-yyyy}"/>
+                                        <dg:DataGridColumn Title="Descripción" PropertyName="Descripcion"/>
+                                        <dg:DataGridColumn Title="Monto">
+                                            <dg:DataGridColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ActivoPasivo">
+                                                    <Label Text="{Binding Monto, StringFormat='${0:N2}'}"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"/>
+                                                </DataTemplate>
+                                            </dg:DataGridColumn.CellTemplate>
+                                        </dg:DataGridColumn>
+                                    </dg:DataGrid.Columns>
+                                </dg:DataGrid>
+
+                                <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                                    <BoxView Grid.ColumnSpan="2" HeightRequest="1" Color="LightGray" VerticalOptions="End"/>
+                                    <Label Grid.Column="1" Text="{Binding Total, StringFormat='Total: ${0:N2}'}"
+                                           FontAttributes="Bold"
+                                           FontSize="15"
+                                           TextColor="DarkGreen"
+                                           HorizontalOptions="End"
+                                           Margin="0,10,0,0"
+                                           BackgroundColor="White"
+                                           Padding="5,0,0,0"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>

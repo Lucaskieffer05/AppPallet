@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AppPallet.Models
 {
-    public class TotalGastoFijoPorMes
+    public class TotalGastoFijoPorMesDTO
     {
-        public TotalGastoFijoPorMes()
+        public TotalGastoFijoPorMesDTO()
         {
         }
         public decimal TotalGastoFijo { get; set; } = 0;

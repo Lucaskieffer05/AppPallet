@@ -23,14 +23,14 @@ namespace AppPallet.ViewModels
         readonly GastosFijosController _gastosFijosController;
         readonly CostoPorPalletController _costoPorPalletController;
 
-        public List<TotalGastoFijoPorMes> TotalGastoFijoPorMesList;
+        public List<TotalGastoFijoPorMesDTO> TotalGastoFijoPorMesList;
 
 
         [ObservableProperty]
         public Empresa? empresaSeleccionada;
 
         [ObservableProperty]
-        public List<GastosYCostos> resultado;
+        public List<GastosYCostosDTO> resultado;
 
         [ObservableProperty]
         public string titulo;
@@ -80,10 +80,10 @@ namespace AppPallet.ViewModels
                
 
             Resultado = EmpresaSeleccionada.CostoPorPallets
-                .Select(c => new GastosYCostos
+                .Select(c => new GastosYCostosDTO
                 {
                     Costo = c,
-                    TotalGasto = TotalGastoFijoPorMesList.FirstOrDefault(t => t.Mes.Month == c.Mes.Month) ?? new TotalGastoFijoPorMes { Mes = c.Mes, TotalGastoFijo = 0 },
+                    TotalGasto = TotalGastoFijoPorMesList.FirstOrDefault(t => t.Mes.Month == c.Mes.Month) ?? new TotalGastoFijoPorMesDTO { Mes = c.Mes, TotalGastoFijo = 0 },
                 })
                 .ToList();
         }
@@ -98,7 +98,7 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
-        public async Task MostrarPresupuesto(GastosYCostos gastosYCostos)
+        public async Task MostrarPresupuesto(GastosYCostosDTO gastosYCostos)
         {
             await Shell.Current.GoToAsync(
                 nameof(PresupuestoModificarView),
@@ -109,7 +109,7 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
-        public async Task GuardarPrecio(GastosYCostos gastosYCostos)
+        public async Task GuardarPrecio(GastosYCostosDTO gastosYCostos)
         {
             // guardar solo el precio del pallet
             if (gastosYCostos.Costo != null)
@@ -133,7 +133,7 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
-        public async Task CopiarPresupuesto(GastosYCostos gastosYCostosToCopy)
+        public async Task CopiarPresupuesto(GastosYCostosDTO gastosYCostosToCopy)
         {
             if (gastosYCostosToCopy.Costo == null)
             {

@@ -20,7 +20,7 @@
 
             
             <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                          Title="Fecha del ingreso"
+                          Title="Fecha"
                           Date="{Binding IngresoCreated.Fecha, Mode=TwoWay}" 
                           TextColor="Black"/>
 

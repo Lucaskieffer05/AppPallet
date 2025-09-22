@@ -97,9 +97,9 @@
 
                 <VerticalStackLayout Grid.Column="2" Spacing="10" >
 
-                    <Button StyleClass="FilledButton"  Text="Agregar cheque" Command="{Binding MostrarPopupGastoFijoCommand}"  WidthRequest="180"/>
+                    <Button StyleClass="FilledButton"  Text="Agregar Gasto Fijo" Command="{Binding MostrarPopupGastoFijoCommand}"  WidthRequest="180"/>
 
-                    <Button StyleClass="OutlinedButton"  Text="Modificar cheque" Command="{Binding MostrarPopupModificarGastoFijoCommand}"  WidthRequest="180"/>
+                    <Button StyleClass="OutlinedButton"  Text="Modificar Gasto Fijo" Command="{Binding MostrarPopupModificarGastoFijoCommand}"  WidthRequest="180"/>
 
 
                 </VerticalStackLayout>

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace AppPallet.Models
 {
-    public class GastosYCostos
+    public class GastosYCostosDTO
     {
         public CostoPorPallet? Costo { get; set; }
-        public TotalGastoFijoPorMes? TotalGasto { get; set; }
+        public TotalGastoFijoPorMesDTO? TotalGasto { get; set; }
 
         public int MesToCopy { get; set; } = DateTime.Now.Month;
         public int AñoToCopy { get; set; } = DateTime.Now.Year;

@@ -37,13 +37,13 @@ namespace AppPallet.Controllers
         }
 
         //Obtener totales de gasto fijo por mes
-        public async Task<List<TotalGastoFijoPorMes>> GetTotalGastoFijoPorMes()
+        public async Task<List<TotalGastoFijoPorMesDTO>> GetTotalGastoFijoPorMes()
         {
             try
             {
                 var result = await _context.GastosFijos
                     .GroupBy(g => g.Mes)
-                    .Select(g => new TotalGastoFijoPorMes
+                    .Select(g => new TotalGastoFijoPorMesDTO
                     {
                         Mes = g.Key,
                         TotalGastoFijo = g.Sum(x => x.Monto)
@@ -56,17 +56,31 @@ namespace AppPallet.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new List<TotalGastoFijoPorMes>();
+                return new List<TotalGastoFijoPorMesDTO>();
             }
         }
 
         // Crear un nuevo cheque
-        public async Task<bool> CreateGastoFijo(GastosFijo nuevoGastoFijo)
+        public async Task<bool> CreateGastoFijo(GastosFijo nuevoGastoFijo, bool flagEgreso = true)
         {
             try
             {
 
                 _context.GastosFijos.Add(nuevoGastoFijo);
+
+                // Crear un Egreso asociado si flagEgreso es true
+                if (flagEgreso)
+                {
+                    var nuevoEgreso = new Egreso
+                    {
+                        Fecha = nuevoGastoFijo.Mes,
+                        Mes = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                        Monto = nuevoGastoFijo.Monto,
+                        DescripEgreso = nuevoGastoFijo.NombreGastoFijo,
+                        Comentario = "Gasto Fijo"
+                    };
+                    _context.Egresos.Add(nuevoEgreso);
+                }
 
                 var result = await _context.SaveChangesAsync();
 

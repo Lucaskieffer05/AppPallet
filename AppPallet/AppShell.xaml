@@ -53,5 +53,18 @@
          Route="IngresoEgresoView"/>
     </FlyoutItem>
 
+    <FlyoutItem Title="Activos y Pasivos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ChartLine}, Color=Black}">
+        <ShellContent 
+         ContentTemplate="{DataTemplate local:ActivoPasivoView}"
+         Route="ActivoPasivoView"/>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Gestión Ventas" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.HandHoldingDollar}, Color=Black}">
+        <ShellContent 
+         ContentTemplate="{DataTemplate local:VentaView}"
+         Route="VentaView"/>
+    </FlyoutItem>
+
+
 
 </Shell>

@@ -3,12 +3,7 @@ using AppPallet.Models;
 using AppPallet.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
@@ -21,6 +16,15 @@ namespace AppPallet.ViewModels
 
         readonly EgresoController _egresoController;
         readonly IngresoController _ingresoController;
+
+        [ObservableProperty]
+        public decimal totalIngresos;
+
+        [ObservableProperty]
+        public decimal totalEgresos;
+
+        [ObservableProperty]
+        public decimal totalEgresosIva;
 
         [ObservableProperty]
         public bool isBusy;
@@ -87,6 +91,10 @@ namespace AppPallet.ViewModels
                 var _listIngresos = await _ingresoController.GetAllIngresos(MesFiltro);
                 ListIngresos = new ObservableCollection<Ingreso>(_listIngresos);
 
+                // calcular totales
+                TotalEgresos = ListEgresos.Sum(e => e.Monto);
+                TotalEgresosIva = ListEgresos.Sum(e => e.SumaIva ?? 0);
+                TotalIngresos = ListIngresos.Sum(i => i.Monto);
 
             }
             catch
@@ -142,7 +150,7 @@ namespace AppPallet.ViewModels
             }
             var navigationParams = new Dictionary<string, object>
             {
-                { "egreso", EgresoSeleccionado }
+                { "Egreso", EgresoSeleccionado }
             };
             await Shell.Current.GoToAsync(nameof(EgresoModificarView), navigationParams);
         }

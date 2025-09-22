@@ -41,7 +41,7 @@
 
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:GastosYCostos">
+                    <DataTemplate x:DataType="models:GastosYCostosDTO">
 
 
                         <Border Padding="16" Margin="0,0,0,12" BackgroundColor="#F8F6F2">

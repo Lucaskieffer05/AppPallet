@@ -109,6 +109,37 @@ namespace AppPallet.Controllers
             }
         }
 
+        // Eliminar un egreso
+        public async Task<bool> DeleteEgreso(int egresoId)
+        {
+            try
+            {
+                var egreso = await _context.Egresos.FindAsync(egresoId);
+                if (egreso == null)
+                {
+                    Console.WriteLine("Egreso no encontrado.");
+                    return false;
+                }
+                _context.Egresos.Remove(egreso);
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                Console.WriteLine($"Error de base de datos: {dbEx.Message}");
+                if (dbEx.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general: {ex.Message}");
+                return false;
+            }
+        }
+
 
     }
 }

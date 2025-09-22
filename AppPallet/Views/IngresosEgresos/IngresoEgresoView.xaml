@@ -54,6 +54,20 @@
                         </Button>
                         <Button StyleClass="OutlinedButton"  Text="Modificar Egreso" Command="{Binding ModificarEgresoCommand}"  WidthRequest="180"/>
 
+                        <Label Text="{Binding TotalEgresos, StringFormat='Total Egresos: ${0:N2}'}" 
+                               FontAttributes="Bold"
+                               FontSize="15"
+                               TextColor="Black"
+                               VerticalOptions="Center"
+                               Margin="15,0,15,0"/>
+
+                        <Label Text="{Binding TotalEgresosIva, StringFormat='Total IVA: ${0:N2}'}" 
+                               FontAttributes="Bold"
+                               FontSize="15"
+                               TextColor="Black"
+                               VerticalOptions="Center"
+                               Margin="0,0,15,0"/>
+
                     </HorizontalStackLayout>
 
 
@@ -83,8 +97,8 @@
                                 </dg:DataGridColumn.CellTemplate>
                             </dg:DataGridColumn>
 
-                            <dg:DataGridColumn Title="Factura" PropertyName="Factura" />
                             <dg:DataGridColumn Title="IVA" PropertyName="SumaIva" />
+                            <dg:DataGridColumn Title="Comentario" PropertyName="Comentario" />
 
                         </dg:DataGrid.Columns>
 
@@ -105,6 +119,14 @@
                             </Button.ImageSource>
                         </Button>
                         <Button StyleClass="OutlinedButton"  Text="Modificar Ingreso" Command="{Binding ModificarIngresoCommand}"  WidthRequest="180"/>
+
+
+                        <Label Text="{Binding TotalIngresos, StringFormat='Total Ingresos: ${0:N2}'}" 
+                               FontAttributes="Bold"
+                               FontSize="15"
+                               TextColor="Black"
+                               VerticalOptions="Center"
+                               Margin="15,0,15,0"/>
 
                     </HorizontalStackLayout>
 

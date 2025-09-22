@@ -30,4 +30,6 @@ public partial class CostoPorPallet
     public virtual Empresa Empresa { get; set; } = null!;
 
     public virtual Pallet Pallet { get; set; } = null!;
+
+    public virtual ICollection<Venta> Venta { get; set; } = new List<Venta>();
 }
