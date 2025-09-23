@@ -1,4 +1,5 @@
-﻿using AppPallet.Controllers;
+﻿using AppPallet.Constants;
+using AppPallet.Controllers;
 using AppPallet.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -59,16 +60,10 @@ namespace AppPallet.ViewModels
             try
             {
 
-                var resultado = await _ingresoController.CreateIngreso(IngresoCreated);
+                MessageResult resultado = await _ingresoController.CreateIngreso(IngresoCreated);
 
-                if (resultado)
-                {
-                    await MostrarAlerta("Éxito", "Ingreso creado correctamente");
-                }
-                else
-                {
-                    await MostrarAlerta("Error", "No se pudo crear el Ingreso");
-                }
+                await MostrarAlerta(resultado.Title, resultado.Message);
+
                 IngresoCreated = new Ingreso();
             }
             catch (Exception ex)

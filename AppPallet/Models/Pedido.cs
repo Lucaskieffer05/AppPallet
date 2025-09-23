@@ -7,15 +7,13 @@ public partial class Pedido
 {
     public int PedidoId { get; set; }
 
-    public int? EmpresaId { get; set; }
-
     public int PalletId { get; set; }
 
     public DateTime FechaEntrega { get; set; }
 
     public int Cantidad { get; set; }
 
-    public virtual Empresa? Empresa { get; set; }
+    public virtual ICollection<HistorialHumedad> HistorialHumedads { get; set; } = new List<HistorialHumedad>();
 
     public virtual ICollection<Lote> Lotes { get; set; } = new List<Lote>();
 

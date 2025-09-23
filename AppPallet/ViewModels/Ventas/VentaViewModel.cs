@@ -3,6 +3,7 @@ using AppPallet.Models;
 using AppPallet.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace AppPallet.ViewModels
 {
@@ -16,7 +17,7 @@ namespace AppPallet.ViewModels
         readonly VentaController _ventaController;
 
         [ObservableProperty]
-        private List<Venta> listaVentas = [];
+        private ObservableCollection<Venta> listaVentas = [];
 
         [ObservableProperty]
         public Venta? ventaSeleccionada;
@@ -46,7 +47,7 @@ namespace AppPallet.ViewModels
                 IsBusy = true;
                 VentaSeleccionada = null;
                 var ventasList = await _ventaController.GetAllVentas();
-                ListaVentas = ventasList;
+                ListaVentas = new ObservableCollection<Venta>(ventasList);
             }
             catch (Exception ex)
             {

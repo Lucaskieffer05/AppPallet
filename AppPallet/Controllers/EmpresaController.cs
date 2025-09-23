@@ -1,4 +1,5 @@
 ﻿using AppPallet.Models;
+using CommunityToolkit.Maui.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppPallet.Controllers
@@ -27,6 +28,18 @@ namespace AppPallet.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return [];
+            }
+        }
+
+        public async Task<List<Empresa>> GetAllAloneEmpresas()
+        {
+            try
+            {
+                return await _context.Empresas.AsNoTracking().ToListAsync();
+            }
+            catch (Exception)
+            {
                 return [];
             }
         }

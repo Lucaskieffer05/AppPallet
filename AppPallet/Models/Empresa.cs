@@ -16,6 +16,4 @@ public partial class Empresa
     public virtual ICollection<ContactosEmpresa> ContactosEmpresas { get; set; } = new List<ContactosEmpresa>();
 
     public virtual ICollection<CostoPorPallet> CostoPorPallets { get; set; } = new List<CostoPorPallet>();
-
-    public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
 }

@@ -24,7 +24,15 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Venta.AsNoTracking().ToListAsync();
+                return await _context.Venta
+                    .AsNoTracking()
+                    .Include(v => v.CostoPorPallet)
+                    .ThenInclude(cp => cp.Empresa)
+                    .Include(v => v.CostoPorPallet)
+                    .ThenInclude(cp => cp.Pallet)
+                    .OrderBy(v => v.Estado)
+                    .ThenBy(v => v.FechaVenta)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {

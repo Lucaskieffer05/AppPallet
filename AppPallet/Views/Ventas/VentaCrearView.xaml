@@ -1,12 +1,90 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.VentaCrearView"
-             Title="VentaCrearView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="AppPallet.Views.VentaCrearView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Registrar venta"
+    x:DataType="viewModels:VentaCrearViewModel">
+
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15"
+            WidthRequest="550">
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Crear nueva venta:"
+                TextColor="Black" />
+
+            <material:PickerField
+                Title="Selecciona la Empresa"
+                x:DataType="{x:Null}"
+                ItemDisplayBinding="{Binding NomEmpresa}"
+                ItemsSource="{Binding ListEmpresas}"
+                SelectedItem="{Binding EmpresaIngresada, Mode=TwoWay}" />
+
+            <material:PickerField
+                Title="Selecciona el presupuesto:"
+                x:DataType="{x:Null}"
+                IsEnabled="{Binding PresupuestoEnabled}"
+                ItemDisplayBinding="{Binding FechaNombre}"
+                ItemsSource="{Binding ListCostoPorPallet}"
+                SelectedItem="{Binding CostoPorPalletIngresado, Mode=TwoWay}" />
+
+            <material:DatePickerField
+                Title="Fecha de venta"
+                Date="{Binding VentaCreated.FechaVenta, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Cantidad Pallets:"
+                Keyboard="Numeric"
+                Text="{Binding VentaCreated.CantPallets, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Comentarios:"
+                Text="{Binding VentaCreated.Comentario, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:PickerField
+                Title="Seleccione el estado:"
+                x:DataType="{x:Null}"
+                ItemsSource="{Binding Estados}"
+                SelectedItem="{Binding Estadoingresado, Mode=TwoWay}" />
+
+            <material:DatePickerField
+                Title="Fecha de entrega"
+                Date="{Binding VentaCreated.FechaEntrega, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                IsEnabled="{Binding EntregadoFlag}"
+                TextColor="Black" />
+
+
+            <HorizontalStackLayout Spacing="10">
+                <Button
+                    Command="{Binding CrearVentaCommand}"
+                    StyleClass="FilledButton"
+                    Text="Guardar Cambios" />
+                <Button
+                    Command="{Binding VolverAtrasCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+
 </ContentPage>

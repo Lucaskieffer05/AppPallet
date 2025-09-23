@@ -1,12 +1,76 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.VentaModificarView"
-             Title="VentaModificarView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="AppPallet.Views.VentaModificarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="{Binding TituloPage}"
+    x:DataType="viewModels:VentaModificarViewModel">
+
+    <ContentPage.Resources>
+        <converters:NullableDateTimeConverter x:Key="NullableDateTimeConverter" />
+    </ContentPage.Resources>
+
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15"
+            WidthRequest="550">
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Modificar Activo/Pasivo:"
+                TextColor="Black" />
+
+            <material:DatePickerField
+                Title="Fecha de venta"
+                Date="{Binding VentaModified.FechaVenta, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Cantidad Pallets:"
+                Keyboard="Numeric"
+                Text="{Binding VentaModified.CantPallets, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Comentarios:"
+                Text="{Binding VentaModified.Comentario, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:DatePickerField
+                Title="Fecha de entrega"
+                Date="{Binding VentaModified.FechaEntrega, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Button
+                    Command="{Binding ModificarVentaCommand}"
+                    StyleClass="FilledButton"
+                    Text="Guardar Cambios" />
+                <Button
+                    Command="{Binding VolverAtrasCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar" />
+                <Button
+                    BorderColor="#D65265"
+                    Command="{Binding EliminarVentaCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Eliminar"
+                    TextColor="#D65265" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

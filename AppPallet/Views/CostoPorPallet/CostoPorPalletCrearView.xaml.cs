@@ -12,6 +12,15 @@ public partial class CostoPorPalletCrearView : UraniumContentPage
 		BindingContext = viewModel;
     }
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is CostoPorPalletCrearViewModel vm)
+        {
+            await vm.CargarListas();
+        }
+    }
+
     private void MontoEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
         var entry = sender as Entry;

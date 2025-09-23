@@ -58,7 +58,35 @@ namespace AppPallet.Constants
             public const string ModifyError = "No se pudo modificar la venta. Intente nuevamente.";
 
         }
-        
+
+        public static class Ingreso
+        {
+            public const string CreateSuccess = "El ingreso ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el ingreso. Intente nuevamente.";
+            public const string NotFound = "No se encontró el ingreso.";
+            public const string DeleteSuccess = "El ingreso ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el ingreso. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El ingreso ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el ingreso. Intente nuevamente.";
+
+        }
+
+        public static class Egreso
+        {
+            public const string CreateSuccess = "El egreso ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el egreso. Intente nuevamente.";
+            public const string NotFound = "No se encontró el egreso.";
+            public const string DeleteSuccess = "El egreso ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el egreso. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El egreso ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el egreso. Intente nuevamente.";
+
+        }
+
 
         // Mensajes genéricos
         public static class Generic

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppPallet.Models;
 
@@ -31,6 +33,8 @@ public partial class PalletContext : DbContext
 
     public virtual DbSet<GastosFijo> GastosFijos { get; set; }
 
+    public virtual DbSet<HistorialHumedad> HistorialHumedads { get; set; }
+
     public virtual DbSet<Ingreso> Ingresos { get; set; }
 
     public virtual DbSet<Lote> Lotes { get; set; }
@@ -46,6 +50,8 @@ public partial class PalletContext : DbContext
     public virtual DbSet<PalletHumedad> PalletHumedads { get; set; }
 
     public virtual DbSet<Pedido> Pedidos { get; set; }
+
+    public virtual DbSet<Stock> Stocks { get; set; }
 
     public virtual DbSet<Venta> Venta { get; set; }
 
@@ -232,6 +238,24 @@ public partial class PalletContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<HistorialHumedad>(entity =>
+        {
+            entity.ToTable("HistorialHumedad");
+
+            entity.Property(e => e.HistorialHumedadId).HasColumnName("HistorialHumedadID");
+            entity.Property(e => e.Fecha).HasColumnType("datetime");
+            entity.Property(e => e.PedidoId).HasColumnName("PedidoID");
+            entity.Property(e => e.PesoAprox)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Promedio).HasColumnType("decimal(18, 1)");
+
+            entity.HasOne(d => d.Pedido).WithMany(p => p.HistorialHumedads)
+                .HasForeignKey(d => d.PedidoId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_HistorialHumedad_Pedido");
+        });
+
         modelBuilder.Entity<Ingreso>(entity =>
         {
             entity.ToTable("Ingreso");
@@ -309,10 +333,16 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.Sello)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.StockId).HasColumnName("StockID");
             entity.Property(e => e.ToleranciaPeso).HasColumnType("decimal(3, 1)");
             entity.Property(e => e.Tratamiento)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Stock).WithMany(p => p.Pallets)
+                .HasForeignKey(d => d.StockId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Pallet_Stock");
         });
 
         modelBuilder.Entity<PalletComponente>(entity =>
@@ -404,18 +434,21 @@ public partial class PalletContext : DbContext
             entity.ToTable("Pedido");
 
             entity.Property(e => e.PedidoId).HasColumnName("PedidoID");
-            entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
             entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
             entity.Property(e => e.PalletId).HasColumnName("PalletID");
-
-            entity.HasOne(d => d.Empresa).WithMany(p => p.Pedidos)
-                .HasForeignKey(d => d.EmpresaId)
-                .HasConstraintName("FK_Pedido_Empresa");
 
             entity.HasOne(d => d.Pallet).WithMany(p => p.Pedidos)
                 .HasForeignKey(d => d.PalletId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Pedido_Pallet");
+        });
+
+        modelBuilder.Entity<Stock>(entity =>
+        {
+            entity.ToTable("Stock");
+
+            entity.Property(e => e.StockId).HasColumnName("StockID");
+            entity.Property(e => e.Stock1).HasColumnName("Stock");
         });
 
         modelBuilder.Entity<Venta>(entity =>

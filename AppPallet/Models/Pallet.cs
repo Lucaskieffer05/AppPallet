@@ -25,6 +25,8 @@ public partial class Pallet
 
     public DateTime? FechaModificacion { get; set; }
 
+    public int StockId { get; set; }
+
     public virtual ICollection<CostoPorPallet> CostoPorPallets { get; set; } = new List<CostoPorPallet>();
 
     public virtual ICollection<PalletComponente> PalletComponentes { get; set; } = new List<PalletComponente>();
@@ -36,4 +38,6 @@ public partial class Pallet
     public virtual ICollection<PalletHumedad> PalletHumedads { get; set; } = new List<PalletHumedad>();
 
     public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
+
+    public virtual Stock Stock { get; set; } = null!;
 }

@@ -61,6 +61,49 @@ namespace AppPallet.Controllers
             }
         }
 
+        // Obtener los costos por pallet por empresa id
+        public async Task<List<CostoPorPalletDTO>> GetCostosPorPalletByEmpresaId(int empresaId)
+        {
+            try
+            {
+                var fechaActual = DateTime.Now;
+                var primerDiaMesActual = new DateTime(fechaActual.Year, fechaActual.Month, 1);
+                var primerDiaMesAnterior = primerDiaMesActual.AddMonths(-1);
+
+                var costos = await _context.CostoPorPallets
+                    .AsNoTracking()
+                    .Where(c => c.EmpresaId == empresaId &&
+                                c.Mes >= primerDiaMesAnterior &&
+                                c.Mes < primerDiaMesActual.AddMonths(1))
+                    .OrderByDescending(c => c.Mes)
+                    .ToListAsync();
+
+                // Mapeo manual de CostoPorPallet a CostoPorPalletDTO
+                var costosDTO = costos.Select(c => new CostoPorPalletDTO
+                {
+                    CostoPorPalletId = c.CostoPorPalletId,
+                    NombrePalletCliente = c.NombrePalletCliente,
+                    FechaNombre = $"{c.Mes:MM/yyyy}/{c.NombrePalletCliente}/{c.PrecioPallet}",
+                    CantidadPorDia = c.CantidadPorDia,
+                    CargaCamion = c.CargaCamion,
+                    PalletId = c.PalletId,
+                    EmpresaId = c.EmpresaId,
+                    PrecioPallet = c.PrecioPallet,
+                    GananciaPorCantPallet = c.GananciaPorCantPallet,
+                    Mes = c.Mes,
+                    HorasPorMes = c.HorasPorMes
+                    // Agrega aquí otros campos si tu DTO los requiere
+                }).ToList();
+
+                return costosDTO;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener los costos por pallet: {ex.Message}");
+                return new List<CostoPorPalletDTO>();
+            }
+        }
+
         public async Task<bool> UpdateCostoPorPallet(CostoPorPallet costoPorPalletSeleccionada)
         {
             try

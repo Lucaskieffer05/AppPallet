@@ -1,87 +1,133 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<uranium:UraniumContentPage 
+<uranium:UraniumContentPage
+    x:Class="AppPallet.Views.CostoPorPalletCrearView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="AppPallet.Views.CostoPorPalletCrearView"
-    Title="Crear Presupuesto"
-    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:models="clr-namespace:AppPallet.Models"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Crear Presupuesto"
     x:DataType="viewModels:CostoPorPalletCrearViewModel">
 
 
     <ScrollView>
 
         <Grid ColumnDefinitions="*,*,*">
-            
-            <VerticalStackLayout Spacing="20"  Grid.Column="1" Padding="0,80,0,80">
+
+            <VerticalStackLayout
+                Grid.Column="1"
+                Padding="0,80,0,80"
+                Spacing="20">
 
 
-                <Label Text="Crear un nuevo costo para presupuesto" TextColor="#424242" FontSize="26" LineBreakMode="WordWrap" VerticalOptions="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" Padding="0,0,0,20"/>
+                <Label
+                    Padding="0,0,0,20"
+                    FontAttributes="Bold"
+                    FontSize="26"
+                    HorizontalTextAlignment="Center"
+                    LineBreakMode="WordWrap"
+                    Text="Crear un nuevo costo para presupuesto"
+                    TextColor="#424242"
+                    VerticalOptions="Center" />
 
 
-                <HorizontalStackLayout  >
-                    <material:PickerField 
+                <HorizontalStackLayout>
+                    <material:PickerField
                         x:Name="MesPicker"
                         Title="Mes"
                         ItemsSource="{Binding Meses}"
                         SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" />
 
-                    <material:PickerField 
+                    <material:PickerField
                         x:Name="AñoPicker"
                         Title="Año"
                         ItemsSource="{Binding Años}"
-                        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"/>
+                        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}" />
                 </HorizontalStackLayout>
-        
+
 
                 <material:PickerField
                     Title="Selecciona la Empresa"
-                    ItemsSource="{Binding ListEmpresas}"
-                    ItemDisplayBinding="{Binding NomEmpresa}"
                     x:DataType="{x:Null}"
+                    ItemDisplayBinding="{Binding NomEmpresa}"
+                    ItemsSource="{Binding ListEmpresas}"
                     SelectedItem="{Binding EmpresaIngresada, Mode=TwoWay}" />
 
                 <material:PickerField
                     Title="Selecciona el Pallet"
-                    ItemsSource="{Binding ListPallets}"
-                    ItemDisplayBinding="{Binding Nombre}"
                     x:DataType="{x:Null}"
+                    ItemDisplayBinding="{Binding Nombre}"
+                    ItemsSource="{Binding ListPallets}"
                     SelectedItem="{Binding PalletIngresado, Mode=TwoWay}" />
 
-                <material:EditorField TextColor="Black" Title="Nombre del Costo al Pallet" Text="{Binding CostoPorPalletCreated.NombrePalletCliente, Mode=TwoWay}" />
+                <material:EditorField
+                    Title="Nombre del Costo al Pallet"
+                    Text="{Binding CostoPorPalletCreated.NombrePalletCliente, Mode=TwoWay}"
+                    TextColor="Black" />
 
-                <material:EditorField TextColor="Black" Title="Cantidad de pallet por dia" Text="{Binding CostoPorPalletCreated.CantidadPorDia, Mode=TwoWay}" />
+                <material:EditorField
+                    Title="Cantidad de pallet por dia"
+                    Text="{Binding CostoPorPalletCreated.CantidadPorDia, Mode=TwoWay}"
+                    TextColor="Black" />
 
-                <material:EditorField TextColor="Black" Title="Carga maxima del camion" Text="{Binding CostoPorPalletCreated.CargaCamion, Mode=TwoWay}" />
+                <material:EditorField
+                    Title="Carga maxima del camion"
+                    Text="{Binding CostoPorPalletCreated.CargaCamion, Mode=TwoWay}"
+                    TextColor="Black" />
 
-                <material:EditorField TextColor="Black" Title="Cantidad de horas por mes" Text="{Binding CostoPorPalletCreated.HorasPorMes, Mode=TwoWay}" />
+                <material:EditorField
+                    Title="Cantidad de horas por mes"
+                    Text="{Binding CostoPorPalletCreated.HorasPorMes, Mode=TwoWay}"
+                    TextColor="Black" />
 
                 <VerticalStackLayout>
-                    <Label Text="Costos por Camión:" FontAttributes="Bold" FontSize="16" HorizontalTextAlignment="Center" Padding="0,0,0,20"/>
+                    <Label
+                        Padding="0,0,0,20"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="Costos por Camión:" />
 
-                    <Grid ColumnDefinitions="*,*" Padding="0,0,0,20">
-                        <Label Grid.Column="0" Text="Nombre Costo" BackgroundColor="#E6E6E6"/>
-                        <Label Grid.Column="1" Text="Monto" BackgroundColor="#D6D6D6" />
+                    <Grid Padding="0,0,0,20" ColumnDefinitions="*,*">
+                        <Label
+                            Grid.Column="0"
+                            BackgroundColor="#E6E6E6"
+                            Text="Nombre Costo" />
+                        <Label
+                            Grid.Column="1"
+                            BackgroundColor="#D6D6D6"
+                            Text="Monto" />
                     </Grid>
 
                     <CollectionView ItemsSource="{Binding ListCostoPorCamions}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:CostoPorCamion">
-                                <Grid ColumnDefinitions="*,*,0.2*" Padding="0,0,0,20">
-                                    <Entry Grid.Column="0" Text="{Binding NombreCosto, Mode=TwoWay}" Placeholder="Nombre del costo" />
-                                    <Entry Grid.Column="1" Text="{Binding Monto, Mode=TwoWay}" Keyboard="Numeric" Placeholder="Monto"/>
+                                <Grid Padding="0,0,0,20" ColumnDefinitions="*,*,0.2*">
+                                    <Entry
+                                        Grid.Column="0"
+                                        Placeholder="Nombre del costo"
+                                        Text="{Binding NombreCosto, Mode=TwoWay}" />
+                                    <Entry
+                                        Grid.Column="1"
+                                        Keyboard="Numeric"
+                                        Placeholder="Monto"
+                                        Text="{Binding Monto, Mode=TwoWay}" />
 
-                                    <ImageButton Grid.Column="2"
-                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CostoPorPalletCrearViewModel}}, Path=EliminarCostoPorCamionCommand}"
-                                                 CommandParameter="{Binding .}"
-                                                 VerticalOptions="Center"
-                                                 StyleClass="OutlinedButton">
+                                    <ImageButton
+                                        Grid.Column="2"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CostoPorPalletCrearViewModel}}, Path=EliminarCostoPorCamionCommand}"
+                                        CommandParameter="{Binding .}"
+                                        StyleClass="OutlinedButton"
+                                        VerticalOptions="Center">
                                         <ImageButton.Source>
-                                            <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.DeleteLeft}" Color="#F78D9C" Size="17"/>
+                                            <FontImageSource
+                                                FontFamily="FASolid"
+                                                Glyph="{x:Static fa:Solid.DeleteLeft}"
+                                                Size="17"
+                                                Color="#F78D9C" />
                                         </ImageButton.Source>
                                     </ImageButton>
 
@@ -90,15 +136,21 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
-                    <Button Text="Agregar costo por camión" 
-                            Command="{Binding AgregarCostoPorCamionCommand}" 
-                            StyleClass="OutlinedButton"
-                            BorderColor="#52D681" TextColor="#52D681"/>
+                    <Button
+                        BorderColor="#52D681"
+                        Command="{Binding AgregarCostoPorCamionCommand}"
+                        StyleClass="OutlinedButton"
+                        Text="Agregar costo por camión"
+                        TextColor="#52D681" />
                 </VerticalStackLayout>
 
 
                 <HorizontalStackLayout Spacing="10">
-                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Crear Costo del Pallet" Command="{Binding CrearCostoPorPalletCommand}"/>
+                    <Button
+                        BackgroundColor="#C352D6"
+                        Command="{Binding CrearCostoPorPalletCommand}"
+                        StyleClass="FilledButton"
+                        Text="Crear Costo del Pallet" />
                 </HorizontalStackLayout>
 
 

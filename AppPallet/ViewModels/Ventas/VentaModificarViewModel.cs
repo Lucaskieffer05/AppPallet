@@ -3,7 +3,6 @@ using AppPallet.Controllers;
 using AppPallet.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
@@ -15,17 +14,25 @@ namespace AppPallet.ViewModels
         // -------------------------------------------------------------------
         readonly VentaController _ventaController;
 
+        readonly IngresoController _ingresoController;
+
         [ObservableProperty]
         public Venta? ventaModified;
+
+        [ObservableProperty]
+        public string tituloPage = string.Empty;
+
+        private string auxEstado = string.Empty;
 
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public VentaModificarViewModel(VentaController ventaController)
+        public VentaModificarViewModel(VentaController ventaController, IngresoController ingresoController)
         {
             _ventaController = ventaController;
+            _ingresoController = ingresoController;
         }
 
 
@@ -46,9 +53,15 @@ namespace AppPallet.ViewModels
         {
             VentaModified = await _ventaController.GetVentaById(ventaId);
 
+
             if (VentaModified == null)
             {
                 await MostrarAlerta("Venta Cargada", $"Venta ID: {ventaId} no fue cargada correctamente.");
+            }
+            else
+            {
+                TituloPage = $"Modificar venta a {VentaModified.CostoPorPallet.Empresa.NomEmpresa} con precio: ${VentaModified.CostoPorPallet.PrecioPallet}";
+                auxEstado = VentaModified.Estado;
             }
         }
 
@@ -64,6 +77,47 @@ namespace AppPallet.ViewModels
         {
             if (VentaModified != null && ValidarVenta(VentaModified))
             {
+                if(VentaModified.FechaEntrega != null)
+                {
+                    VentaModified.Estado = "Entregado";
+                }
+                else
+                {
+                    VentaModified.Estado = "En Producción";
+                }
+
+
+                    var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+                if (mainPage == null)
+                {
+                    await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                    return;
+                }
+
+                if (VentaModified.Estado != auxEstado && VentaModified.Estado == "Entregado")
+                {
+                    bool confirmar = await mainPage.DisplayAlert("Confirmar", "Se ha detectado el estado de 'Entregado' ¿Desea registar el ingreso de esta venta?", "Sí", "No");
+
+                    if (confirmar)
+                    {
+                        Ingreso ingreso = new Ingreso
+                        {
+                            Fecha = VentaModified.FechaEntrega,
+                            DescripIngreso = $"Venta de {VentaModified.CantPallets} pallets - {VentaModified.CostoPorPallet.NombrePalletCliente}",
+                            Op = string.Empty,
+                            Remito = string.Empty,
+                            Factura = string.Empty,
+                            Monto = (decimal)(VentaModified.CantPallets * (VentaModified.CostoPorPallet.PrecioPallet ?? 0)),
+                            Comentario = "ENTREGADO"
+                        };
+
+                        MessageResult resultIngreso = await _ingresoController.CreateIngreso(ingreso);
+
+                        await MostrarAlerta(resultIngreso.Title, resultIngreso.Message);
+                    }
+                }
+
+
                 MessageResult result = await _ventaController.UpdateVenta(VentaModified);
 
                 await MostrarAlerta(result.Title, result.Message);

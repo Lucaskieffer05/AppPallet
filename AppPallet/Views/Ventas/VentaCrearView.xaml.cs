@@ -9,4 +9,13 @@ public partial class VentaCrearView : ContentPage
 		InitializeComponent();
 		BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is VentaCrearViewModel vm)
+        {
+            await vm.CargarListas();
+        }
+    }
 }

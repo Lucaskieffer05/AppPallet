@@ -1,4 +1,5 @@
-﻿using AppPallet.Models;
+﻿using AppPallet.Constants;
+using AppPallet.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace AppPallet.Controllers
         }
 
         // Crear un nuevo ingreso
-        public async Task<bool> CreateIngreso(Ingreso nuevoIngreso)
+        public async Task<MessageResult> CreateIngreso(Ingreso nuevoIngreso)
         {
             try
             {
@@ -51,21 +52,19 @@ namespace AppPallet.Controllers
 
                 _context.Ingresos.Add(ingresoCreated);
                 var result = await _context.SaveChangesAsync();
-                return result > 0;
+                if(result > 0)
+                {
+                    return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Ingreso.CreateSuccess);
+                }
+                return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Ingreso.CreateError);
             }
             catch (DbUpdateException dbEx)
             {
-                Console.WriteLine($"Error de base de datos: {dbEx.Message}");
-                if (dbEx.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
-                }
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Error de base de datos: {dbEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error general: {ex.Message}");
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Error general: {ex.Message}");
             }
         }
 

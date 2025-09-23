@@ -1,12 +1,8 @@
 ﻿using AppPallet.Controllers;
 using AppPallet.Models;
-using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace AppPallet.ViewModels
 {
@@ -54,32 +50,57 @@ namespace AppPallet.ViewModels
 
         readonly CostoPorPalletController _costoPorPalletController;
 
+        readonly EmpresaController _empresaController;
+
+        readonly PalletController _palletController;
+
         readonly PalletContext _context = new();
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public CostoPorPalletCrearViewModel(CostoPorPalletController controller)
+        public CostoPorPalletCrearViewModel(CostoPorPalletController controller, EmpresaController empresaController, PalletController palletController)
         {
-            ListPallets = _context.Pallets.AsNoTracking().ToList().ToObservableCollection();
-            ListEmpresas = _context.Empresas.AsNoTracking().ToList().ToObservableCollection();
+            _empresaController = empresaController;
             _costoPorPalletController = controller;
+            _palletController = palletController;
+
             CostoPorPalletCreated = new CostoPorPallet();
             MesIngresado = DateTime.Today.Month - 1;
             AñoIngresado = DateTime.Today.Year;
-            
-            if (ListEmpresas.Count > 0)
-                EmpresaIngresada = ListEmpresas.FirstOrDefault()!;
-
-            if (ListPallets.Count > 0)
-                PalletIngresado = ListPallets.FirstOrDefault()!;
-
         }
 
         // -------------------------------------------------------------------
         // ----------------------- Comandos y Consultas a DB -----------------
         // -------------------------------------------------------------------
+
+        public async Task CargarListas()
+        {
+            try
+            {
+                var listEmpresas = await _empresaController.GetAllAloneEmpresas();
+                ListEmpresas = new ObservableCollection<Empresa>(listEmpresas);
+
+                var listPallet = await _palletController.GetAllPallets();
+                ListPallets = new ObservableCollection<Pallet>(listPallet);
+
+                if (ListEmpresas.Count > 0)
+                    EmpresaIngresada = ListEmpresas.FirstOrDefault()!;
+
+                if (ListPallets.Count > 0)
+                    PalletIngresado = ListPallets.FirstOrDefault()!;
+
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción (por ejemplo, mostrar un mensaje de error)
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+            }
+        }
 
 
         [RelayCommand]
