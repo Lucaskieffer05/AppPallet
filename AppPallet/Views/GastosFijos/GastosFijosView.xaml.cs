@@ -3,7 +3,7 @@ using UraniumUI.Pages;
 
 namespace AppPallet.Views;
 
-public partial class GastosFijosView : UraniumContentPage
+public partial class GastosFijosView : ContentPage
 {
 	public GastosFijosView(GastosFijosViewModel viewModel)
 	{

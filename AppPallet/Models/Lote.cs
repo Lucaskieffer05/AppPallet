@@ -23,7 +23,5 @@ public partial class Lote
 
     public decimal? PrecioCamionero { get; set; }
 
-    public int PedidoId { get; set; }
-
-    public virtual Pedido Pedido { get; set; } = null!;
+    public virtual ICollection<Pedido> Pedido { get; set; } = new List<Pedido>();
 }

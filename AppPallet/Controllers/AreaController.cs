@@ -24,7 +24,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Areas.AsNoTracking().ToListAsync();
+                return await _context.Area.AsNoTracking().ToListAsync();
             }
             catch (Exception ex)
             {

@@ -23,12 +23,33 @@ namespace AppPallet.ViewModels
         private ObservableCollection<Cheque> listaCheques = [];
 
         [ObservableProperty]
+        public bool hayCheques;
+
+        [ObservableProperty]
         public Cheque? chequeSeleccionado;
 
         [ObservableProperty]
         private bool isBusy;
 
         private bool _isLoading = false;
+
+        [ObservableProperty]
+        private int mesIngresado = DateTime.Today.Month - 1;
+
+        [ObservableProperty]
+        private int añoIngresado = DateTime.Today.Year;
+
+
+        public ObservableCollection<string> Meses { get; } = new()
+            {
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            };
+
+        public ObservableCollection<int> Años { get; } = new()
+            {
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            };
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -56,8 +77,9 @@ namespace AppPallet.ViewModels
 
                 ChequeSeleccionado = null;
 
-                var chequesList = await _chequeController.GetAllCheques();
+                var chequesList = await _chequeController.GetAllCheques(new DateTime(AñoIngresado, MesIngresado + 1, 1));
                 ListaCheques = new ObservableCollection<Cheque>(chequesList);
+                HayCheques = ListaCheques.Count == 0;
             }
             finally
             {
@@ -66,11 +88,45 @@ namespace AppPallet.ViewModels
             }
         }
 
+        partial void OnMesIngresadoChanged(int oldValue, int newValue)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    await CargarListaCheques();
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
+        }
+
+        partial void OnAñoIngresadoChanged(int oldValue, int newValue)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    await CargarListaCheques();
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
+        }
+
 
         [RelayCommand]
         public async Task MostrarPopupCheque()
         {
-            
+
             await DisplayPopupCrear();
         }
 

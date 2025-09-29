@@ -13,11 +13,11 @@ namespace AppPallet.Controllers
         }
 
         // Obtener todos los cheques
-        public async Task<List<Cheque>> GetAllCheques()
+        public async Task<List<Cheque>> GetAllCheques(DateTime filtroMes)
         {
             try
             {
-                return await _context.Cheques.AsNoTracking().OrderBy(c => c.FechaPago).ToListAsync();
+                return await _context.Cheque.AsNoTracking().Where(c => c.FechaPago.Year == filtroMes.Year && c.FechaPago.Month == filtroMes.Month).OrderBy(c => c.FechaPago).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -31,7 +31,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                _context.Cheques.Add(nuevoCheque);
+                _context.Cheque.Add(nuevoCheque);
                 var result = await _context.SaveChangesAsync();
                 return result > 0; // SaveChangesAsync retorna el número de entradas afectadas
             }
@@ -56,7 +56,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var cheque = await _context.Cheques.Where(c => c.ChequeId == chequeModificado.ChequeId).FirstOrDefaultAsync();
+                var cheque = await _context.Cheque.Where(c => c.ChequeId == chequeModificado.ChequeId).FirstOrDefaultAsync();
 
                 if (cheque == null)
                 {
@@ -86,13 +86,13 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var cheque = await _context.Cheques.Where(c => c.ChequeId == chequeId).FirstOrDefaultAsync();
+                var cheque = await _context.Cheque.Where(c => c.ChequeId == chequeId).FirstOrDefaultAsync();
 
                 if (cheque == null)
                 {
                     return false;
                 }
-                _context.Cheques.Remove(cheque);
+                _context.Cheque.Remove(cheque);
                 await _context.SaveChangesAsync();
                 return true;
             }

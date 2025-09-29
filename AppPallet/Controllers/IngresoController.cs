@@ -23,7 +23,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Ingresos.AsNoTracking().Where(c => c.Fecha.HasValue && c.Fecha.Value.Month == mes.Month && c.Fecha.Value.Year == mes.Year).OrderByDescending(c => c.Fecha).ToListAsync();
+                return await _context.Ingreso.AsNoTracking().Where(c => c.Fecha.HasValue && c.Fecha.Value.Month == mes.Month && c.Fecha.Value.Year == mes.Year).OrderByDescending(c => c.Fecha).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace AppPallet.Controllers
                 };
 
 
-                _context.Ingresos.Add(ingresoCreated);
+                _context.Ingreso.Add(ingresoCreated);
                 var result = await _context.SaveChangesAsync();
                 if(result > 0)
                 {
@@ -73,7 +73,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var ingreso = await _context.Ingresos.Where(i => i.IngresoId == ingresoModificado.IngresoId).FirstOrDefaultAsync();
+                var ingreso = await _context.Ingreso.Where(i => i.IngresoId == ingresoModificado.IngresoId).FirstOrDefaultAsync();
                 if (ingreso == null)
                 {
                     Console.WriteLine("Ingreso no encontrado.");
@@ -109,13 +109,13 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var ingreso = await _context.Ingresos.Where(i => i.IngresoId == id).FirstOrDefaultAsync();
+                var ingreso = await _context.Ingreso.Where(i => i.IngresoId == id).FirstOrDefaultAsync();
                 if (ingreso == null)
                 {
                     Console.WriteLine("Ingreso no encontrado.");
                     return false;
                 }
-                _context.Ingresos.Remove(ingreso);
+                _context.Ingreso.Remove(ingreso);
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
             }

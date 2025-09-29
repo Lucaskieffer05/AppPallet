@@ -1,158 +1,348 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                            x:Class="AppPallet.Views.EmpresaView"
-                            Title="Empresas"
-                            xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-                            xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-                            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-                            xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-                            xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
-                            xmlns:models="clr-namespace:AppPallet.Models"
-                            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-                            x:DataType="viewModels:EmpresaViewModel">
-    <ScrollView>
-        <Grid RowDefinitions="Auto,Auto">
+<ContentPage
+    x:Class="AppPallet.Views.EmpresaView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Empresas"
+    x:DataType="viewModels:EmpresaViewModel"
+    Shell.NavBarIsVisible="False">
 
 
-            <Grid Padding="20" ColumnSpacing="20" ColumnDefinitions="0.8*,*,0.5*">
-                <Border Stroke="green" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="0">
-                    <Label Text="Verde" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </Border>
-                <Border Stroke="red" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="1">
-                    <Label Text="Rojo" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </Border>
-                <Border Stroke="black" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="2">
-                    <Label Text="Negro" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </Border>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryColor">#2E7D32</Color>
+            <Color x:Key="SecondaryColor">#4CAF50</Color>
+            <Color x:Key="AccentColor">#2196F3</Color>
+            <Color x:Key="WarningColor">#FF9800</Color>
+            <Color x:Key="DangerColor">#F44336</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BackgroundLight">#F5F5F5</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#F6F1EB" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!--  Header  -->
+        <Border Grid.Row="0" Stroke="Black">
+            <Grid BackgroundColor="#374151" ColumnDefinitions="0.5*,*,0.5*">
+
+                <Label
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Start"
+                    Text="EMPRESAS"
+                    TextColor="#F6F1EB"
+                    VerticalOptions="Center" />
+
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label
+                        FontSize="15"
+                        Text="Filtrar por mes:"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+
+                    <material:PickerField
+                        x:Name="TipoPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        AllowClear="False"
+                        BorderColor="White"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding Tipos}"
+                        SelectedItem="{Binding TipoIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+
+
+
+                </HorizontalStackLayout>
             </Grid>
+        </Border>
+
+        <!--  Empresas  -->
+
+        <Grid
+            Grid.Row="1"
+            Margin="0,30"
+            ColumnDefinitions="0.5*,*,0.5*">
+
+            <Border
+                Grid.Column="1"
+                Padding="20"
+                BackgroundColor="#374151"
+                StrokeShape="12">
+                <Grid RowDefinitions="Auto,*" RowSpacing="20">
+
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                        <Label
+                            Grid.Column="0"
+                            FontSize="25"
+                            Style="{StaticResource SectionTitleStyle}"
+                            Text="{Binding TipoIngresado}" />
+
+                        <Button
+                            Grid.Column="2"
+                            Padding="20,10"
+                            BackgroundColor="#F6F1EB"
+                            BorderColor="#D0B595"
+                            BorderWidth="3"
+                            Command="{Binding MostrarPopupCrearCommand}"
+                            CornerRadius="20"
+                            HeightRequest="45"
+                            StyleClass="FilledButton"
+                            Text="Agregar Empresa"
+                            TextColor="Black"
+                            WidthRequest="200" />
+                    </Grid>
 
 
-            <Grid Grid.Row="1" ColumnDefinitions="0.1*,*,0.3*">
-                <Border Stroke="Silver" StrokeThickness="3" HeightRequest="50" WidthRequest="100" Grid.Column="0">
-                    <Label Text="Plata" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </Border>
-
-                <Border Stroke="Silver" StrokeThickness="1" Grid.Column="1">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10"/>
-                    </Border.StrokeShape>
-
-
-                    <CollectionView ItemsSource="{Binding ListaEmpresas}" Margin="20" SelectedItem="{Binding EmpresaSeleccionada, Mode=TwoWay}">
+                    <CollectionView
+                        Grid.Row="1"
+                        ItemsSource="{Binding ListaEmpresas}"
+                        SelectedItem="{Binding EmpresaSeleccionada, Mode=TwoWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Empresa">
                                 <Grid Padding="0,0,0,20">
-                                <Border Stroke="#D0B595" StrokeThickness="2">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="10"/>
-                                    </Border.StrokeShape>
-                                    <VerticalStackLayout Padding="15" Spacing="10">
+                                    <Border
+                                        Margin="0,0,20,0"
+                                        BackgroundColor="#F6F1EB"
+                                        Stroke="#D0B595"
+                                        StrokeThickness="2">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Border.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=EsCliente}"
+                                                TargetType="Border"
+                                                Value="True">
+                                                <Setter Property="Stroke" Value="#A46C3B" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=EsCliente}"
+                                                TargetType="Border"
+                                                Value="False">
+                                                <Setter Property="Stroke" Value="#00101A" />
+                                            </DataTrigger>
+                                        </Border.Triggers>
+                                        <VerticalStackLayout Padding="15" Spacing="10">
 
-                                        <!-- Datos principales de la empresa -->
-                                        <HorizontalStackLayout VerticalOptions="Center">
-                                            <Image Grid.RowSpan="3" WidthRequest="20" Margin="0,0,10,0">
-                                                <Image.Source>
-                                                    <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.User}" Color="#848484" Size="100"/>
-                                                </Image.Source>
-                                            </Image>
-                                            <Label Text="{Binding NomEmpresa}" FontAttributes="Bold" FontSize="18" VerticalTextAlignment="Center"/>
+                                            <!--  Datos principales de la empresa  -->
+                                            <HorizontalStackLayout VerticalOptions="Center">
+                                                <Image
+                                                    Grid.RowSpan="3"
+                                                    Margin="0,0,10,0"
+                                                    WidthRequest="20">
+                                                    <Image.Source>
+                                                        <FontImageSource
+                                                            x:Name="EmpresaIcon"
+                                                            FontFamily="FASolid"
+                                                            Glyph="{x:Static fa:Solid.User}"
+                                                            Size="100" />
+                                                    </Image.Source>
+                                                    <Image.Triggers>
+                                                        <DataTrigger
+                                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=EsCliente}"
+                                                            TargetType="Image"
+                                                            Value="True">
+                                                            <Setter Property="Source">
+                                                                <Setter.Value>
+                                                                    <FontImageSource
+                                                                        FontFamily="FASolid"
+                                                                        Glyph="{x:Static fa:Solid.User}"
+                                                                        Size="100"
+                                                                        Color="#A46C3B" />
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger
+                                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=EsCliente}"
+                                                            TargetType="Image"
+                                                            Value="False">
+                                                            <Setter Property="Source">
+                                                                <Setter.Value>
+                                                                    <FontImageSource
+                                                                        FontFamily="FASolid"
+                                                                        Glyph="{x:Static fa:Solid.User}"
+                                                                        Size="100"
+                                                                        Color="#00101A" />
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Image.Triggers>
+                                                </Image>
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    Text="{Binding NomEmpresa}"
+                                                    VerticalTextAlignment="Center" />
 
-                                            <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=MostrarPopupModificarCommand}"
-                                                         CommandParameter="{Binding EmpresaId}"
-                                                         VerticalOptions="Center"
-                                                         StyleClass="OutlinedButton">
-                                                <ImageButton.Source>
-                                                    <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.PenToSquare}" Color="#D65265" Size="20"/>
-                                                </ImageButton.Source>
-                                            </ImageButton>
-
-
-                                        </HorizontalStackLayout>
-                                        <StackLayout Orientation="Horizontal" Spacing="15">
-                                            <Label Text="CUIT:" FontAttributes="Bold"/>
-                                            <Label Text="{Binding Cuit}"/>
-                                        </StackLayout>
-                                        <StackLayout Orientation="Horizontal" Spacing="15">
-                                            <Label Text="Dirección:" FontAttributes="Bold"/>
-                                            <Label Text="{Binding Domicilio}"/>
-                                        </StackLayout>
-
-
-
-                                        <!-- Áreas y contactos -->
-                                        <CollectionView ItemsSource="{Binding ContactosEmpresas}">
-                                            <CollectionView.ItemTemplate>
-                                                <DataTemplate x:DataType="models:ContactosEmpresa">
-                                                    <Border Stroke="#848484" Padding="10">
-                                                        <Border.StrokeShape>
-                                                            <RoundRectangle CornerRadius="8"/>
-                                                        </Border.StrokeShape>
-
-
-                                                        <uranium:ExpanderView>
-
-                                                            <uranium:ExpanderView.Header>
-                                                                <Label Text="{Binding Area.NomArea}" FontAttributes="Bold" FontSize="16" TextColor="#2e7d32"/>
-                                                            </uranium:ExpanderView.Header>
-
-                                                            <VerticalStackLayout Padding="10" Spacing="5">
-                                                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                                                    <Label Text="Contacto:" FontAttributes="Bold"/>
-                                                                    <Label Text="{Binding Contacto}"/>
-                                                                </StackLayout>
-                                                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                                                    <Label Text="Mail:" FontAttributes="Bold"/>
-                                                                    <Label Text="{Binding Mail}"/>
-                                                                </StackLayout>
-                                                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                                                    <Label Text="Teléfono:" FontAttributes="Bold"/>
-                                                                    <Label Text="{Binding Telefono}"/>
-                                                                </StackLayout>
-                                                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                                                    <Label Text="Comentario:" FontAttributes="Bold"/>
-                                                                    <Label Text="{Binding Comentario}"/>
-                                                                </StackLayout>
-                                                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                                                    <Label Text="Pallet:" FontAttributes="Bold"/>
-                                                                    <Label Text="{Binding Pallet}"/>
-                                                                </StackLayout>
-                                                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                                                    <Label Text="Sello:" FontAttributes="Bold"/>
-                                                                    <Label Text="{Binding Sello}"/>
-                                                                </StackLayout>
-                                                            </VerticalStackLayout>
-
-                                                        </uranium:ExpanderView>
-
-                                                    </Border>
-                                                </DataTemplate>
-                                            </CollectionView.ItemTemplate>
-                                        </CollectionView>
+                                                <ImageButton
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=MostrarPopupModificarCommand}"
+                                                    CommandParameter="{Binding EmpresaId}"
+                                                    StyleClass="OutlinedButton"
+                                                    VerticalOptions="Center">
+                                                    <ImageButton.Source>
+                                                        <FontImageSource
+                                                            FontFamily="FASolid"
+                                                            Glyph="{x:Static fa:Solid.PenToSquare}"
+                                                            Size="20"
+                                                            Color="#D65265" />
+                                                    </ImageButton.Source>
+                                                </ImageButton>
 
 
-                                    </VerticalStackLayout>
-                                </Border>
+                                            </HorizontalStackLayout>
+                                            <StackLayout Orientation="Horizontal" Spacing="15">
+                                                <Label FontAttributes="Bold" Text="CUIT:" />
+                                                <Label Text="{Binding Cuit}" />
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal" Spacing="15">
+                                                <Label FontAttributes="Bold" Text="Dirección:" />
+                                                <Label Text="{Binding Domicilio}" />
+                                            </StackLayout>
+
+
+
+                                            <!--  Áreas y contactos  -->
+                                            <CollectionView ItemsSource="{Binding ContactosEmpresa}">
+                                                <CollectionView.ItemTemplate>
+                                                    <DataTemplate x:DataType="models:ContactosEmpresa">
+                                                        <Border Padding="10" Stroke="#848484">
+                                                            <Border.StrokeShape>
+                                                                <RoundRectangle CornerRadius="8" />
+                                                            </Border.StrokeShape>
+
+
+                                                            <uranium:ExpanderView>
+
+                                                                <uranium:ExpanderView.Header>
+                                                                    <Label
+                                                                        FontAttributes="Bold"
+                                                                        FontSize="16"
+                                                                        Text="{Binding Area.NomArea}"
+                                                                        TextColor="#2e7d32" />
+                                                                </uranium:ExpanderView.Header>
+
+                                                                <VerticalStackLayout Padding="10" Spacing="5">
+                                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                                        <Label
+                                                                            FontAttributes="Bold"
+                                                                            Text="Contacto:"
+                                                                            VerticalTextAlignment="Center" />
+                                                                        <Label Text="{Binding Contacto}" VerticalTextAlignment="Center" />
+                                                                        <ImageButton
+                                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=CopiarCommand}"
+                                                                            CommandParameter="{Binding Contacto}"
+                                                                            Style="{StaticResource CopyImageButtonStyle}" />
+
+                                                                    </StackLayout>
+                                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                                        <Label
+                                                                            FontAttributes="Bold"
+                                                                            Text="Mail:"
+                                                                            VerticalTextAlignment="Center" />
+                                                                        <Label Text="{Binding Mail}" VerticalTextAlignment="Center" />
+                                                                        <ImageButton
+                                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=CopiarCommand}"
+                                                                            CommandParameter="{Binding Mail}"
+                                                                            Style="{StaticResource CopyImageButtonStyle}" />
+                                                                    </StackLayout>
+                                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                                        <Label
+                                                                            FontAttributes="Bold"
+                                                                            Text="Teléfono:"
+                                                                            VerticalTextAlignment="Center" />
+                                                                        <Label Text="{Binding Telefono}" VerticalTextAlignment="Center" />
+                                                                        <ImageButton
+                                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=CopiarCommand}"
+                                                                            CommandParameter="{Binding Telefono}"
+                                                                            Style="{StaticResource CopyImageButtonStyle}" />
+                                                                    </StackLayout>
+                                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                                        <Label
+                                                                            FontAttributes="Bold"
+                                                                            Text="Comentario:"
+                                                                            VerticalTextAlignment="Center" />
+                                                                        <Label Text="{Binding Comentario}" VerticalTextAlignment="Center" />
+                                                                        <ImageButton
+                                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=CopiarCommand}"
+                                                                            CommandParameter="{Binding Comentario}"
+                                                                            Style="{StaticResource CopyImageButtonStyle}" />
+                                                                    </StackLayout>
+                                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                                        <Label
+                                                                            FontAttributes="Bold"
+                                                                            Text="Pallet:"
+                                                                            VerticalTextAlignment="Center" />
+                                                                        <Label Text="{Binding Pallet}" VerticalTextAlignment="Center" />
+                                                                        <ImageButton
+                                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=CopiarCommand}"
+                                                                            CommandParameter="{Binding Pallet}"
+                                                                            Style="{StaticResource CopyImageButtonStyle}" />
+                                                                    </StackLayout>
+                                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                                        <Label
+                                                                            FontAttributes="Bold"
+                                                                            Text="Sello:"
+                                                                            VerticalTextAlignment="Center" />
+                                                                        <Label Text="{Binding Sello}" VerticalTextAlignment="Center" />
+                                                                        <ImageButton
+                                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=CopiarCommand}"
+                                                                            CommandParameter="{Binding Sello}"
+                                                                            Style="{StaticResource CopyImageButtonStyle}" />
+                                                                    </StackLayout>
+                                                                </VerticalStackLayout>
+
+                                                            </uranium:ExpanderView>
+
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </CollectionView.ItemTemplate>
+                                            </CollectionView>
+
+
+                                        </VerticalStackLayout>
+                                    </Border>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
+                </Grid>
 
-
-                </Border>
-
-                <VerticalStackLayout Grid.Column="2" Spacing="10" >
-                    <Button StyleClass="FilledButton" 
-                            Text="Agregar Empresa" 
-                            Command="{Binding MostrarPopupCrearCommand}"  
-                            WidthRequest="180"/>
-                    <Button StyleClass="OutlinedButton"  
-                            Text="Modificar Empresa" 
-                            Command="{Binding MostrarPopupModificarCommand}"  
-                            WidthRequest="180"/>
-                </VerticalStackLayout>
-                
-            </Grid>
+            </Border>
         </Grid>
-    </ScrollView>
-</uranium:UraniumContentPage>
+
+    </Grid>
+
+</ContentPage>

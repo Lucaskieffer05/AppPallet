@@ -1,6 +1,8 @@
-﻿using AppPallet.Models;
+﻿using AppPallet.Constants;
+using AppPallet.Models;
 using CommunityToolkit.Maui.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Windows.ApplicationModel.Chat;
 
 namespace AppPallet.Controllers
 {
@@ -15,13 +17,14 @@ namespace AppPallet.Controllers
         // Métodos para manejar empresa (CRUD) pueden ser añadidos aquí
 
         // Obtener todos los empresa
-        public async Task<List<Empresa>> GetAllEmpresas()
+        public async Task<List<Empresa>> GetAllEmpresas(string tipo)
         {
             try
             {
-                return await _context.Empresas
+                return await _context.Empresa
                     .AsNoTracking()
-                    .Include(e => e.ContactosEmpresas)
+                    .Where(c => c.Tipo == tipo && c.FechaDelete == null)
+                    .Include(e => e.ContactosEmpresa)
                         .ThenInclude(c => c.Area)
                     .ToListAsync();
             }
@@ -36,7 +39,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Empresas.AsNoTracking().ToListAsync();
+                return await _context.Empresa.AsNoTracking().ToListAsync();
             }
             catch (Exception)
             {
@@ -50,7 +53,7 @@ namespace AppPallet.Controllers
             {
                 var mesActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
-                return await _context.Empresas
+                return await _context.Empresa
                     .AsNoTracking()
                     .Select(e => new Empresa
                     {
@@ -58,7 +61,7 @@ namespace AppPallet.Controllers
                         NomEmpresa = e.NomEmpresa,
                         Cuit = e.Cuit,
                         Domicilio = e.Domicilio,
-                        CostoPorPallets = e.CostoPorPallets
+                        CostoPorPallet = e.CostoPorPallet
                             .Where(cp => cp.Mes.Year == mesActual.Year && cp.Mes.Month == mesActual.Month)
                             .ToList(),
                     })
@@ -76,9 +79,9 @@ namespace AppPallet.Controllers
         public async Task<Empresa?> GetEmpresaById(int empresaId) {             
             try
             {
-                return await _context.Empresas
-                    .Include(e => e.CostoPorPallets.OrderByDescending(cp => cp.Mes))
-                    .ThenInclude(cp => cp.CostoPorCamions)
+                return await _context.Empresa
+                    .Include(e => e.CostoPorPallet.OrderByDescending(cp => cp.Mes))
+                    .ThenInclude(cp => cp.CostoPorCamion)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(e => e.EmpresaId == empresaId);
             }
@@ -95,11 +98,11 @@ namespace AppPallet.Controllers
             try
             {
                 // 1. Agregar la empresa
-                _context.Empresas.Add(nuevaEmpresa);
+                _context.Empresa.Add(nuevaEmpresa);
                 await _context.SaveChangesAsync();
 
                 // 2. Obtener las áreas fijas
-                var areasFijas = await _context.Areas
+                var areasFijas = await _context.Area
                     .Where(a => a.NomArea == "VENTA" || a.NomArea == "ENTREGAS" || a.NomArea == "FACTURAS" || a.NomArea == "PAGOS")
                     .ToListAsync();
 
@@ -117,7 +120,7 @@ namespace AppPallet.Controllers
                         Pallet = null,
                         Sello = null
                     };
-                    _context.ContactosEmpresas.Add(contacto);
+                    _context.ContactosEmpresa.Add(contacto);
                 }
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
@@ -143,8 +146,8 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var existingEntity = await _context.Empresas
-                    .Include(e => e.ContactosEmpresas)
+                var existingEntity = await _context.Empresa
+                    .Include(e => e.ContactosEmpresa)
                     .FirstOrDefaultAsync(e => e.EmpresaId == EmpresaModificado.EmpresaId);
 
                 if (existingEntity == null)
@@ -155,9 +158,9 @@ namespace AppPallet.Controllers
 
                 _context.Entry(existingEntity).CurrentValues.SetValues(EmpresaModificado);
 
-                foreach (var contactoModificado in EmpresaModificado.ContactosEmpresas)
+                foreach (var contactoModificado in EmpresaModificado.ContactosEmpresa)
                 {
-                    var contactoExistente = existingEntity.ContactosEmpresas
+                    var contactoExistente = existingEntity.ContactosEmpresa
                         .FirstOrDefault(c => c.ContactosEmpresaId == contactoModificado.ContactosEmpresaId);
 
                     if (contactoExistente != null)
@@ -166,7 +169,7 @@ namespace AppPallet.Controllers
                     }
                     else
                     {
-                        existingEntity.ContactosEmpresas.Add(contactoModificado);
+                        existingEntity.ContactosEmpresa.Add(contactoModificado);
                     }
                 }
 
@@ -191,33 +194,31 @@ namespace AppPallet.Controllers
         }
 
         // Eliminar un cliente/proveedor
-        public async Task<bool> DeleteEmpresa(int EmpresaId)
+        public async Task<MessageResult> DeleteEmpresa(int EmpresaId)
         {
             try
             {
-                var entity = await _context.Empresas.FindAsync(EmpresaId);
+                var entity = await _context.Empresa.FindAsync(EmpresaId);
                 if (entity == null)
                 {
-                    Console.WriteLine("Cliente/Proveedor no encontrado.");
-                    return false;
+                    return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Empresa.NotFound);
                 }
-                _context.Empresas.Remove(entity);
+                //Poner fechadelete en hoy
+                entity.FechaDelete = DateTime.Now;
                 var result = await _context.SaveChangesAsync();
-                return result > 0;
+                if (result > 0)
+                {
+                    return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Empresa.Deleted);
+                }
+                return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Empresa.NoDeleted);
             }
             catch (DbUpdateException dbEx)
             {
-                Console.WriteLine($"Error de base de datos: {dbEx.Message}");
-                if (dbEx.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
-                }
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Empresa.NoDeleted} Detalle: {dbEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error general: {ex.Message}");
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Empresa.NoDeleted} Detalle: {ex.Message}");
             }
         }
     }

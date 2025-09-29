@@ -20,7 +20,7 @@ namespace AppPallet.Controllers
 
         // ...resto del código...
 
-        public async Task<List<GastosFijo>> GetAllGastosFijos(DateTime mes)
+        public async Task<List<GastosFijos>> GetAllGastosFijos(DateTime mes)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace AppPallet.Controllers
         }
 
         // Crear un nuevo cheque
-        public async Task<bool> CreateGastoFijo(GastosFijo nuevoGastoFijo, bool flagEgreso = true)
+        public async Task<bool> CreateGastoFijo(GastosFijos nuevoGastoFijo, bool flagEgreso = true)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace AppPallet.Controllers
                         DescripEgreso = nuevoGastoFijo.NombreGastoFijo,
                         Comentario = "Gasto Fijo"
                     };
-                    _context.Egresos.Add(nuevoEgreso);
+                    _context.Egreso.Add(nuevoEgreso);
                 }
 
                 var result = await _context.SaveChangesAsync();
@@ -103,7 +103,7 @@ namespace AppPallet.Controllers
         }
 
         // Modificar un cheque existente
-        public async Task<bool> UpdateGastoFijo(GastosFijo gastoFijoModificado)
+        public async Task<bool> UpdateGastoFijo(GastosFijos gastoFijoModificado)
         {
             try
             {

@@ -52,7 +52,7 @@ namespace AppPallet.Models
             {
                 if (Costo == null)
                     return 0;
-                return (decimal)Costo.CostoPorCamions.Sum(c => c.Monto);
+                return (decimal)Costo.CostoPorCamion.Sum(c => c.Monto);
             }
         }
 

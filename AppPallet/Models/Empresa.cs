@@ -13,7 +13,11 @@ public partial class Empresa
 
     public string? Domicilio { get; set; }
 
-    public virtual ICollection<ContactosEmpresa> ContactosEmpresas { get; set; } = new List<ContactosEmpresa>();
+    public DateTime? FechaDelete { get; set; }
 
-    public virtual ICollection<CostoPorPallet> CostoPorPallets { get; set; } = new List<CostoPorPallet>();
+    public string Tipo { get; set; } = null!;
+
+    public virtual ICollection<ContactosEmpresa> ContactosEmpresa { get; set; } = new List<ContactosEmpresa>();
+
+    public virtual ICollection<CostoPorPallet> CostoPorPallet { get; set; } = new List<CostoPorPallet>();
 }

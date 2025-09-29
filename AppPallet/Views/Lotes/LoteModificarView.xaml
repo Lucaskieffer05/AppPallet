@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.LoteModificarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="EDITAR LOTE"
+    x:DataType="viewModels:LoteModificarViewModel"
+    Shell.BackgroundColor="#374151"
+    Shell.TitleColor="#F6F1EB">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryColor">#2E7D32</Color>
+            <Color x:Key="SecondaryColor">#4CAF50</Color>
+            <Color x:Key="AccentColor">#2196F3</Color>
+            <Color x:Key="WarningColor">#FF9800</Color>
+            <Color x:Key="DangerColor">#F44336</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BackgroundLight">#F5F5F5</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#F6F1EB" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView Padding="200,0,200,0">
+        <Grid
+            Padding="16"
+            RowDefinitions="Auto,Auto,Auto,Auto"
+            RowSpacing="10">
+
+            <!--  Loading Indicator  -->
+            <ActivityIndicator
+                Grid.RowSpan="4"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center"
+                Color="{StaticResource PrimaryColor}" />
+
+            <!--  Header del Lote  -->
+            <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                <Grid RowDefinitions="Auto,Auto" RowSpacing="15">
+                    <!--  Título y Estado  -->
+                    <Grid ColumnDefinitions="*,Auto" Row="0">
+                        <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                            <Label Style="{StaticResource TitleStyle}" Text="{Binding LoteModified.NumLote, StringFormat='Editar Lote #{0}'}" />
+
+                            <Border
+                                Padding="8,4"
+                                BackgroundColor="{Binding EstadoColor}"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    Text="{Binding Estado}"
+                                    TextColor="White" />
+                            </Border>
+
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!--  Información Básica del Lote  -->
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="15"
+                        Row="1">
+                        <!--  Columna Izquierda - Información General  -->
+                        <VerticalStackLayout Grid.Column="0" Spacing="10">
+
+                            <material:DatePickerField
+                                Title="Fecha Solicitada"
+                                Date="{Binding LoteModified.FechaSolicitada, Mode=TwoWay}"
+                                TextColor="Black" />
+
+                            <material:DatePickerField
+                                Title="Fecha Entrega"
+                                Date="{Binding FechaEntrega, Mode=TwoWay}"
+                                TextColor="Black" />
+                            <material:EditorField
+                                Title="Proveedor"
+                                Text="{Binding LoteModified.NomProveedor, Mode=TwoWay}"
+                                TextColor="Black" />
+                            <material:EditorField
+                                Title="Precio Proveedor $:"
+                                Keyboard="Numeric"
+                                Text="{Binding LoteModified.PrecioProveedor, Mode=TwoWay, StringFormat='{}{0:N2}'}"
+                                TextColor="Black" />
+                        </VerticalStackLayout>
+
+                        <!--  Columna Derecha - Proveedor y Camionero  -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="10">
+
+
+                            <material:EditorField
+                                Title="N° Factura Proveedor"
+                                Text="{Binding LoteModified.NumFacturaProveedor, Mode=TwoWay}"
+                                TextColor="Black" />
+
+                            <material:EditorField
+                                Title="Camionero"
+                                Text="{Binding LoteModified.NomCamionero, Mode=TwoWay}"
+                                TextColor="Black" />
+
+                            <material:EditorField
+                                Title="Precio Camionero $:"
+                                Keyboard="Numeric"
+                                Text="{Binding LoteModified.PrecioCamionero, Mode=TwoWay, StringFormat='{}{0:N2}'}"
+                                TextColor="Black" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!--  Gestión de Pedidos  -->
+            <Border
+                Grid.Row="2"
+                Margin="200,0,200,0"
+                BackgroundColor="#374151"
+                Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource SectionTitleStyle}"
+                            Text="📦 Pedidos del Lote" />
+
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="#F6F1EB"
+                            BorderColor="#D0B595"
+                            BorderWidth="1"
+                            Command="{Binding AgregarPedidoCommand}"
+                            StyleClass="FilledButton"
+                            Text="Agregar Pedido"
+                            TextColor="Black" />
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding Pedidos}" SelectionMode="None">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout
+                                Padding="20"
+                                HorizontalOptions="Center"
+                                Spacing="10">
+                                <Label
+                                    FontSize="32"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="📭" />
+                                <Label
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="No hay pedidos en este lote"
+                                    TextColor="White" />
+                                <Label
+                                    FontSize="12"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Agrega el primer pedido para comenzar"
+                                    TextColor="#F6F1EB" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:PedidoMostrarDTO">
+                                <Border Margin="0,5" Style="{StaticResource CardStyle}">
+                                    <Grid
+                                        ColumnDefinitions="*,Auto"
+                                        RowDefinitions="Auto,Auto"
+                                        RowSpacing="8">
+                                        <!--  Información del Pedido  -->
+                                        <Grid
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            ColumnDefinitions="*,*"
+                                            RowDefinitions="Auto,Auto">
+                                            <Label
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                FontAttributes="Bold"
+                                                FontSize="16"
+                                                Text="{Binding NombrePallet}" />
+
+                                            <Label
+                                                Grid.Row="0"
+                                                Grid.Column="1"
+                                                FontAttributes="Bold"
+                                                FontSize="14"
+                                                HorizontalOptions="Center"
+                                                Text="{Binding Cantidad, StringFormat='Cantidad: {0}'}" />
+
+
+                                            <HorizontalStackLayout Grid.Row="1">
+                                                <Label
+                                                    Grid.Column="0"
+                                                    FontAttributes="Italic"
+                                                    FontSize="12"
+                                                    Text="{Binding FechaEInicio, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
+                                                    TextColor="#666" />
+
+                                                <Label
+                                                    Grid.Column="0"
+                                                    Margin="10,0,0,0"
+                                                    FontAttributes="Italic"
+                                                    FontSize="12"
+                                                    Text="{Binding FechaEFinal, StringFormat='Terminado: {0:dd/MM/yyyy}'}"
+                                                    TextColor="#666" />
+
+                                            </HorizontalStackLayout>
+
+                                            <Label
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                FontSize="12"
+                                                HorizontalOptions="Center"
+                                                Text="{Binding Estado}"
+                                                TextColor="{Binding EstadoColor}" />
+                                        </Grid>
+
+                                        <!--  Acciones  -->
+                                        <HorizontalStackLayout
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            Spacing="5">
+                                            <Button
+                                                BackgroundColor="#374151"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteModificarViewModel}}, Path=ModificarPedidoCommand}"
+                                                CommandParameter="{Binding}"
+                                                CornerRadius="10"
+                                                HeightRequest="35"
+                                                StyleClass="FilledButton"
+                                                Text="Editar"
+                                                WidthRequest="85" />
+
+                                            <ImageButton
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteModificarViewModel}}, Path=EliminarPedidoCommand}"
+                                                CommandParameter="{Binding}"
+                                                StyleClass="OutlinedButton"
+                                                VerticalOptions="Center">
+                                                <ImageButton.Source>
+                                                    <FontImageSource
+                                                        FontFamily="FASolid"
+                                                        Glyph="{x:Static fa:Regular.TrashCan}"
+                                                        Size="15"
+                                                        Color="#FF8B9D" />
+                                                </ImageButton.Source>
+                                            </ImageButton>
+
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Botones de Acción  -->
+            <Border
+                Grid.Row="3"
+                Padding="200,20,200,0"
+                StrokeThickness="0">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        Command="{Binding GuardarLoteCommand}"
+                        StyleClass="FilledButton"
+                        Text="Guardar Cambios" />
+                    <Button
+                        Grid.Column="1"
+                        BackgroundColor="#e5e7eb"
+                        BorderColor="#9ca3af"
+                        Command="{Binding VolverAtrasCommand}"
+                        StyleClass="OutlinedButton"
+                        Text="← Volver"
+                        TextColor="Black" />
+
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

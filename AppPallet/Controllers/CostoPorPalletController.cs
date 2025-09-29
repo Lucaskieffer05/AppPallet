@@ -25,7 +25,7 @@ namespace AppPallet.Controllers
                 nuevoCosto.Empresa = null!;
                 nuevoCosto.Pallet = null!;
 
-                _context.CostoPorPallets.Add(nuevoCosto);
+                _context.CostoPorPallet.Add(nuevoCosto);
                 var result = await _context.SaveChangesAsync();
 
                 if (result <= 0)
@@ -48,9 +48,9 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.CostoPorPallets
+                return await _context.CostoPorPallet
                     .AsNoTracking()
-                    .Include(CostoPorPallet => CostoPorPallet.CostoPorCamions)
+                    .Include(CostoPorPallet => CostoPorPallet.CostoPorCamion)
                     .FirstOrDefaultAsync(c => c.CostoPorPalletId == id);
 
             }
@@ -70,7 +70,7 @@ namespace AppPallet.Controllers
                 var primerDiaMesActual = new DateTime(fechaActual.Year, fechaActual.Month, 1);
                 var primerDiaMesAnterior = primerDiaMesActual.AddMonths(-1);
 
-                var costos = await _context.CostoPorPallets
+                var costos = await _context.CostoPorPallet
                     .AsNoTracking()
                     .Where(c => c.EmpresaId == empresaId &&
                                 c.Mes >= primerDiaMesAnterior &&
@@ -83,7 +83,7 @@ namespace AppPallet.Controllers
                 {
                     CostoPorPalletId = c.CostoPorPalletId,
                     NombrePalletCliente = c.NombrePalletCliente,
-                    FechaNombre = $"{c.Mes:MM/yyyy}/{c.NombrePalletCliente}/{c.PrecioPallet}",
+                    FechaNombre = $"{c.Mes:MM/yyyy} - {c.NombrePalletCliente} - ${c.PrecioPallet}",
                     CantidadPorDia = c.CantidadPorDia,
                     CargaCamion = c.CargaCamion,
                     PalletId = c.PalletId,
@@ -108,7 +108,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var costo = await _context.CostoPorPallets
+                var costo = await _context.CostoPorPallet
                     .FirstOrDefaultAsync(c => c.CostoPorPalletId == costoPorPalletSeleccionada.CostoPorPalletId);
 
                 if (costo == null)
@@ -126,27 +126,27 @@ namespace AppPallet.Controllers
                 costo.HorasPorMes = costoPorPalletSeleccionada.HorasPorMes;
 
                 // Actualizar CostoPorCamions asociados
-                var costosExistentes = await _context.CostoPorCamions
+                var costosExistentes = await _context.CostoPorCamion
                     .Where(cc => cc.CostoPorPalletId == costo.CostoPorPalletId)
                     .ToListAsync();
 
                 // Eliminar los que ya no están
                 foreach (var costoExistente in costosExistentes)
                 {
-                    if (!costoPorPalletSeleccionada.CostoPorCamions
+                    if (!costoPorPalletSeleccionada.CostoPorCamion
                         .Any(cc => cc.CostoPorCamionId == costoExistente.CostoPorCamionId))
                     {
-                        _context.CostoPorCamions.Remove(costoExistente);
+                        _context.CostoPorCamion.Remove(costoExistente);
                     }
                 }
 
                 // Agregar o actualizar los que vienen
-                foreach (var costoCamion in costoPorPalletSeleccionada.CostoPorCamions)
+                foreach (var costoCamion in costoPorPalletSeleccionada.CostoPorCamion)
                 {
                     if (costoCamion.CostoPorCamionId == 0)
                     {
                         costoCamion.CostoPorPalletId = costo.CostoPorPalletId;
-                        _context.CostoPorCamions.Add(costoCamion);
+                        _context.CostoPorCamion.Add(costoCamion);
                     }
                     else
                     {
@@ -177,7 +177,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var costo = await _context.CostoPorPallets
+                var costo = await _context.CostoPorPallet
                     .FirstOrDefaultAsync(c => c.CostoPorPalletId == costoPorPalletSeleccionada.CostoPorPalletId);
 
                 if (costo == null)
@@ -201,15 +201,15 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var costo = await _context.CostoPorPallets
-                    .Include(c => c.CostoPorCamions)
+                var costo = await _context.CostoPorPallet
+                    .Include(c => c.CostoPorCamion)
                     .FirstOrDefaultAsync(c => c.CostoPorPalletId == costoPorPalletId);
                 if (costo == null)
                     return false;
                 // Eliminar costos por camión asociados
-                _context.CostoPorCamions.RemoveRange(costo.CostoPorCamions);
+                _context.CostoPorCamion.RemoveRange(costo.CostoPorCamion);
                 // Eliminar el costo por pallet
-                _context.CostoPorPallets.Remove(costo);
+                _context.CostoPorPallet.Remove(costo);
                 var respuesta = await _context.SaveChangesAsync();
                 return respuesta > 0;
 

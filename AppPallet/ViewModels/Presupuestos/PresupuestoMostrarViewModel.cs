@@ -79,7 +79,7 @@ namespace AppPallet.ViewModels
             }
                
 
-            Resultado = EmpresaSeleccionada.CostoPorPallets
+            Resultado = EmpresaSeleccionada.CostoPorPallet
                 .Select(c => new GastosYCostosDTO
                 {
                     Costo = c,
@@ -181,7 +181,7 @@ namespace AppPallet.ViewModels
                 CantidadPorDia = costoToCopy.CantidadPorDia,
                 HorasPorMes = costoToCopy.HorasPorMes,
                 PrecioPallet = costoToCopy.PrecioPallet,
-                CostoPorCamions = costoToCopy.CostoPorCamions
+                CostoPorCamion = costoToCopy.CostoPorCamion
                     .Select(c => new CostoPorCamion
                     {
                         NombreCosto = c.NombreCosto,

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.EmpresaCrearView"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-             HorizontalOptions="Center"
-             VerticalOptions="Center"
-             Padding="10"
-             WidthRequest="400"
-             x:DataType="viewModels:EmpresaCrearViewModel">
+<ContentView
+    x:Class="AppPallet.Views.EmpresaCrearView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Padding="10"
+    x:DataType="viewModels:EmpresaCrearViewModel"
+    HorizontalOptions="Center"
+    VerticalOptions="Center"
+    WidthRequest="400">
 
 
     <VerticalStackLayout Spacing="20">
@@ -23,15 +24,30 @@
 
         <material:TextField Title="CUIL" Text="{Binding EmpresaCreated.Cuit, Mode=TwoWay}" />
 
-        
+        <material:PickerField
+            x:Name="TipoPicker"
+            AccentColor="Black"
+            AllowClear="False"
+            ItemsSource="{Binding Tipos}"
+            SelectedItem="{Binding TipoIngresado, Mode=TwoWay}" />
+
+
         <HorizontalStackLayout Spacing="10">
-            
-            <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Crear" Command="{Binding GuardarPopupCommand}"/>
-            <Button StyleClass="OutlinedButton" TextColor="#C352D6" Text="Cancelar" Command="{Binding CerrarPopupCommand}"/>
-            
+
+            <Button
+                BackgroundColor="#C352D6"
+                Command="{Binding GuardarPopupCommand}"
+                StyleClass="FilledButton"
+                Text="Crear" />
+            <Button
+                Command="{Binding CerrarPopupCommand}"
+                StyleClass="OutlinedButton"
+                Text="Cancelar"
+                TextColor="#C352D6" />
+
         </HorizontalStackLayout>
-        
-        
+
+
     </VerticalStackLayout>
 
 

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.LoteCrearView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Crear Lote"
+    x:DataType="viewModels:LoteCrearViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15"
+            WidthRequest="500">
+            <Label
+                FontSize="24"
+                HorizontalOptions="Center"
+                Text="Crear Lote" />
+
+            <!--
+            <material:EditorField
+                Title="Número de Lote"
+                Keyboard="Numeric"
+                Text="{Binding LoteCreated.NumLote, Mode=TwoWay}"
+                TextColor="Black" />
+            -->
+
+            <Label
+                Margin="0,-10,0,0"
+                Padding="10"
+                Background="#E2E2E2"
+                FontSize="12"
+                Text="El numero de lote se asignará con un número único automáticamente."
+                TextColor="Gray" />
+
+            <material:DatePickerField
+                Title="Fecha Solicitada"
+                AllowClear="False"
+                Date="{Binding LoteCreated.FechaSolicitada, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:DatePickerField
+                Title="Fecha Entrega"
+                Date="{Binding LoteCreated.FechaEntrega, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Proveedor"
+                Text="{Binding LoteCreated.NomProveedor, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Precio Proveedor"
+                Keyboard="Numeric"
+                Text="{Binding LoteCreated.PrecioProveedor, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="N° Factura Proveedor"
+                Text="{Binding LoteCreated.NumFacturaProveedor, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Camionero"
+                Text="{Binding LoteCreated.NomCamionero, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Precio Camionero"
+                Keyboard="Numeric"
+                Text="{Binding LoteCreated.PrecioCamionero, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Button
+                    Command="{Binding CrearLoteCommand}"
+                    StyleClass="FilledButton"
+                    Text="Crear nuevo lote" />
+                <Button
+                    Command="{Binding VolverAtrasCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

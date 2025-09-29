@@ -3,7 +3,7 @@ using UraniumUI.Pages;
 
 namespace AppPallet.Views;
 
-public partial class EmpresaView : UraniumContentPage
+public partial class EmpresaView : ContentPage
 {
     public EmpresaView(EmpresaViewModel viewModel)
     {

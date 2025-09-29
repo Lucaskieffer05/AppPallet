@@ -25,19 +25,17 @@ public partial class Pallet
 
     public DateTime? FechaModificacion { get; set; }
 
-    public int StockId { get; set; }
+    public int Stock { get; set; }
 
-    public virtual ICollection<CostoPorPallet> CostoPorPallets { get; set; } = new List<CostoPorPallet>();
+    public virtual ICollection<CostoPorPallet> CostoPorPallet { get; set; } = new List<CostoPorPallet>();
 
-    public virtual ICollection<PalletComponente> PalletComponentes { get; set; } = new List<PalletComponente>();
+    public virtual ICollection<PalletComponentes> PalletComponentes { get; set; } = new List<PalletComponentes>();
 
-    public virtual ICollection<PalletDimensione> PalletDimensiones { get; set; } = new List<PalletDimensione>();
+    public virtual ICollection<PalletDimensiones> PalletDimensiones { get; set; } = new List<PalletDimensiones>();
 
-    public virtual ICollection<PalletEspecificacione> PalletEspecificaciones { get; set; } = new List<PalletEspecificacione>();
+    public virtual ICollection<PalletEspecificaciones> PalletEspecificaciones { get; set; } = new List<PalletEspecificaciones>();
 
-    public virtual ICollection<PalletHumedad> PalletHumedads { get; set; } = new List<PalletHumedad>();
+    public virtual ICollection<PalletHumedad> PalletHumedad { get; set; } = new List<PalletHumedad>();
 
-    public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
-
-    public virtual Stock Stock { get; set; } = null!;
+    public virtual ICollection<Pedido> Pedido { get; set; } = new List<Pedido>();
 }

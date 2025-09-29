@@ -1,96 +1,128 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
-             x:Class="AppFarmacia.Resources.Styles.MyStyles">
+<ResourceDictionary
+    x:Class="AppFarmacia.Resources.Styles.MyStyles"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui">
 
-    <Style TargetType="Entry" x:Key="EntryComun">
-        <Setter Property="FontSize" Value="Micro"/>
-        <Setter Property="VerticalTextAlignment" Value="Center"/>
-        <Setter Property="HorizontalTextAlignment" Value="Start"/>
-        <Setter Property="WidthRequest" Value="150"/>
+    <Style x:Key="EntryComun" TargetType="Entry">
+        <Setter Property="FontSize" Value="Micro" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
+        <Setter Property="WidthRequest" Value="150" />
     </Style>
-    <Style TargetType="Label" x:Key="TituloGrafico">
-        <Setter Property="FontSize" Value="Micro"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="#111827"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
+    <Style x:Key="TituloGrafico" TargetType="Label">
+        <Setter Property="FontSize" Value="Micro" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="#111827" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
-    <Style TargetType="Label" x:Key="TituloTabla">
-        <Setter Property="FontFamily" Value="LexendBold"/>
-        <Setter Property="FontSize" Value="Micro"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="#111827"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="Margin" Value="0,-5,0,5"/>
+    <Style x:Key="TituloTabla" TargetType="Label">
+        <Setter Property="FontFamily" Value="LexendBold" />
+        <Setter Property="FontSize" Value="Micro" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="#111827" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,-5,0,5" />
     </Style>
 
     <Style x:Key="FlyoutGradientBackground" TargetType="Shell">
         <Setter Property="FlyoutBackground">
             <Setter.Value>
                 <LinearGradientBrush>
-                    <GradientStop Color="#fce0b6" Offset="0.02"/>
-                    <GradientStop Color="White" Offset="0.7"/>
+                    <GradientStop Offset="0.02" Color="#fce0b6" />
+                    <GradientStop Offset="0.7" Color="White" />
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style TargetType="Label" x:Key="VistaSinData">
-        <Setter Property="FontSize" Value="Large"/>
-        <Setter Property="TextColor" Value="#111827"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
+    <Style x:Key="VistaSinData" TargetType="Label">
+        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="TextColor" Value="#111827" />
+        <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="VerticalTextAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="100"/>
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="Padding" Value="100" />
     </Style>
 
-    <Style TargetType="Frame" x:Key="FrameGrafico">
-        <Setter Property="BackgroundColor" Value="Transparent"/>
-        <Setter Property="BorderColor" Value="Gray"/>
-        <Setter Property="CornerRadius" Value="1"/>
-        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    <Style x:Key="FrameGrafico" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderColor" Value="Gray" />
+        <Setter Property="CornerRadius" Value="1" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="VerticalOptions" Value="FillAndExpand" />
     </Style>
 
-    <Style TargetType="dg:DataGrid" x:Key="TablaComun">
-        <Setter Property="RowHeight" Value="40"/>
-        <Setter Property="HeaderHeight" Value="50"/>
-        <Setter Property="BorderColor" Value="#111827"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Margin" Value="1"/>
-        <Setter Property="HeaderBordersVisible" Value="True"/>
-        <Setter Property="ActiveRowColor" Value="#e4f2e2"/>
-        <Setter Property="HeaderBackground" Value="#D0B595"/>
+    <Style x:Key="TablaComun" TargetType="dg:DataGrid">
+        <Setter Property="RowHeight" Value="40" />
+        <Setter Property="HeaderHeight" Value="50" />
+        <Setter Property="BorderColor" Value="#111827" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Margin" Value="1" />
+        <Setter Property="HeaderBordersVisible" Value="True" />
+        <Setter Property="ActiveRowColor" Value="#e4f2e2" />
+        <Setter Property="HeaderBackground" Value="#D0B595" />
         <Setter Property="PaginationStepperStyle">
             <Setter.Value>
                 <Style TargetType="Stepper">
-                    <Setter Property="BackgroundColor" Value="#E7F1FF"/>
+                    <Setter Property="BackgroundColor" Value="#E7F1FF" />
                 </Style>
             </Setter.Value>
         </Setter>
     </Style>
 
-
+    <Style x:Key="CopyImageButtonStyle" TargetType="ImageButton">
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Source">
+            <Setter.Value>
+                <FontImageSource
+                    FontFamily="FASolid"
+                    Glyph="{x:Static fa:Solid.Copy}"
+                    Size="20"
+                    Color="#374151" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <Setter.Value>
+                <VisualStateGroupList>
+                    <VisualStateGroup Name="CommonStates">
+                        <VisualState Name="Normal" />
+                        <VisualState Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="Scale" Value="0.9" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
     <Style x:Key="BotonGeneral" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="White"/>
-        <Setter Property="BorderColor" Value="#D1D5DB"/>
-        <Setter Property="BorderWidth" Value="1"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="#111827"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="BorderColor" Value="#D1D5DB" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="#111827" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="Shadow">
             <Setter.Value>
-                <Shadow Brush="Black" Opacity="0.15" Offset="0,1" Radius="2"/>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.15"
+                    Radius="2"
+                    Offset="0,1" />
             </Setter.Value>
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -98,19 +130,19 @@
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="White"/>
+                            <Setter Property="BackgroundColor" Value="White" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="PointerOver">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="#E7F1FF"/>
+                            <Setter Property="BackgroundColor" Value="#E7F1FF" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Focused">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="White"/>
-                            <Setter Property="BorderColor" Value="Transparent"/>
-                            <Setter Property="BorderWidth" Value="2"/>
+                            <Setter Property="BackgroundColor" Value="White" />
+                            <Setter Property="BorderColor" Value="Transparent" />
+                            <Setter Property="BorderWidth" Value="2" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -118,14 +150,18 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ImageButton" x:Key="ImagenBotonGeneral">
-        <Setter Property="BackgroundColor" Value="White"/>
-        <Setter Property="BorderColor" Value="#D1D5DB"/>
-        <Setter Property="BorderWidth" Value="1"/>
-        <Setter Property="CornerRadius" Value="8"/>
+    <Style x:Key="ImagenBotonGeneral" TargetType="ImageButton">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="BorderColor" Value="#D1D5DB" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Shadow">
             <Setter.Value>
-                <Shadow Brush="Black" Opacity="0.15" Offset="0,1" Radius="2"/>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.15"
+                    Radius="2"
+                    Offset="0,1" />
             </Setter.Value>
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -133,19 +169,19 @@
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="White"/>
+                            <Setter Property="BackgroundColor" Value="White" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="PointerOver">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="#E7F1FF"/>
+                            <Setter Property="BackgroundColor" Value="#E7F1FF" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Focused">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="White"/>
-                            <Setter Property="BorderColor" Value="Transparent"/>
-                            <Setter Property="BorderWidth" Value="2"/>
+                            <Setter Property="BackgroundColor" Value="White" />
+                            <Setter Property="BorderColor" Value="Transparent" />
+                            <Setter Property="BorderWidth" Value="2" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -154,29 +190,37 @@
     </Style>
 
     <Style x:Key="BarraBusqueda" TargetType="SearchBar">
-        <Setter Property="CancelButtonColor" Value="Red"/>
-        <Setter Property="BackgroundColor" Value="White"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="TextColor" Value="#111827"/>
-        <Setter Property="PlaceholderColor" Value="Gray"/>
-        <Setter Property="WidthRequest" Value="300"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="CancelButtonColor" Value="Red" />
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="#111827" />
+        <Setter Property="PlaceholderColor" Value="Gray" />
+        <Setter Property="WidthRequest" Value="300" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="Shadow">
             <Setter.Value>
-                <Shadow Brush="Black" Opacity="0.15" Offset="0,1" Radius="2"/>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.15"
+                    Radius="2"
+                    Offset="0,1" />
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style x:Key="PickerEstilo" TargetType="Picker">
-        <Setter Property="BackgroundColor" Value="White"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="TextColor" Value="#111827"/>
-        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="#111827" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="Shadow">
             <Setter.Value>
-                <Shadow Brush="Black" Opacity="0.15" Offset="0,1" Radius="2"/>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.15"
+                    Radius="2"
+                    Offset="0,1" />
             </Setter.Value>
         </Setter>
     </Style>

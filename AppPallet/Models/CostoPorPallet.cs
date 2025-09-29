@@ -25,7 +25,7 @@ public partial class CostoPorPallet
 
     public int HorasPorMes { get; set; }
 
-    public virtual ICollection<CostoPorCamion> CostoPorCamions { get; set; } = new List<CostoPorCamion>();
+    public virtual ICollection<CostoPorCamion> CostoPorCamion { get; set; } = new List<CostoPorCamion>();
 
     public virtual Empresa Empresa { get; set; } = null!;
 

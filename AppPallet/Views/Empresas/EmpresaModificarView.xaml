@@ -1,75 +1,111 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.EmpresaModificarView"
-             xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-             xmlns:models="clr-namespace:AppPallet.Models"
-             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-             WidthRequest="500"
-             x:DataType="viewModels:EmpresaModificarViewModel">
+<ContentView
+    x:Class="AppPallet.Views.EmpresaModificarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    x:DataType="viewModels:EmpresaModificarViewModel"
+    WidthRequest="500">
 
     <ScrollView>
-        
-    
+
+
         <VerticalStackLayout Padding="20" Spacing="20">
-        
-        
-            <Label Text="Modificar Empresa" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
 
-            <!-- Nombre de la empresa -->
-            <material:EditorField Text="{Binding EmpresaSeleccionada.NomEmpresa, Mode=TwoWay}" 
-                   Title="Nombre de la empresa" TextColor="Black"/>
 
-            <!-- CUIT -->
-            <material:EditorField Text="{Binding EmpresaSeleccionada.Cuit, Mode=TwoWay}" 
-                   Title="CUIT" TextColor="Black"/>
+            <Label
+                FontAttributes="Bold"
+                FontSize="24"
+                HorizontalOptions="Center"
+                Text="Modificar Empresa" />
 
-            <!-- Domicilio -->
-            <material:EditorField Text="{Binding EmpresaSeleccionada.Domicilio, Mode=TwoWay}" 
-                   Title="Domicilio" TextColor="Black"/>
+            <!--  Nombre de la empresa  -->
+            <material:EditorField
+                Title="Nombre de la empresa"
+                Text="{Binding EmpresaSeleccionada.NomEmpresa, Mode=TwoWay}"
+                TextColor="Black" />
 
-            <!-- Contactos de la empresa -->
-            <Label Text="Contactos" FontAttributes="Bold" FontSize="18" />
-            <CollectionView ItemsSource="{Binding EmpresaSeleccionada.ContactosEmpresas}">
+            <!--  CUIT  -->
+            <material:EditorField
+                Title="CUIT"
+                Text="{Binding EmpresaSeleccionada.Cuit, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <!--  Domicilio  -->
+            <material:EditorField
+                Title="Domicilio"
+                Text="{Binding EmpresaSeleccionada.Domicilio, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <!--  Contactos de la empresa  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Contactos" />
+            <CollectionView ItemsSource="{Binding EmpresaSeleccionada.ContactosEmpresa}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ContactosEmpresa">
 
 
-                        <Border Stroke="#b0b0b0" Padding="10" Margin="0,5">
+                        <Border
+                            Margin="0,5"
+                            Padding="10"
+                            Stroke="#b0b0b0">
 
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="10"/>
+                                <RoundRectangle CornerRadius="10" />
                             </Border.StrokeShape>
 
                             <VerticalStackLayout Spacing="5">
-                                <Label Text="{Binding Area.NomArea}" FontAttributes="Bold" FontSize="16" TextColor="#2e7d32"/>
-                                <Entry Text="{Binding Contacto, Mode=TwoWay}" Placeholder="Contacto" />
-                                <Entry Text="{Binding Mail, Mode=TwoWay}" Placeholder="Mail" />
-                                <Entry Text="{Binding Telefono, Mode=TwoWay}" Placeholder="Teléfono" />
-                                <Entry Text="{Binding Comentario, Mode=TwoWay}" Placeholder="Comentario" />
-                                <Entry Text="{Binding Pallet, Mode=TwoWay}" Placeholder="Pallet" />
-                                <Entry Text="{Binding Sello, Mode=TwoWay}" Placeholder="Sello" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    Text="{Binding Area.NomArea}"
+                                    TextColor="#2e7d32" />
+                                <Entry Placeholder="Contacto" Text="{Binding Contacto, Mode=TwoWay}" />
+                                <Entry Placeholder="Mail" Text="{Binding Mail, Mode=TwoWay}" />
+                                <Entry Placeholder="Teléfono" Text="{Binding Telefono, Mode=TwoWay}" />
+                                <Entry Placeholder="Comentario" Text="{Binding Comentario, Mode=TwoWay}" />
+                                <Entry Placeholder="Pallet" Text="{Binding Pallet, Mode=TwoWay}" />
+                                <Entry Placeholder="Sello" Text="{Binding Sello, Mode=TwoWay}" />
                             </VerticalStackLayout>
                         </Border>
-                    
-                    
+
+
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <!-- Botones de acción -->
-            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
-                <Button Text="Guardar" Command="{Binding GuardarPopupCommand}" StyleClass="FilledButton" WidthRequest="120"/>
-                <Button Text="Cancelar" Command="{Binding CancelarPopupCommand}" StyleClass="OutlinedButton" WidthRequest="120"/>
+            <!--  Botones de acción  -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Button
+                    Command="{Binding GuardarPopupCommand}"
+                    StyleClass="FilledButton"
+                    Text="Guardar"
+                    WidthRequest="120" />
+                <Button
+                    Command="{Binding CancelarPopupCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar"
+                    WidthRequest="120" />
+                <Button
+                    BorderColor="#D65265"
+                    Command="{Binding EliminarCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Eliminar"
+                    TextColor="#D65265"
+                    WidthRequest="120" />
             </HorizontalStackLayout>
-        
-        
+
+
         </VerticalStackLayout>
-        
+
 
     </ScrollView>
-    
-    
+
+
 </ContentView>

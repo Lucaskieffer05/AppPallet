@@ -20,6 +20,20 @@ namespace AppPallet.ViewModels
 
         readonly ChequeController _chequeController;
 
+
+        [ObservableProperty]
+        public int estadoSeleccionado;
+        public List<int> OpcionesEstado { get; } = new List<int> { 0, 1, 2, 3, 4 };
+
+        public Dictionary<int, string> DescripcionesEstado { get; } = new Dictionary<int, string>
+        {
+            { 0, "Pendiente" },
+            { 1, "En proceso" },
+            { 2, "Pagado" },
+            { 3, "Rechazado" },
+            { 4, "Anulado" }
+        };
+
         public bool IsBusy { get; private set; }
 
         // -------------------------------------------------------------------
@@ -32,6 +46,8 @@ namespace AppPallet.ViewModels
             _chequeController = chequeController;
             ChequeCreated = new Cheque();
             ChequeCreated.FechaEmision = DateTime.Today;
+            ChequeCreated.FechaPago = DateTime.Today.AddDays(1);
+            EstadoSeleccionado = 0;
         }
 
 
@@ -53,6 +69,8 @@ namespace AppPallet.ViewModels
                 await MostrarAlerta("Error", "Datos inválidos");
                 return;
             }
+
+            ChequeCreated.Estado = EstadoSeleccionado;
 
             try
             {

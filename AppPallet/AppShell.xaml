@@ -3,66 +3,49 @@
     x:Class="AppPallet.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:local="clr-namespace:AppPallet.Views"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     Title="Sistema Pallet"
-    Shell.FlyoutBackdrop="#50000000"
     FlyoutBackgroundImage="logo.png"
     FlyoutBackgroundImageAspect="AspectFill"
-    
-    Shell.TitleColor="Black"
+    Shell.BackgroundColor="#374151"
+    Shell.FlyoutBackdrop="#50000000"
     Shell.ForegroundColor="#A5A5A5"
-    Shell.BackgroundColor="#CCCCCC">
+    Shell.TitleColor="#F6F1EB">
 
 
 
     <FlyoutItem Title="Cheques" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.MoneyCheck}, Color=Black}">
-        <ShellContent 
-         ContentTemplate="{DataTemplate local:ChequeView}"
-         Route="ChequeView"/>
+        <ShellContent ContentTemplate="{DataTemplate local:ChequeView}" Route="ChequeView" />
     </FlyoutItem>
 
     <FlyoutItem Title="Empresas" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Building}, Color=Black}">
-        <ShellContent 
-         ContentTemplate="{DataTemplate local:EmpresaView}"
-         Route="EmpresaView"/>
+        <ShellContent ContentTemplate="{DataTemplate local:EmpresaView}" Route="EmpresaView" />
     </FlyoutItem>
 
     <FlyoutItem Title="Gastos Fijos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.MoneyBill}, Color=Black}">
-        <ShellContent
-             ContentTemplate="{DataTemplate local:GastosFijosView}"
-             Route="GastosFijoView"/>
-    </FlyoutItem>
-    
-    <FlyoutItem Title="Presupuestos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Wallet}, Color=Black}">
-        <ShellContent 
-         ContentTemplate="{DataTemplate local:PresupuestoView}"
-         Route="PresupuestoView"/>
+        <ShellContent ContentTemplate="{DataTemplate local:GastosFijosView}" Route="GastosFijoView" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Crear nuevo Presupuesto" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Database}, Color=Black}">
-        <ShellContent 
-             ContentTemplate="{DataTemplate local:CostoPorPalletCrearView}"
-             Route="CostoPorPalletCrearView"/>
+    <FlyoutItem Title="Presupuestos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Wallet}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:PresupuestoView}" Route="PresupuestoView" />
     </FlyoutItem>
 
     <FlyoutItem Title="Ingreso - Egresos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Coins}, Color=Black}">
-        <ShellContent 
-         ContentTemplate="{DataTemplate local:IngresoEgresoView}"
-         Route="IngresoEgresoView"/>
+        <ShellContent ContentTemplate="{DataTemplate local:IngresoEgresoView}" Route="IngresoEgresoView" />
     </FlyoutItem>
 
     <FlyoutItem Title="Activos y Pasivos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ChartLine}, Color=Black}">
-        <ShellContent 
-         ContentTemplate="{DataTemplate local:ActivoPasivoView}"
-         Route="ActivoPasivoView"/>
+        <ShellContent ContentTemplate="{DataTemplate local:ActivoPasivoView}" Route="ActivoPasivoView" />
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Gestión Ventas" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.HandHoldingDollar}, Color=Black}">
-        <ShellContent 
-         ContentTemplate="{DataTemplate local:VentaView}"
-         Route="VentaView"/>
+        <ShellContent ContentTemplate="{DataTemplate local:VentaView}" Route="VentaView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Control de Lote" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.BoxesStacked}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:LoteView}" Route="LoteView" />
     </FlyoutItem>
 
 

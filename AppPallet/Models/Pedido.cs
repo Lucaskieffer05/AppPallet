@@ -9,13 +9,17 @@ public partial class Pedido
 
     public int PalletId { get; set; }
 
-    public DateTime FechaEntrega { get; set; }
+    public DateTime? FechaEInicio { get; set; }
 
     public int Cantidad { get; set; }
 
-    public virtual ICollection<HistorialHumedad> HistorialHumedads { get; set; } = new List<HistorialHumedad>();
+    public int LoteId { get; set; }
 
-    public virtual ICollection<Lote> Lotes { get; set; } = new List<Lote>();
+    public DateTime? FechaEFinal { get; set; }
+
+    public virtual ICollection<HistorialHumedad> HistorialHumedad { get; set; } = new List<HistorialHumedad>();
+
+    public virtual Lote Lote { get; set; } = null!;
 
     public virtual Pallet Pallet { get; set; } = null!;
 }

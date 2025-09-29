@@ -25,6 +25,24 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         private bool isBusy;
 
+        [ObservableProperty]
+        private int mesIngresado = DateTime.Today.Month - 1;
+
+        [ObservableProperty]
+        private int añoIngresado = DateTime.Today.Year;
+
+
+        public ObservableCollection<string> Meses { get; } = new()
+            {
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            };
+
+        public ObservableCollection<int> Años { get; } = new()
+            {
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            };
+
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
@@ -46,7 +64,7 @@ namespace AppPallet.ViewModels
             {
                 IsBusy = true;
                 VentaSeleccionada = null;
-                var ventasList = await _ventaController.GetAllVentas();
+                var ventasList = await _ventaController.GetAllVentas(new DateTime(AñoIngresado, MesIngresado + 1, 1));
                 ListaVentas = new ObservableCollection<Venta>(ventasList);
             }
             catch (Exception ex)
@@ -58,6 +76,16 @@ namespace AppPallet.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        partial void OnMesIngresadoChanged(int oldValue, int newValue)
+        {
+            _ = CargarListaVentas();
+        }
+
+        partial void OnAñoIngresadoChanged(int oldValue, int newValue)
+        {
+            _ = CargarListaVentas();
         }
 
         [RelayCommand]

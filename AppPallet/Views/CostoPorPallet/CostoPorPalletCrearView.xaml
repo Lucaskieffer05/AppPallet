@@ -3,26 +3,28 @@
     x:Class="AppPallet.Views.CostoPorPalletCrearView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
     xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:models="clr-namespace:AppPallet.Models"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-    Title="Crear Presupuesto"
+    Title="CREAR PRESUPUESTO"
     x:DataType="viewModels:CostoPorPalletCrearViewModel">
 
 
     <ScrollView>
 
+        <!--  base  -->
         <Grid ColumnDefinitions="*,*,*">
 
             <VerticalStackLayout
                 Grid.Column="1"
-                Padding="0,80,0,80"
+                Padding="0,20,0,80"
                 Spacing="20">
 
-
+                <!--  Titulo  -->
                 <Label
                     Padding="0,0,0,20"
                     FontAttributes="Bold"
@@ -34,6 +36,7 @@
                     VerticalOptions="Center" />
 
 
+                <!--  Selectores  -->
                 <HorizontalStackLayout>
                     <material:PickerField
                         x:Name="MesPicker"
@@ -49,6 +52,8 @@
                 </HorizontalStackLayout>
 
 
+
+                <!--  cosas para rellenar  -->
                 <material:PickerField
                     Title="Selecciona la Empresa"
                     x:DataType="{x:Null}"
@@ -83,6 +88,9 @@
                     Text="{Binding CostoPorPalletCreated.HorasPorMes, Mode=TwoWay}"
                     TextColor="Black" />
 
+
+
+
                 <VerticalStackLayout>
                     <Label
                         Padding="0,0,0,20"
@@ -102,6 +110,7 @@
                             Text="Monto" />
                     </Grid>
 
+                    <!--  Lista de costos por camión  -->
                     <CollectionView ItemsSource="{Binding ListCostoPorCamions}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:CostoPorCamion">
@@ -136,21 +145,31 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
+                    <!--  boton 1  -->
                     <Button
                         BorderColor="#52D681"
                         Command="{Binding AgregarCostoPorCamionCommand}"
                         StyleClass="OutlinedButton"
                         Text="Agregar costo por camión"
                         TextColor="#52D681" />
+
                 </VerticalStackLayout>
 
-
+                <!--  horizontale  -->
                 <HorizontalStackLayout Spacing="10">
                     <Button
-                        BackgroundColor="#C352D6"
+                        BackgroundColor="#52D681"
                         Command="{Binding CrearCostoPorPalletCommand}"
                         StyleClass="FilledButton"
                         Text="Crear Costo del Pallet" />
+                    <Button
+                        Grid.Column="1"
+                        BackgroundColor="#e5e7eb"
+                        BorderColor="#9ca3af"
+                        Command="{Binding VolverAtrasCommand}"
+                        StyleClass="OutlinedButton"
+                        Text="← Volver"
+                        TextColor="Black" />
                 </HorizontalStackLayout>
 
 

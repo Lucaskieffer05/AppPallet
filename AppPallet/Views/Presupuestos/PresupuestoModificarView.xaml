@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<uranium:UraniumContentPage  
+<uranium:UraniumContentPage
+    x:Class="AppPallet.Views.PresupuestoModificarView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="AppPallet.Views.PresupuestoModificarView"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-    xmlns:models="clr-namespace:AppPallet.Models"
-    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     Title="PresupuestoModificarView"
     x:DataType="viewModels:PresupuestoModificarViewModel">
 
@@ -16,44 +16,82 @@
     <ScrollView>
 
         <Grid ColumnDefinitions="0.5*,*,*,0.5*">
-            
-            
-            <VerticalStackLayout Grid.Column="1" Padding="20" Spacing="15">
-
-                <!-- Campos editables -->
 
 
-                <material:EditorField TextColor="Black" Title="Nombre Pallet Cliente" Text="{Binding CostoPorPalletSeleccionada.NombrePalletCliente}" />
+            <VerticalStackLayout
+                Grid.Column="1"
+                Padding="20"
+                Spacing="15">
+
+                <!--  Campos editables  -->
 
 
-                <material:EditorField TextColor="Black" Title="Cantidad Por Día" Text="{Binding CostoPorPalletSeleccionada.CantidadPorDia}" Keyboard="Numeric" />
+                <material:EditorField
+                    Title="Nombre Pallet Cliente"
+                    Text="{Binding CostoPorPalletSeleccionada.NombrePalletCliente}"
+                    TextColor="Black" />
 
 
-                <material:EditorField TextColor="Black" Title="Carga Camión" Text="{Binding CostoPorPalletSeleccionada.CargaCamion}" Keyboard="Numeric" />
+                <material:EditorField
+                    Title="Cantidad Por Día"
+                    Keyboard="Numeric"
+                    Text="{Binding CostoPorPalletSeleccionada.CantidadPorDia}"
+                    TextColor="Black" />
+
+
+                <material:EditorField
+                    Title="Carga Camión"
+                    Keyboard="Numeric"
+                    Text="{Binding CostoPorPalletSeleccionada.CargaCamion}"
+                    TextColor="Black" />
 
 
                 <HorizontalStackLayout Spacing="10">
-                    <Button StyleClass="FilledButton" Text="Guardar Cambios" Command="{Binding GuardarCambiosCommand}" />
-                    <Button StyleClass="OutlinedButton" Text="Cancelar Cambios" Command="{Binding CancelarCambiosCommand}" />
-                    <Button StyleClass="OutlinedButton" Text="Eliminar Presupuesto"  BorderColor="#d65265" TextColor="#d65265" Command="{Binding EliminarCostoPorPalletCommand}" />
+                    <Button
+                        Command="{Binding GuardarCambiosCommand}"
+                        StyleClass="FilledButton"
+                        Text="Guardar Cambios" />
+                    <Button
+                        Command="{Binding CancelarCambiosCommand}"
+                        StyleClass="OutlinedButton"
+                        Text="Cancelar Cambios" />
+                    <Button
+                        BorderColor="#d65265"
+                        Command="{Binding EliminarCostoPorPalletCommand}"
+                        StyleClass="OutlinedButton"
+                        Text="Eliminar Presupuesto"
+                        TextColor="#d65265" />
                 </HorizontalStackLayout>
-                
+
 
 
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Column="2" Padding="20" Spacing="15">
+            <VerticalStackLayout
+                Grid.Column="2"
+                Padding="20"
+                Spacing="15">
 
 
-                <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                          Title="Mes del presupuesto"
-                          Date="{Binding CostoPorPalletSeleccionada.Mes, Mode=TwoWay}" 
-                          TextColor="Black"/>
+                <material:DatePickerField
+                    Title="Mes del presupuesto"
+                    Date="{Binding CostoPorPalletSeleccionada.Mes, Mode=TwoWay}"
+                    Icon="{FontImageSource FontFamily=FASolid,
+                                           Glyph={x:Static fa:Solid.Calendar}}"
+                    TextColor="Black" />
 
 
-                <material:EditorField TextColor="Black" Title="Horas Por Mes" Text="{Binding CostoPorPalletSeleccionada.HorasPorMes}" Keyboard="Numeric" />
+                <material:EditorField
+                    Title="Horas Por Mes"
+                    Keyboard="Numeric"
+                    Text="{Binding CostoPorPalletSeleccionada.HorasPorMes}"
+                    TextColor="Black" />
 
-                <Label Text="Costos por camión" TextColor="Gray" FontSize="19" HorizontalTextAlignment="Center"/>
+                <Label
+                    FontSize="19"
+                    HorizontalTextAlignment="Center"
+                    Text="Costos por camión"
+                    TextColor="Gray" />
 
                 <CollectionView ItemsSource="{Binding ListCostoPorCamions}">
 
@@ -63,19 +101,30 @@
                             <VerticalStackLayout>
 
                                 <Grid ColumnDefinitions="*,*,0.2*">
-                                    <Entry Grid.Column="0" Text="{Binding NombreCosto, Mode=TwoWay}" Placeholder="Nombre del costo" />
+                                    <Entry
+                                        Grid.Column="0"
+                                        Placeholder="Nombre del costo"
+                                        Text="{Binding NombreCosto, Mode=TwoWay}" />
                                     <HorizontalStackLayout Grid.Column="1">
-                                        <Label Text="$" VerticalTextAlignment="Center"/>
-                                        <Entry  Text="{Binding Monto, Mode=TwoWay}" Keyboard="Numeric" Placeholder="Monto"/>
+                                        <Label Text="$" VerticalTextAlignment="Center" />
+                                        <Entry
+                                            Keyboard="Numeric"
+                                            Placeholder="Monto"
+                                            Text="{Binding Monto, Mode=TwoWay}" />
 
                                     </HorizontalStackLayout>
-                                    <ImageButton Grid.Column="2"
-                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoModificarViewModel}}, Path=EliminarCostoPorCamionCommand}"
-                                                 CommandParameter="{Binding .}"
-                                                 VerticalOptions="Center"
-                                                 StyleClass="OutlinedButton">
+                                    <ImageButton
+                                        Grid.Column="2"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoModificarViewModel}}, Path=EliminarCostoPorCamionCommand}"
+                                        CommandParameter="{Binding .}"
+                                        StyleClass="OutlinedButton"
+                                        VerticalOptions="Center">
                                         <ImageButton.Source>
-                                            <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.DeleteLeft}" Color="#F78D9C" Size="17"/>
+                                            <FontImageSource
+                                                FontFamily="FASolid"
+                                                Glyph="{x:Static fa:Solid.DeleteLeft}"
+                                                Size="17"
+                                                Color="#F78D9C" />
                                         </ImageButton.Source>
                                     </ImageButton>
                                 </Grid>
@@ -90,11 +139,13 @@
                     </CollectionView.ItemTemplate>
 
                 </CollectionView>
-                   
-                <Button Text="Agregar costo por camión" 
-                        Command="{Binding AgregarCostoPorCamionCommand}"
-                        StyleClass="OutlinedButton"
-                        BorderColor="#d65265" TextColor="#d65265"/>
+
+                <Button
+                    BorderColor="#d65265"
+                    Command="{Binding AgregarCostoPorCamionCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Agregar costo por camión"
+                    TextColor="#d65265" />
 
 
 
@@ -104,7 +155,7 @@
 
 
         </Grid>
-        
+
     </ScrollView>
 
 </uranium:UraniumContentPage>

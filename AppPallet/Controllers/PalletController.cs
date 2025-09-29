@@ -1,4 +1,5 @@
-﻿using AppPallet.Models;
+﻿using AppPallet.Constants;
+using AppPallet.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Pallets.AsNoTracking().ToListAsync();
+                return await _context.Pallet.AsNoTracking().ToListAsync();
             }
             catch (Exception ex)
             {
@@ -32,6 +33,29 @@ namespace AppPallet.Controllers
                 return [];
             }
         }
+
+        //Sumar stock
+        public async Task<MessageResult> SumarStockPallet(int palletId, int cantidad)
+        {
+            try
+            {
+                var pallet = await _context.Pallet.FindAsync(palletId);
+                if (pallet == null)
+                {
+                    return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Pallet.NotFound);
+                }
+                pallet.Stock += cantidad;
+                if (pallet.Stock < 0)
+                    pallet.Stock = 0;
+                await _context.SaveChangesAsync();
+                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Pallet.ModifySuccess);
+            }
+            catch (Exception ex)
+            {
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Pallet.ModifyError} Detalles: {ex.Message}");
+            }
+        }
+
 
     }
 }

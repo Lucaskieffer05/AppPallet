@@ -62,6 +62,12 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
+        public async Task CrearPresupuesto()
+        {
+           await Shell.Current.GoToAsync(nameof(CostoPorPalletCrearView));
+        }
+
+        [RelayCommand]
         public async Task MostrarPresupuesto(int empresaId)
         {
             await Shell.Current.GoToAsync(

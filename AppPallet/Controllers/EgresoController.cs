@@ -23,7 +23,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Egresos.AsNoTracking().Where(c => c.Mes.HasValue && c.Mes.Value.Month == mes.Month && c.Mes.Value.Year == mes.Year).OrderByDescending(c => c.Fecha).ToListAsync();
+                return await _context.Egreso.AsNoTracking().Where(c => c.Mes.HasValue && c.Mes.Value.Month == mes.Month && c.Mes.Value.Year == mes.Year).OrderByDescending(c => c.Fecha).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace AppPallet.Controllers
                 };
 
 
-                _context.Egresos.Add(nuevoEgreso);
+                _context.Egreso.Add(nuevoEgreso);
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
             }
@@ -75,7 +75,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var egreso = await _context.Egresos.Where(c => c.EgresoId == egresoModificado.EgresoId).FirstOrDefaultAsync();
+                var egreso = await _context.Egreso.Where(c => c.EgresoId == egresoModificado.EgresoId).FirstOrDefaultAsync();
                 if (egreso == null)
                 {
                     Console.WriteLine("Egreso no encontrado.");
@@ -114,13 +114,13 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var egreso = await _context.Egresos.FindAsync(egresoId);
+                var egreso = await _context.Egreso.FindAsync(egresoId);
                 if (egreso == null)
                 {
                     Console.WriteLine("Egreso no encontrado.");
                     return false;
                 }
-                _context.Egresos.Remove(egreso);
+                _context.Egreso.Remove(egreso);
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
             }

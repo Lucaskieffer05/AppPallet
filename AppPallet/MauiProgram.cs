@@ -49,6 +49,10 @@ namespace AppPallet
             builder.Services.AddTransient<EgresoController>();
             builder.Services.AddTransient<ActivoPasivoController>();
             builder.Services.AddTransient<VentaController>();
+            builder.Services.AddTransient<LoteController>();
+            builder.Services.AddTransient<PedidoController>();
+            builder.Services.AddTransient<PalletController>();
+
 
             // Registro de Vistas y ViewModels
 
@@ -105,6 +109,27 @@ namespace AppPallet
 
             builder.Services.AddTransient<VentaModificarView>();
             builder.Services.AddTransient<VentaModificarViewModel>();
+
+            builder.Services.AddTransient<LoteView>();
+            builder.Services.AddTransient<LoteViewModel>();
+
+            builder.Services.AddTransient<LoteCrearView>();
+            builder.Services.AddTransient<LoteCrearViewModel>();
+
+            builder.Services.AddTransient<LoteModificarView>();
+            builder.Services.AddTransient<LoteModificarViewModel>();
+
+            builder.Services.AddTransient<PedidoView>();
+            builder.Services.AddTransient<PedidoViewModel>();
+
+            builder.Services.AddTransient<PedidoCrearView>();
+            builder.Services.AddTransient<PedidoCrearViewModel>();
+
+            builder.Services.AddTransient<PedidoModificarView>();
+            builder.Services.AddTransient<PedidoModificarViewModel>();
+
+
+
 
             builder.Services.AddTransientPopup<ChequeCrearView, ChequeCrearViewModel>();
             builder.Services.AddTransientPopup<ChequeModificarView, ChequeModificarViewModel>();

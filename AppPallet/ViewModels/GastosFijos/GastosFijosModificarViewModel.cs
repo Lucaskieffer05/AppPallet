@@ -20,7 +20,7 @@ namespace AppPallet.ViewModels
         // ------------------------------------------------------------------
 
         [ObservableProperty]
-        public GastosFijo? gastosFijoSeleccionado;
+        public GastosFijos? gastosFijoSeleccionado;
 
         readonly IPopupService _popupService;
 
@@ -92,7 +92,7 @@ namespace AppPallet.ViewModels
                 {
                     await MostrarAlerta("Error", "No se pudo actualizar el Gastos Fijo");
                 }
-                GastosFijoSeleccionado = new GastosFijo();
+                GastosFijoSeleccionado = new GastosFijos();
             }
             catch (Exception ex)
             {
@@ -135,7 +135,7 @@ namespace AppPallet.ViewModels
                 {
                     await MostrarAlerta("Error", "No se pudo eliminar el Gasto Fijo");
                 }
-                GastosFijoSeleccionado = new GastosFijo();
+                GastosFijoSeleccionado = new GastosFijos();
             }
             catch (Exception ex)
             {
@@ -146,7 +146,7 @@ namespace AppPallet.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            GastosFijoSeleccionado = (GastosFijo)query["GastosFijoSeleccionado"];
+            GastosFijoSeleccionado = (GastosFijos)query["GastosFijoSeleccionado"];
         }
 
         private bool ValidarGastosFijo()

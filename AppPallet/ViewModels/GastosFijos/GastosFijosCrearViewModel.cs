@@ -3,12 +3,7 @@ using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
@@ -20,7 +15,7 @@ namespace AppPallet.ViewModels
         // ------------------------------------------------------------------
 
         [ObservableProperty]
-        public GastosFijo? gastosFijosCreated;
+        public GastosFijos? gastosFijosCreated;
 
         readonly IPopupService _popupService;
 
@@ -52,7 +47,7 @@ namespace AppPallet.ViewModels
         {
             _popupService = popupService;
             _gastosFijosController = gastosFijosController;
-            GastosFijosCreated = new GastosFijo();
+            GastosFijosCreated = new GastosFijos();
             GastosFijosCreated.Mes = DateTime.Today;
 
             MesIngresado = DateTime.Today.Month - 1;
@@ -93,7 +88,7 @@ namespace AppPallet.ViewModels
                 {
                     await MostrarAlerta("Error", "No se pudo crear el GastosFijos");
                 }
-                GastosFijosCreated = new GastosFijo();
+                GastosFijosCreated = new GastosFijos();
             }
             catch (Exception ex)
             {
@@ -103,7 +98,7 @@ namespace AppPallet.ViewModels
             await CerrarPopup();
         }
 
-        bool ValidarGastosFijos(GastosFijo gastosFijos)
+        bool ValidarGastosFijos(GastosFijos gastosFijos)
         {
             // Eliminar la comprobación de null para DateTime, ya que nunca puede ser null
             if (string.IsNullOrWhiteSpace(gastosFijos.NombreGastoFijo) || gastosFijos.Monto <= 0)

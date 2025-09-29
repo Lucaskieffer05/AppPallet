@@ -20,6 +20,11 @@ namespace AppPallet
             Routing.RegisterRoute(nameof(ActivoPasivoCrearView), typeof(ActivoPasivoCrearView));
             Routing.RegisterRoute(nameof(VentaModificarView), typeof(VentaModificarView));
             Routing.RegisterRoute(nameof(VentaCrearView), typeof(VentaCrearView));
+            Routing.RegisterRoute(nameof(LoteCrearView), typeof(LoteCrearView));
+            Routing.RegisterRoute(nameof(LoteModificarView), typeof(LoteModificarView));
+            Routing.RegisterRoute(nameof(PedidoCrearView), typeof(PedidoCrearView));
+            Routing.RegisterRoute(nameof(PedidoModificarView), typeof(PedidoModificarView));
+
 
         }
     }

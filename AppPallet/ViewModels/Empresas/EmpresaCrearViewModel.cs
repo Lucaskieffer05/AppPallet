@@ -3,6 +3,7 @@ using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace AppPallet.ViewModels
 {
@@ -19,6 +20,14 @@ namespace AppPallet.ViewModels
         readonly IPopupService _popupService;
 
         readonly EmpresaController _empresaController;
+
+        [ObservableProperty]
+        private string tipoIngresado = "Cliente";
+
+        public ObservableCollection<string> Tipos { get; } = new()
+            {
+                "Cliente", "Proveedor"
+            };
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -52,6 +61,7 @@ namespace AppPallet.ViewModels
             }
             try
             {
+                EmpresaCreated.Tipo = TipoIngresado;
                 var resultado = await _empresaController.CreateEmpresa(EmpresaCreated);
 
                 if (resultado)

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<uranium:UraniumContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                            x:Class="AppPallet.Views.VentaView"
-                            Title="Gestión de Ventas"
-                            xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-                            xmlns:models="clr-namespace:AppPallet.Models"
-                            xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-                            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-                            xmlns:fa="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/fontawesome"
-                            xmlns:converters="clr-namespace:AppPallet.Converters"
-                            x:DataType="viewModels:VentaViewModel">
+<ContentPage
+    x:Class="AppPallet.Views.VentaView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:fa="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/fontawesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Gestión de Ventas"
+    x:DataType="viewModels:VentaViewModel"
+    Shell.NavBarIsVisible="False">
 
-    <uranium:UraniumContentPage.Resources>
+    <ContentPage.Resources>
         <ResourceDictionary>
             <converters:EstadoVentaToColorConverter x:Key="EstadoVentaToColor" />
 
@@ -39,121 +41,334 @@
             </Style>
 
         </ResourceDictionary>
-    </uranium:UraniumContentPage.Resources>
+    </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10" Padding="15">
+    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
 
-        <!-- Encabezado -->
-        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="Center">
-            <Image Source="graficodebarras.png" HeightRequest="30" WidthRequest="30" VerticalOptions="Center"/>
-            <Label Text="Panel de Ventas" Style="{StaticResource HeaderLabelStyle}" Margin="8,0,0,0"/>
-        </HorizontalStackLayout>
+        <!--  Encabezado  -->
+        <Border Grid.Row="0" Stroke="Black">
+            <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,Auto,0.1*">
 
-        <!-- Indicadores de Estado -->
-        <Border  Grid.Row="1" BackgroundColor="#F8F9FA" Style="{StaticResource CardStyle}" >
+                <Label
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Start"
+                    Text="GESTIÓN DE VENTAS"
+                    TextColor="#F6F1EB"
+                    VerticalOptions="Center" />
+
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label
+                        FontSize="15"
+                        Text="Filtrar por mes:"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+
+                    <material:PickerField
+                        x:Name="MesPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        BorderColor="White"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding Meses}"
+                        SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+
+                    <material:PickerField
+                        x:Name="AñoPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        BorderColor="White"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding Años}"
+                        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+
+
+
+                </HorizontalStackLayout>
+                <Button
+                    Grid.Column="2"
+                    Margin="400,0,0,0"
+                    Padding="20,10"
+                    BackgroundColor="#F6F1EB"
+                    BorderColor="#D0B595"
+                    BorderWidth="3"
+                    Command="{Binding CrearVentaCommand}"
+                    CornerRadius="20"
+                    HeightRequest="43"
+                    StyleClass="FilledButton"
+                    Text="Agregar Nueva Venta"
+                    TextColor="Black"
+                    WidthRequest="200" />
+            </Grid>
+        </Border>
+
+        <!--  Indicadores de Estado  -->
+        <Border
+            Grid.Row="1"
+            BackgroundColor="#F8F9FA"
+            Style="{StaticResource CardStyle}">
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
-                <Border Grid.Column="0"  Stroke="#4CAF50" BackgroundColor="#E8F5E8">
-                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-                        <Label Text="✅" FontSize="16" HorizontalOptions="Center"/>
-                        <Label Text="Activas" TextColor="#2E7D32" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <Border
+                    Grid.Column="0"
+                    BackgroundColor="#E8F5E8"
+                    Stroke="#4CAF50">
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        Spacing="2"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Text="✅" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Activas"
+                            TextColor="#2E7D32" />
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Column="1"  Stroke="#F44336" BackgroundColor="#FFEBEE">
-                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-                        <Label Text="❌" FontSize="16" HorizontalOptions="Center"/>
-                        <Label Text="Pendientes" TextColor="#C62828" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <Border
+                    Grid.Column="1"
+                    BackgroundColor="#FFEBEE"
+                    Stroke="#F44336">
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        Spacing="2"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Text="❌" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Pendientes"
+                            TextColor="#C62828" />
                     </VerticalStackLayout>
-                </Border>
-
-                <Border Grid.Column="2" Stroke="#607D8B" BackgroundColor="#ECEFF1">
-                    <Button Text="➕ Agregar Nueva Venta" 
-                            Command="{Binding CrearVentaCommand}" 
-                            BackgroundColor="#4CAF50" TextColor="White"
-                            WidthRequest="210"/>
                 </Border>
             </Grid>
         </Border>
 
 
-        <!-- Lista de Ventas -->
-        <Border Grid.Row="2" BackgroundColor="White" Style="{StaticResource CardStyle}">
+        <!--  Lista de Ventas  -->
+        <Border
+            Grid.Row="2"
+            BackgroundColor="White"
+            Style="{StaticResource CardStyle}">
             <VerticalStackLayout Spacing="10">
 
-                <!-- cosas extras -->
-                <Label Text="Lista de Ventas" FontSize="20" FontAttributes="Bold" Margin="0,0,0,10"/>
+                <!--  cosas extras  -->
+                <Label
+                    Margin="0,0,0,10"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="Lista de Ventas" />
 
-                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center"/>
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}" />
 
 
-                <Grid ColumnDefinitions="2*,1*,1*,2*,1*,1*,2*,2*,1*" ColumnSpacing="8">
-                    <Label Grid.Column="0" Text="Fecha de Venta" VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD"/>
-                    <Label Grid.Column="1" Text="Empresa" VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD"/>
-                    <Label Grid.Column="2" Text="Cantidad Pallets"  VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD" />
-                    <Label Grid.Column="3" Text="Presupuesto" VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD"/>
-                    <Label Grid.Column="4" Text="Precio c/u" VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD"/>
-                    <Label Grid.Column="5" Text="Estado"  VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD" />
-                    <Label Grid.Column="6" Text="Comentario"  VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD" />
-                    <Label Grid.Column="7" Text="Fecha de Entrega" VerticalOptions="Center" FontSize="16" TextColor="#BDBDBD"/>
-                    <Label Grid.Column="8" Text="Acción" TextColor="#BDBDBD"/>
+                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
+                    <Label
+                        Grid.Column="0"
+                        FontSize="16"
+                        Text="Fecha de Venta"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Empresa"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="2"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Cantidad Pallets"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="3"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Presupuesto"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="4"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Precio c/u"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="5"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Estado"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="6"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Fecha de Entrega"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="7"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Comentario"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="8"
+                        HorizontalOptions="Center"
+                        Text="Acción"
+                        TextColor="#BDBDBD" />
                 </Grid>
 
 
-                <!--Lista de las ventas-->
-                <CollectionView ItemsSource="{Binding ListaVentas}" SelectionMode="Single" HeightRequest="500" SelectedItem="{Binding VentaSeleccionada, Mode=TwoWay}">
+                <!--  Lista de las ventas  -->
+                <CollectionView
+                    HeightRequest="500"
+                    ItemsSource="{Binding ListaVentas}"
+                    SelectedItem="{Binding VentaSeleccionada, Mode=TwoWay}"
+                    SelectionMode="Single">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Venta">
 
 
-                            <Border Padding="10" Margin="5" Style="{StaticResource CardStyle}">
+                            <Border
+                                Margin="5"
+                                Padding="10"
+                                Style="{StaticResource CardStyle}">
 
 
-                                <Grid ColumnDefinitions="2*,1*,1*,2*,1*,1*,2*,2*,1*" ColumnSpacing="8">
+                                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
 
-                                    <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="5">
-                                        <Image Source="calendario.png" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
-                                        <Label Text="{Binding FechaVenta, StringFormat='{0:dd/MM/yyyy}'}" FontSize="16" TextColor="#333" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                    <HorizontalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="5"
+                                        VerticalOptions="Center">
+                                        <Image
+                                            HeightRequest="18"
+                                            Source="calendario.png"
+                                            VerticalOptions="Center"
+                                            WidthRequest="18" />
+                                        <Label
+                                            FontSize="16"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding FechaVenta, StringFormat='{0:dd/MM/yyyy}'}"
+                                            TextColor="#333"
+                                            VerticalTextAlignment="Center" />
                                     </HorizontalStackLayout>
 
-                                    <Label Grid.Column="1" Text="{Binding CostoPorPallet.Empresa.NomEmpresa, StringFormat='{0}'}" 
-                                            VerticalOptions="Center" FontSize="16" TextColor="#333"/>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding CostoPorPallet.Empresa.NomEmpresa, StringFormat='{0}'}"
+                                        TextColor="#333"
+                                        VerticalOptions="Center" />
 
-                                    <HorizontalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="5">
-                                        
-                                        <Label Text="{Binding CantPallets}" VerticalOptions="Center" FontSize="16" TextColor="#333"/>
-                                        <Image Source="pallet.png" HeightRequest="15" WidthRequest="15" VerticalOptions="Center"/>
-                                        
+                                    <HorizontalStackLayout
+                                        Grid.Column="2"
+                                        HorizontalOptions="Center"
+                                        Spacing="5"
+                                        VerticalOptions="Center">
+
+                                        <Label
+                                            FontSize="16"
+                                            Text="{Binding CantPallets}"
+                                            TextColor="#333"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            HeightRequest="15"
+                                            Source="pallet.png"
+                                            VerticalOptions="Center"
+                                            WidthRequest="15" />
+
                                     </HorizontalStackLayout>
 
-                                    <Label Grid.Column="3" Text="{Binding CostoPorPallet.NombrePalletCliente, StringFormat='{0}'}" 
-                                            VerticalOptions="Center" FontSize="16" TextColor="#333"/>
+                                    <Label
+                                        Grid.Column="3"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding CostoPorPallet.NombrePalletCliente, StringFormat='{0}'}"
+                                        TextColor="#333"
+                                        VerticalOptions="Center" />
 
-                                    <Label Grid.Column="4" Text="{Binding CostoPorPallet.PrecioPallet, StringFormat='${0:N2}'}" 
-                                           VerticalOptions="Center" FontSize="16" TextColor="#333"/>
+                                    <Label
+                                        Grid.Column="4"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding CostoPorPallet.PrecioPallet, StringFormat='${0:N2}'}"
+                                        TextColor="#333"
+                                        VerticalOptions="Center" />
 
-                                    <Label Grid.Column="5" Text="{Binding Estado}" 
-                                           TextColor="{Binding Estado, Converter={StaticResource EstadoVentaToColor}}" 
-                                           VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
-                                    
-                                    <Label Grid.Column="6" Text="{Binding Comentario, StringFormat='{0}'}" 
-                                           VerticalOptions="Center" FontSize="16" TextColor="#333"/>
+                                    <Label
+                                        Grid.Column="5"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Estado}"
+                                        TextColor="{Binding Estado, Converter={StaticResource EstadoVentaToColor}}"
+                                        VerticalOptions="Center" />
 
-                                    <HorizontalStackLayout Grid.Column="7" VerticalOptions="Center" Spacing="5">
-                                        <Image Source="cajadeentrega.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
-                                        <Label Text="{Binding FechaEntrega, StringFormat='{0:dd/MM/yyyy}'}" FontSize="16" TextColor="#333"/>
+                                    <HorizontalStackLayout
+                                        Grid.Column="6"
+                                        HorizontalOptions="Center"
+                                        Spacing="5"
+                                        VerticalOptions="Center">
+                                        <Image
+                                            HeightRequest="20"
+                                            Source="cajadeentrega.png"
+                                            VerticalOptions="Center"
+                                            WidthRequest="20" />
+                                        <Label
+                                            FontSize="16"
+                                            Text="{Binding FechaEntrega, StringFormat='{0:dd/MM/yyyy}'}"
+                                            TextColor="#333" />
                                     </HorizontalStackLayout>
 
-                                    <Button Grid.Column="8" Text="✏️ Editar" 
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VentaViewModel}}, Path=ModificarVentaCommand}" 
-                                            CommandParameter="{Binding VentaId}" BackgroundColor="#2196F3" TextColor="White"
-                                            Style="{StaticResource ActionButtonStyle}"/>
-                                
+                                    <Label
+                                        Grid.Column="7"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Comentario, StringFormat='{0}'}"
+                                        TextColor="#333"
+                                        VerticalOptions="Center" />
+
+
+
+                                    <Button
+                                        Grid.Column="8"
+                                        BackgroundColor="#374151"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VentaViewModel}}, Path=ModificarVentaCommand}"
+                                        CommandParameter="{Binding VentaId}"
+                                        Style="{StaticResource ActionButtonStyle}"
+                                        Text="Editar"
+                                        TextColor="White" />
+
                                 </Grid>
-                                
-                                
+
+
                             </Border>
-                            
-                            
+
+
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -162,18 +377,18 @@
         </Border>
 
 
-        <!-- Panel de Acciones -->
-        <!-- 
+        <!--  Panel de Acciones  -->
+        <!--
         <Border Style="{StaticResource CardStyle}" Grid.Row="3" BackgroundColor="#F3F4F6">
             <VerticalStackLayout>
                 <Label Text="Acciones" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" Padding="0,0,0,15"/>
                 <HorizontalStackLayout Spacing="15" HorizontalOptions="Center" VerticalOptions="Center">
-                    
 
-                    
 
-                    <Button Text="✏️ Modificar Venta Seleccionada" 
-                            Command="{Binding ModificarVentaCommand}" 
+
+
+                    <Button Text="✏️ Modificar Venta Seleccionada"
+                            Command="{Binding ModificarVentaCommand}"
                             CommandParameter="{Binding VentaSeleccionada.VentaId}"
                             Style="{StaticResource ActionButtonStyle}"
                             BackgroundColor="#FF9800" TextColor="White"
@@ -184,4 +399,4 @@
         -->
 
     </Grid>
-</uranium:UraniumContentPage>
+</ContentPage>

@@ -22,12 +22,12 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var costoPorCamion = await _context.CostoPorCamions.FindAsync(costoPorCamionId);
+                var costoPorCamion = await _context.CostoPorCamion.FindAsync(costoPorCamionId);
                 if (costoPorCamion == null)
                 {
                     return false;
                 }
-                _context.CostoPorCamions.Remove(costoPorCamion);
+                _context.CostoPorCamion.Remove(costoPorCamion);
                 var result = await _context.SaveChangesAsync();
                 if (result <= 0)
                 {

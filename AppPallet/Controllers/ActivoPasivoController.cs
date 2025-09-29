@@ -25,7 +25,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.ActivoPasivos.AsNoTracking().Where(a => a.Mes.Month == Mes.Month && a.Mes.Year == Mes.Year).ToListAsync();
+                return await _context.ActivoPasivo.AsNoTracking().Where(a => a.Mes.Month == Mes.Month && a.Mes.Year == Mes.Year).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -49,7 +49,7 @@ namespace AppPallet.Controllers
                     Categoria = nuevoActivoPasivo.Categoria
                 };
 
-                _context.ActivoPasivos.Add(nuevoActivoPasivo);
+                _context.ActivoPasivo.Add(nuevoActivoPasivo);
                 var result = await _context.SaveChangesAsync();
                 
                 if (result == 0)
@@ -73,7 +73,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var activopasivoExistente = await _context.ActivoPasivos.FindAsync(activoPasivoModificar.ActivoPasivoId);
+                var activopasivoExistente = await _context.ActivoPasivo.FindAsync(activoPasivoModificar.ActivoPasivoId);
                 if (activopasivoExistente == null)
                 {
                     // Devuelve un objeto anónimo con los mensajes requeridos
@@ -116,13 +116,13 @@ namespace AppPallet.Controllers
         {
             try
             {
-                var activoPasivo = await _context.ActivoPasivos.FindAsync(activoPasivoId);
+                var activoPasivo = await _context.ActivoPasivo.FindAsync(activoPasivoId);
                 if (activoPasivo == null)
                 {
                     Console.WriteLine("Activo o Pasivo no encontrado.");
                     return false;
                 }
-                _context.ActivoPasivos.Remove(activoPasivo);
+                _context.ActivoPasivo.Remove(activoPasivo);
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
 

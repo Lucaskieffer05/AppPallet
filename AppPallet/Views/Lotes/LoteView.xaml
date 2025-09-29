@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.LoteView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Lotes"
+    x:DataType="viewModels:LoteViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:PendientesConverter x:Key="PendientesConverter" />
+
+            <Color x:Key="PrimaryColor">#2E7D32</Color>
+            <Color x:Key="SecondaryColor">#4CAF50</Color>
+            <Color x:Key="AccentColor">#FF9800</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BackgroundLight">#F5F5F5</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="22" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SubtitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="ResumenColumn" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#626262" />
+            </Style>
+
+            <Style x:Key="ValueStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="#757575" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <Border Grid.Row="1" Stroke="Black">
+            <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,Auto,0.1*">
+
+                <Label
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Start"
+                    Text="GESTION LOTES"
+                    TextColor="#F6F1EB"
+                    VerticalOptions="Center" />
+
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label
+                        FontSize="15"
+                        Text="Filtrar por mes:"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+
+                    <material:PickerField
+                        x:Name="MesPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        BorderColor="White"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding Meses}"
+                        SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+
+                    <material:PickerField
+                        x:Name="AñoPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        BorderColor="White"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding Años}"
+                        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+
+
+
+                </HorizontalStackLayout>
+                <Button
+                    Grid.Column="2"
+                    Margin="400,0,0,0"
+                    Padding="20,10"
+                    BackgroundColor="#F6F1EB"
+                    BorderColor="#D0B595"
+                    BorderWidth="3"
+                    Command="{Binding VerCrearLoteCommand}"
+                    CornerRadius="20"
+                    StyleClass="FilledButton"
+                    Text="Nuevo Lote"
+                    TextColor="Black"
+                    WidthRequest="200" />
+            </Grid>
+        </Border>
+
+        <!--  Loading Indicator  -->
+        <ActivityIndicator
+            Grid.Row="2"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="{StaticResource PrimaryColor}" />
+
+        <!--  Lista de Lotes  -->
+        <RefreshView
+            Grid.Row="2"
+            Padding="100,0,100,0"
+            IsRefreshing="{Binding IsBusy}">
+
+            <CollectionView ItemsSource="{Binding ListaLotes}" SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        Spacing="20"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="48"
+                            HorizontalOptions="Center"
+                            Text="📦" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource TitleStyle}"
+                            Text="No hay lotes registrados" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource SubtitleStyle}"
+                            Text="Presiona el botón '+' para crear tu primer lote" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:LoteMostrarDTO">
+                        <Grid>
+                            <Border Margin="0,25,0,0" Style="{StaticResource CardStyle}">
+                                <Grid
+                                    ColumnDefinitions="Auto,*"
+                                    ColumnSpacing="200"
+                                    RowDefinitions="Auto,Auto,Auto,Auto">
+
+                                    <!--  Header con Número de Lote y Estado  -->
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="0,0,0,10"
+                                        Style="{StaticResource TitleStyle}"
+                                        Text="{Binding NumLote, StringFormat='Lote # {0}'}" />
+
+                                    <Border
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Padding="8,4"
+                                        BackgroundColor="{Binding EstadoColor}"
+                                        HorizontalOptions="End"
+                                        StrokeThickness="0">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="12"
+                                            Text="{Binding Estado}"
+                                            TextColor="White"
+                                            VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <!--  Fechas  -->
+                                    <Grid
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        ColumnDefinitions="Auto,Auto"
+                                        ColumnSpacing="50">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                            <HorizontalStackLayout
+                                                Grid.Column="0"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="18"
+                                                    Source="fecha_tope.png"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="18" />
+                                                <Label
+                                                    HorizontalTextAlignment="Center"
+                                                    Style="{StaticResource SubtitleStyle}"
+                                                    Text="Fecha Solicitada" />
+                                            </HorizontalStackLayout>
+                                            <Label
+                                                HorizontalTextAlignment="Center"
+                                                Style="{StaticResource ValueStyle}"
+                                                Text="{Binding FechaSolicitada, StringFormat='{0:dd MMMM yyyy}'}" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                            <HorizontalStackLayout
+                                                Grid.Column="0"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="18"
+                                                    Source="camion_de_reparto.png"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="18" />
+                                                <Label
+                                                    HorizontalTextAlignment="Center"
+                                                    Style="{StaticResource SubtitleStyle}"
+                                                    Text="Fecha Entrega" />
+                                                <Image
+                                                    HeightRequest="18"
+                                                    IsVisible="{Binding TieneFechaEntrega}"
+                                                    Source="comprobado.png"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="18" />
+                                            </HorizontalStackLayout>
+                                            <Label
+                                                HorizontalTextAlignment="Center"
+                                                Style="{StaticResource ValueStyle}"
+                                                Text="{Binding FechaEntrega, StringFormat='{0:dd MMMM yyyy}'}">
+                                                <Label.Triggers>
+                                                    <!--  Si NO tiene fecha  -->
+                                                    <DataTrigger
+                                                        Binding="{Binding TieneFechaEntrega}"
+                                                        TargetType="Label"
+                                                        Value="False">
+                                                        <Setter Property="Text" Value="Pendiente" />
+                                                        <Setter Property="TextColor" Value="#D68152" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!--  Información de Proveedor y Camionero  -->
+                                    <Grid
+                                        Grid.Row="2"
+                                        ColumnDefinitions="Auto,Auto"
+                                        ColumnSpacing="90">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                            <HorizontalStackLayout
+                                                Grid.Column="0"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="18"
+                                                    Source="almacen.png"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="18" />
+                                                <Label
+                                                    HorizontalTextAlignment="Center"
+                                                    Style="{StaticResource SubtitleStyle}"
+                                                    Text="Proveedor" />
+                                            </HorizontalStackLayout>
+                                            <Label
+                                                HorizontalTextAlignment="Center"
+                                                Style="{StaticResource ValueStyle}"
+                                                Text="{Binding NomProveedor}" />
+                                            <Label
+                                                HorizontalTextAlignment="Center"
+                                                Style="{StaticResource ValueStyle}"
+                                                Text="{Binding PrecioProveedor, StringFormat='${0:N2}'}" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                            <HorizontalStackLayout
+                                                Grid.Column="0"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="18"
+                                                    Source="camion.png"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="18" />
+                                                <Label
+                                                    HorizontalTextAlignment="Center"
+                                                    Style="{StaticResource SubtitleStyle}"
+                                                    Text="Camionero" />
+                                            </HorizontalStackLayout>
+                                            <Label
+                                                HorizontalTextAlignment="Center"
+                                                Style="{StaticResource ValueStyle}"
+                                                Text="{Binding NomCamionero}" />
+                                            <Label
+                                                HorizontalTextAlignment="Center"
+                                                Style="{StaticResource ValueStyle}"
+                                                Text="{Binding PrecioCamionero, StringFormat='${0:N2}'}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <HorizontalStackLayout
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        Spacing="8"
+                                        VerticalOptions="End">
+                                        <Button
+                                            BackgroundColor="#374151"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteViewModel}}, Path=VerDetallesLoteCommand}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="10"
+                                            FontSize="12"
+                                            StyleClass="FilledButton"
+                                            Text="Detalles" />
+
+                                        <Button
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteViewModel}}, Path=EliminarLoteCommand}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="10"
+                                            FontSize="12"
+                                            StyleClass="OutlinedButton"
+                                            Text="Eliminar"
+                                            TextColor="#D65265" />
+                                    </HorizontalStackLayout>
+
+
+                                    <!--  Estadísticas y Acciones  -->
+                                    <Grid
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                            <HorizontalStackLayout
+                                                Grid.Column="0"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="18"
+                                                    Source="documento.png"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="18" />
+                                                <Label
+                                                    HorizontalTextAlignment="Center"
+                                                    Style="{StaticResource SubtitleStyle}"
+                                                    Text="Resumen del Lote" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="16">
+                                                <VerticalStackLayout Spacing="2">
+                                                    <Label
+                                                        HorizontalTextAlignment="Center"
+                                                        Style="{StaticResource ResumenColumn}"
+                                                        Text="Pedidos" />
+                                                    <Label
+                                                        HorizontalTextAlignment="Center"
+                                                        Style="{StaticResource ValueStyle}"
+                                                        Text="{Binding TotalPedidos}" />
+                                                </VerticalStackLayout>
+                                                <VerticalStackLayout Spacing="2">
+                                                    <Label
+                                                        HorizontalTextAlignment="Center"
+                                                        Style="{StaticResource ResumenColumn}"
+                                                        Text="Pallets" />
+                                                    <Label
+                                                        HorizontalTextAlignment="Center"
+                                                        Style="{StaticResource ValueStyle}"
+                                                        Text="{Binding TotalPallets}" />
+                                                </VerticalStackLayout>
+                                                <VerticalStackLayout Spacing="2">
+                                                    <Label
+                                                        HorizontalTextAlignment="Center"
+                                                        Style="{StaticResource ResumenColumn}"
+                                                        Text="Costo Total" />
+                                                    <Label
+                                                        HorizontalTextAlignment="Center"
+                                                        Style="{StaticResource ValueStyle}"
+                                                        Text="{Binding CostoTotal, StringFormat='${0:N2}'}" />
+                                                </VerticalStackLayout>
+                                                <VerticalStackLayout Spacing="2">
+                                                    <HorizontalStackLayout>
+                                                        <Label
+                                                            HorizontalTextAlignment="Center"
+                                                            Style="{StaticResource ResumenColumn}"
+                                                            Text="Tiempo" />
+
+                                                        <Label
+                                                            IsVisible="{Binding TieneFechaEntrega}"
+                                                            Style="{StaticResource ResumenColumn}"
+                                                            Text=" del envio" />
+                                                    </HorizontalStackLayout>
+                                                    <Label
+                                                        HorizontalTextAlignment="Center"
+                                                        Style="{StaticResource ValueStyle}"
+                                                        Text="{Binding TiempoProcesamiento, StringFormat='{0:%d} días'}" />
+                                                </VerticalStackLayout>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+
+                                    </Grid>
+
+
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!--  Footer con Estadísticas Generales  -->
+        <Border
+            Grid.Row="3"
+            Padding="16,8"
+            BackgroundColor="{StaticResource BackgroundLight}">
+
+            <Grid ColumnDefinitions="*,*,*,*">
+                <VerticalStackLayout
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Total Lotes" />
+                    <Label Style="{StaticResource ValueStyle}" Text="{Binding ListaLotes.Count}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Pendientes" />
+                    <Label Style="{StaticResource ValueStyle}" Text="{Binding LotesPendientes}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="2"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Total Pallets" />
+                    <Label Style="{StaticResource ValueStyle}" Text="{Binding TotalPallets}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="3"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Inversión Total" />
+                    <Label Style="{StaticResource ValueStyle}" Text="{Binding InversionTotal, StringFormat='${0:N2}'}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

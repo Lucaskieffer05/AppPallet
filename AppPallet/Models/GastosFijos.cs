@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AppPallet.Models;
 
-public partial class GastosFijo
+public partial class GastosFijos
 {
     public int GastosFijosId { get; set; }
 

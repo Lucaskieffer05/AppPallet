@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.PedidoCrearView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="NUEVO PEDIDO"
+    x:DataType="viewModels:PedidoCrearViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:EstadoColorConverter x:Key="EstadoColorConverter" />
+            <converters:EstadoTextoConverter x:Key="EstadoTextoConverter" />
+            <converters:DuracionEstimadaConverter x:Key="DuracionEstimadaConverter" />
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+
+            <Color x:Key="PrimaryColor">#2196F3</Color>
+            <Color x:Key="SecondaryColor">#42A5F5</Color>
+            <Color x:Key="AccentColor">#FF9800</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BackgroundLight">#F5F5F5</Color>
+            <Color x:Key="SuccessColor">#4CAF50</Color>
+            <Color x:Key="WarningColor">#FFC107</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="WidthRequest" Value="550" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+
+            <Style x:Key="HeaderTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#F6F1EB" />
+            </Style>
+
+            <Style x:Key="TitlePageStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="25" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#F6F1EB" />
+                <Setter Property="Margin" Value="10,0,0,0" />
+            </Style>
+
+            <Style x:Key="InfoTextStyle" TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="#666" />
+            </Style>
+            <Style x:Key="InfoTextHeaderStyle" TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="#E1DBD5" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="20">
+
+            <!--  Loading Indicator  -->
+            <ActivityIndicator
+                Grid.RowSpan="4"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center"
+                Color="{StaticResource PrimaryColor}" />
+
+            <!--  Header Información del Lote  -->
+            <Border
+                Grid.Row="0"
+                Padding="0,0,0,10"
+                BackgroundColor="#374151"
+                Stroke="Black">
+
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        Grid.Column="0"
+                        Style="{StaticResource TitlePageStyle}"
+                        Text="AGREGAR PEDIDO" />
+
+                    <Grid
+                        Padding="10,0,0,0"
+                        RowDefinitions="*,*"
+                        RowSpacing="10">
+                        <HorizontalStackLayout Grid.Row="0" Spacing="15">
+                            <Label
+                                Style="{StaticResource HeaderTitleStyle}"
+                                Text="Información del Lote:"
+                                VerticalOptions="Center"
+                                VerticalTextAlignment="Center" />
+                            <Label Style="{StaticResource InfoTextHeaderStyle}" Text="{Binding LoteInfo.NumLote, StringFormat='Lote #: {0}'}" />
+                            <Label Style="{StaticResource InfoTextHeaderStyle}" Text="{Binding LoteInfo.NomProveedor, StringFormat='Proveedor: {0}'}" />
+                            <Label Style="{StaticResource InfoTextHeaderStyle}" Text="{Binding LoteInfo.FechaSolicitada, StringFormat='Fecha Solicitada: {0:dd/MM/yyyy}'}" />
+                            <Label Style="{StaticResource InfoTextHeaderStyle}" Text="{Binding LoteInfo.FechaEntrega, StringFormat='Fecha de Entrega: {0:dd/MM/yyyy}'}" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Grid.Row="1" Spacing="15">
+                            <Label Style="{StaticResource HeaderTitleStyle}" Text="Estado del Lote:" />
+                            <Border
+                                Padding="8,4"
+                                BackgroundColor="{Binding LoteInfo.FechaEntrega, Converter={StaticResource EstadoColorConverter}}"
+                                HorizontalOptions="Start"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    Text="{Binding LoteInfo.FechaEntrega, Converter={StaticResource EstadoTextoConverter}}"
+                                    TextColor="White"
+                                    VerticalTextAlignment="Center" />
+                            </Border>
+                            <Label Style="{StaticResource InfoTextHeaderStyle}" Text="{Binding LoteInfo.Pedido.Count, StringFormat='Pedidos actuales: {0}'}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Selección de Pallet  -->
+            <Border Grid.Row="1" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="Seleccionar Pallet" />
+
+
+                    <HorizontalStackLayout VerticalOptions="Center">
+                        <!--  FIX: Usar UraniumUI FontAwesomeIcon en vez de FontImageSource  -->
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource
+                                    FontFamily="FASolid"
+                                    Glyph="{x:Static fa:Solid.CircleInfo}"
+                                    Size="15"
+                                    Color="#656565" />
+                            </Image.Source>
+                        </Image>
+
+                        <Label
+                            Padding="5,0,5,0"
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Seleccione un tipo de pallet para continuar"
+                            TextColor="#656565"
+                            VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+
+
+                    <material:PickerField
+                        Title="Tipo de Pallet"
+                        x:DataType="{x:Null}"
+                        ItemDisplayBinding="{Binding Nombre}"
+                        ItemsSource="{Binding PalletsDisponibles}"
+                        SelectedItem="{Binding PalletSeleccionado, Mode=TwoWay}" />
+
+                    <!--  Información del Pallet Seleccionado  -->
+                    <Border
+                        Padding="12"
+                        BackgroundColor="#F0F8FF"
+                        IsVisible="{Binding PalletSeleccionado, Converter={StaticResource NullToBoolConverter}}"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                Text="{Binding PalletSeleccionado.Nombre}" />
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontSize="12"
+                                Text="✅ Seleccionado"
+                                TextColor="{StaticResource SuccessColor}"
+                                VerticalOptions="Center" />
+
+                            <!--  Descripción  -->
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Margin="0,5,0,0"
+                                FontSize="14"
+                                Text="{Binding PalletSeleccionado.Descripcion}"
+                                TextColor="#666">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding PalletSeleccionado.Descripcion, Converter={StaticResource NullToBoolConverter}}"
+                                        TargetType="Label"
+                                        Value="False">
+                                        <Setter Property="Text" Value="Sin descripción" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                            <!--  Peso  -->
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                FontSize="12"
+                                Text="{Binding PalletSeleccionado.Peso, StringFormat='Peso: {0} kg'}"
+                                TextColor="#666">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding PalletSeleccionado.Peso, Converter={StaticResource NullToBoolConverter}}"
+                                        TargetType="Label"
+                                        Value="False">
+                                        <Setter Property="Text" Value="Sin peso" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                            <!--  Estructura  -->
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                FontSize="12"
+                                Text="{Binding PalletSeleccionado.Estructura, StringFormat='Estructura: {0}'}"
+                                TextColor="#666">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding PalletSeleccionado.Estructura, Converter={StaticResource NullToBoolConverter}}"
+                                        TargetType="Label"
+                                        Value="False">
+                                        <Setter Property="Text" Value="Sin estructura" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                            <!--  Tratamiento  -->
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                FontSize="12"
+                                Text="{Binding PalletSeleccionado.Tratamiento, StringFormat='Tratamiento: {0}'}"
+                                TextColor="#666">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding PalletSeleccionado.Tratamiento, Converter={StaticResource NullToBoolConverter}}"
+                                        TargetType="Label"
+                                        Value="False">
+                                        <Setter Property="Text" Value="Sin tratamiento" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Grid>
+                    </Border>
+
+
+
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Detalles del Pedido  -->
+            <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="Detalles del Pedido" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                        <VerticalStackLayout Grid.Column="0" Spacing="10">
+                            <material:EditorField
+                                Title="Cantidad de Pallets"
+                                Keyboard="Numeric"
+                                Text="{Binding Cantidad, Mode=TwoWay}"
+                                TextColor="Black" />
+
+                            <material:DatePickerField
+                                Title="Fecha de Inicio"
+                                Date="{Binding FechaEInicio, Mode=TwoWay}"
+                                TextColor="Black" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="10">
+                            <material:DatePickerField
+                                Title="Fecha de Finalización (Opcional)"
+                                Date="{Binding FechaEFinal, Mode=TwoWay}"
+                                TextColor="Black" />
+
+                            <Border
+                                Margin="0,10,0,0"
+                                Padding="10"
+                                BackgroundColor="#FFF3E0"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="12"
+                                        Text="⏱️ Duración Estimada" />
+                                    <Label
+                                        FontSize="11"
+                                        Text="{Binding FechaEInicio, Converter={StaticResource DuracionEstimadaConverter}}"
+                                        TextColor="#666" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Resumen y Acciones  -->
+            <Border Grid.Row="3" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="Resumen del Pedido" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Grid.Column="0" Spacing="8">
+                            <Label FontAttributes="Bold" Text="Pallet Seleccionado:" />
+                            <Label FontSize="14" Text="{Binding PalletSeleccionado.Nombre}" />
+
+                            <Label
+                                Margin="0,10,0,0"
+                                FontAttributes="Bold"
+                                Text="Cantidad:" />
+                            <Label FontSize="14" Text="{Binding Cantidad, StringFormat='{0} unidades'}" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label FontAttributes="Bold" Text="Fechas:" />
+                            <Label FontSize="12" Text="{Binding FechaEInicio, StringFormat='Inicio: {0:dd/MM/yyyy}'}" />
+                            <Label
+                                FontSize="12"
+                                IsVisible="{Binding HasFechaFinal}"
+                                Text="{Binding FechaEFinal, StringFormat='Fin: {0:dd/MM/yyyy}'}" />
+                            <Label
+                                FontSize="12"
+                                IsVisible="{Binding HasFechaFinal, Converter={StaticResource InverseBoolConverter}}"
+                                Text="Fin: No especificado"
+                                TextColor="#666" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!--  Botones de Acción  -->
+                    <Grid
+                        Margin="0,10,0,0"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="10">
+                        <Button
+                            Grid.Column="0"
+                            Command="{Binding CrearPedidoCommand}"
+                            IsEnabled="{Binding PalletSeleccionado, Converter={StaticResource NullToBoolConverter}}"
+                            StyleClass="FilledButton"
+                            Text="Crear Pedido" />
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="#e5e7eb"
+                            BorderColor="#9ca3af"
+                            Command="{Binding VolverAtrasCommand}"
+                            StyleClass="OutlinedButton"
+                            Text="← Volver"
+                            TextColor="Black" />
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

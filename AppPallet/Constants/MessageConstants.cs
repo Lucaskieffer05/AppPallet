@@ -87,6 +87,91 @@ namespace AppPallet.Constants
 
         }
 
+        public static class Lote
+        {
+            public const string CreateSuccess = "El lote ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el lote. Intente nuevamente.";
+            public const string NotFound = "No se encontró el lote.";
+            public const string DeleteSuccess = "El lote ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el lote. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El lote ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el lote. Intente nuevamente.";
+            public static string DeleteHasPedidos= "No se puede eliminar el lote porque tiene pedidos asociados.";
+        }
+
+        public static class Pallet
+        {
+            public const string CreateSuccess = "El pallet ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el pallet. Intente nuevamente.";
+            public const string NotFound = "No se encontró el pallet.";
+            public const string DeleteSuccess = "El pallet ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el pallet. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El pallet ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el pallet. Intente nuevamente.";
+            public const string AddStockSuccess = "El stock del pallet ha sido actualizado correctamente.";
+        }
+
+        public static class CostoPorPallet
+        {
+            public const string CreateSuccess = "El costo por pallet ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el costo por pallet. Intente nuevamente.";
+            public const string NotFound = "No se encontró el costo por pallet.";
+            public const string DeleteSuccess = "El costo por pallet ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el costo por pallet. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El costo por pallet ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el costo por pallet. Intente nuevamente.";
+        }
+
+        public static class CostoPorCamion
+        {
+            public const string CreateSuccess = "El costo por camión ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el costo por camión. Intente nuevamente.";
+            public const string NotFound = "No se encontró el costo por camión.";
+            public const string DeleteSuccess = "El costo por camión ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el costo por camión. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El costo por camión ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el costo por camión. Intente nuevamente.";
+        }
+
+        public static class Pedido
+        {
+            public const string CreateSuccess = "El pedido ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el pedido. Intente nuevamente.";
+            public const string NotFound = "No se encontró el pedido.";
+            public const string DeleteSuccess = "El pedido ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el pedido. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El pedido ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el pedido. Intente nuevamente.";
+        }
+
+
+        public static class Empresa
+        {
+            public const string CreateSuccess = "La empresa ha sido creada correctamente.";
+            public const string CreateError = "No se pudo crear la empresa. Intente nuevamente.";
+            public const string NotFound = "No se encontró la empresa.";
+            public const string DeleteSuccess = "La empresa ha sido eliminada correctamente.";
+            public const string DeleteError = "No se pudo eliminar la empresa. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "La empresa ha sido modificada correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar la empresa. Intente nuevamente.";
+            public static string DeleteHasContactos = "No se puede eliminar la empresa porque tiene contactos asociados.";
+            public static string DeleteHasPedidos = "No se puede eliminar la empresa porque tiene pedidos asociados.";
+            public static string Deleted = "La empresa ha sido eliminada correctamente.";
+            public static string NoDeleted = "La empresa no pudo ser eliminada";
+        }
+
 
         // Mensajes genéricos
         public static class Generic

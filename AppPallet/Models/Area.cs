@@ -9,5 +9,5 @@ public partial class Area
 
     public string NomArea { get; set; } = null!;
 
-    public virtual ICollection<ContactosEmpresa> ContactosEmpresas { get; set; } = new List<ContactosEmpresa>();
+    public virtual ICollection<ContactosEmpresa> ContactosEmpresa { get; set; } = new List<ContactosEmpresa>();
 }

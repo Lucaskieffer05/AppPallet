@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="AppPallet.Views.ChequeModificarView"
-    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converts="clr-namespace:AppPallet.Converters"
-    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
     x:DataType="viewModels:ChequeModificarViewModel"
     WidthRequest="500">
 
@@ -19,53 +19,78 @@
     <ScrollView>
         <VerticalStackLayout Spacing="20">
 
-            <material:EditorField TextColor="Black" Title="Proveedor" Text="{Binding ChequeSeleccionado.Proveedor, Mode=TwoWay}" />
+            <material:EditorField
+                Title="Proveedor"
+                Text="{Binding ChequeSeleccionado.Proveedor, Mode=TwoWay}"
+                TextColor="Black" />
 
-            <material:EditorField TextColor="Black" Title="Tipo" Text="{Binding ChequeSeleccionado.Tipo, Mode=TwoWay}" />
+            <material:EditorField
+                Title="Tipo"
+                Text="{Binding ChequeSeleccionado.Tipo, Mode=TwoWay}"
+                TextColor="Black" />
 
-            <material:EditorField TextColor="Black" Title="Número de Cheque" Text="{Binding ChequeSeleccionado.NumCheque, Mode=TwoWay}" />
+            <material:EditorField
+                Title="Número de Cheque"
+                Text="{Binding ChequeSeleccionado.NumCheque, Mode=TwoWay}"
+                TextColor="Black" />
 
-            <material:EditorField TextColor="Black" Title="Monto" Text="{Binding ChequeSeleccionado.Monto, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}" Keyboard="Numeric" />
-        
-            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                              AllowClear="True"
-                              Title="Fecha de Emisión"
-                              Date="{Binding ChequeSeleccionado.FechaEmision, Mode=TwoWay}" 
-                              TextColor="Black"/>
+            <material:EditorField
+                Title="Monto"
+                Keyboard="Numeric"
+                Text="{Binding ChequeSeleccionado.Monto, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}"
+                TextColor="Black" />
 
-            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                                      AllowClear="True"
-                                      Title="Fecha de Pago"
-                                      Date="{Binding ChequeSeleccionado.FechaPago, Mode=TwoWay}" 
-                                      TextColor="Black"/>
+            <material:DatePickerField
+                Title="Fecha de Emisión"
+                AllowClear="True"
+                Date="{Binding ChequeSeleccionado.FechaEmision, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
+
+            <material:DatePickerField
+                Title="Fecha de Pago"
+                AllowClear="True"
+                Date="{Binding ChequeSeleccionado.FechaPago, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
 
 
- <!-- Radio Button para Estado -->
-            <Label Text="Estado" TextColor="Black" FontAttributes="Bold"/>
+            <!--  Radio Button para Estado  -->
+            <Label
+                FontAttributes="Bold"
+                Text="Estado"
+                TextColor="Black" />
             <HorizontalStackLayout Spacing="20">
-                <VerticalStackLayout >
-                    <RadioButton GroupName="EstadoGroup" 
-                               Content="Sin Estado" 
-                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=0}"
-                               Value="0"/>
-                    <RadioButton GroupName="EstadoGroup" 
-                               Content="Cobrado" 
-                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=1}"
-                               Value="1"/>
-                    <RadioButton GroupName="EstadoGroup" 
-                               Content="Vencido" 
-                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=2}"
-                               Value="2"/>
+                <VerticalStackLayout>
+                    <RadioButton
+                        Content="Sin Estado"
+                        GroupName="EstadoGroup"
+                        IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=0}"
+                        Value="0" />
+                    <RadioButton
+                        Content="Cobrado"
+                        GroupName="EstadoGroup"
+                        IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=1}"
+                        Value="1" />
+                    <RadioButton
+                        Content="Vencido"
+                        GroupName="EstadoGroup"
+                        IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=2}"
+                        Value="2" />
                 </VerticalStackLayout>
-                <VerticalStackLayout >
-                    <RadioButton GroupName="EstadoGroup" 
-                               Content="Pago inmediato" 
-                               IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=3}"
-                               Value="3"/>
-                    <RadioButton GroupName="EstadoGroup" 
-                                   Content="Proximo a pagar" 
-                                   IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=4}"
-                                   Value="4"/>
+                <VerticalStackLayout>
+                    <RadioButton
+                        Content="Pago inmediato"
+                        GroupName="EstadoGroup"
+                        IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=3}"
+                        Value="3" />
+                    <RadioButton
+                        Content="Proximo a pagar"
+                        GroupName="EstadoGroup"
+                        IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=4}"
+                        Value="4" />
                 </VerticalStackLayout>
 
             </HorizontalStackLayout>
@@ -73,15 +98,30 @@
 
 
             <Grid ColumnDefinitions="*,*">
-                <HorizontalStackLayout Spacing="10" Grid.Column="0">
-                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Guardar" Command="{Binding GuardarPopupCommand}"/>
-                    <Button StyleClass="FilledButton" BackgroundColor="#C352D6" Text="Cancelar" Command="{Binding CancelarPopupCommand}"/>
+                <HorizontalStackLayout Grid.Column="0" Spacing="10">
+                    <Button
+                        BackgroundColor="#C352D6"
+                        Command="{Binding GuardarPopupCommand}"
+                        StyleClass="FilledButton"
+                        Text="Guardar" />
+                    <Button
+                        BackgroundColor="#C352D6"
+                        Command="{Binding CancelarPopupCommand}"
+                        StyleClass="FilledButton"
+                        Text="Cancelar" />
                 </HorizontalStackLayout>
 
-                <Button Grid.Column="1" HorizontalOptions="End" StyleClass="OutlinedButton" BorderColor="#d65265" TextColor="#d65265" Text="Eliminar Cheque" Command="{Binding EliminarChequeCommand}"/>
+                <Button
+                    Grid.Column="1"
+                    BorderColor="#d65265"
+                    Command="{Binding EliminarChequeCommand}"
+                    HorizontalOptions="End"
+                    StyleClass="OutlinedButton"
+                    Text="Eliminar Cheque"
+                    TextColor="#d65265" />
 
             </Grid>
-        
+
         </VerticalStackLayout>
     </ScrollView>
 

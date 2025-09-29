@@ -2,7 +2,7 @@ using AppPallet.ViewModels;
 using UraniumUI.Pages;
 namespace AppPallet.Views;
 
-public partial class ChequeView : UraniumContentPage
+public partial class ChequeView : ContentPage
 {
     public ChequeView(ChequeViewModel viewModel)
     {

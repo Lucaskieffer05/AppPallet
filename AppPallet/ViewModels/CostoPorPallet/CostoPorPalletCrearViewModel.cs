@@ -127,6 +127,14 @@ namespace AppPallet.ViewModels
             return Task.CompletedTask;
         }
 
+        [RelayCommand]
+        async Task VolverAtras()
+        {
+            //Volver atras
+            await Shell.Current.GoToAsync("..");
+        }
+
+
 
         [RelayCommand]
         public async Task CrearCostoPorPallet()
@@ -138,7 +146,7 @@ namespace AppPallet.ViewModels
                 return;
             }
 
-            CostoPorPalletCreated.CostoPorCamions = ListCostoPorCamions;
+            CostoPorPalletCreated.CostoPorCamion = ListCostoPorCamions;
 
             if (string.IsNullOrWhiteSpace(CostoPorPalletCreated.NombrePalletCliente) ||
                 CostoPorPalletCreated.CantidadPorDia <= 0 ||
@@ -159,7 +167,7 @@ namespace AppPallet.ViewModels
                 CantidadPorDia = CostoPorPalletCreated.CantidadPorDia,
                 CargaCamion = CostoPorPalletCreated.CargaCamion,
                 HorasPorMes = CostoPorPalletCreated.HorasPorMes,
-                CostoPorCamions = new ObservableCollection<CostoPorCamion>(
+                CostoPorCamion = new ObservableCollection<CostoPorCamion>(
                     ListCostoPorCamions.Select(c => new CostoPorCamion
                     {
                         NombreCosto = c.NombreCosto,

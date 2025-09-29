@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.PedidoModificarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="EDITAR PEDIDO"
+    x:DataType="viewModels:PedidoModificarViewModel"
+    Shell.BackgroundColor="#374151"
+    Shell.TitleColor="#F6F1EB">
+
+
+    <VerticalStackLayout
+        Margin="0,50,0,0"
+        Spacing="10"
+        WidthRequest="300">
+
+        <Border
+            Padding="10"
+            BackgroundColor="#DADADA"
+            StrokeShape="7">
+            <HorizontalStackLayout VerticalOptions="Center">
+                <!--  FIX: Usar UraniumUI FontAwesomeIcon en vez de FontImageSource  -->
+                <Image>
+                    <Image.Source>
+                        <FontImageSource
+                            FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.CircleInfo}"
+                            Size="15"
+                            Color="#656565" />
+                    </Image.Source>
+                </Image>
+
+                <Label
+                    Padding="15,0,5,0"
+                    Text="Pallet:"
+                    TextColor="#656565"
+                    VerticalTextAlignment="Center" />
+
+                <Label
+                    FontAttributes="Bold"
+                    Text="{Binding PedidoModificar.Pallet.Nombre}"
+                    TextColor="#656565"
+                    VerticalTextAlignment="Center" />
+                <Label
+                    Padding="30,0,0,0"
+                    Text="Cantidad:"
+                    TextColor="#656565"
+                    VerticalTextAlignment="Center" />
+                <Label
+                    Padding="5,0,0,0"
+                    FontAttributes="Bold"
+                    Text="{Binding PedidoModificar.Cantidad}"
+                    TextColor="#656565"
+                    VerticalTextAlignment="Center" />
+            </HorizontalStackLayout>
+
+        </Border>
+
+        <material:DatePickerField
+            Title="Fecha de inicio"
+            Date="{Binding PedidoModificar.FechaEInicio, Mode=TwoWay}"
+            TextColor="Black" />
+
+        <material:DatePickerField
+            Title="Fecha finalizacion"
+            Date="{Binding PedidoModificar.FechaEFinal, Mode=TwoWay}"
+            TextColor="Black" />
+
+
+        <HorizontalStackLayout Spacing="10">
+
+            <Button
+                Grid.Column="1"
+                Command="{Binding GuardarCambiosCommand}"
+                StyleClass="FilledButton"
+                Text="Guardar Cambios" />
+            <Button
+                Grid.Column="0"
+                BorderColor="#9ca3af"
+                Command="{Binding VolverAtrasCommand}"
+                StyleClass="OutlinedButton"
+                Text="← Volver"
+                TextColor="Black" />
+
+
+        </HorizontalStackLayout>
+
+
+    </VerticalStackLayout>
+
+
+</ContentPage>

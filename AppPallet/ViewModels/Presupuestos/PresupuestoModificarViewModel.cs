@@ -52,7 +52,7 @@ namespace AppPallet.ViewModels
                     {
                         return;
                     }
-                    ListCostoPorCamions = new ObservableCollection<CostoPorCamion>(CostoPorPalletSeleccionada.CostoPorCamions);
+                    ListCostoPorCamions = new ObservableCollection<CostoPorCamion>(CostoPorPalletSeleccionada.CostoPorCamion);
 
                 }
             }
@@ -101,7 +101,7 @@ namespace AppPallet.ViewModels
             {
                 var filtro = ListCostoPorCamions.Where(c => !string.IsNullOrWhiteSpace(c.NombreCosto) && c.Monto > 0).ToList();
 
-                CostoPorPalletSeleccionada.CostoPorCamions = new ObservableCollection<CostoPorCamion>(filtro);
+                CostoPorPalletSeleccionada.CostoPorCamion = new ObservableCollection<CostoPorCamion>(filtro);
 
                 var respuesta = await _costoPorPalletController.UpdateCostoPorPallet(CostoPorPalletSeleccionada);
                 if (!respuesta)

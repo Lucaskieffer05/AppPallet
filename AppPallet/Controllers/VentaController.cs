@@ -20,7 +20,7 @@ namespace AppPallet.Controllers
         }
 
         // Obtener todas las ventas
-        public async Task<List<Venta>> GetAllVentas()
+        public async Task<List<Venta>> GetAllVentas(DateTime fechaFiltro)
         {
             try
             {
@@ -30,6 +30,7 @@ namespace AppPallet.Controllers
                     .ThenInclude(cp => cp.Empresa)
                     .Include(v => v.CostoPorPallet)
                     .ThenInclude(cp => cp.Pallet)
+                    .Where(v => v.FechaVenta.Year == fechaFiltro.Year && v.FechaVenta.Month == fechaFiltro.Month)
                     .OrderBy(v => v.Estado)
                     .ThenBy(v => v.FechaVenta)
                     .ToListAsync();

@@ -28,6 +28,18 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         public Empresa? empresaSeleccionada;
 
+        [ObservableProperty]
+        private string tipoIngresado = "Cliente";
+
+        [ObservableProperty]
+        private bool esCliente = true;
+
+
+        public ObservableCollection<string> Tipos { get; } = new()
+            {
+                "Cliente", "Proveedor"
+            };
+
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -48,7 +60,7 @@ namespace AppPallet.ViewModels
             try
             {
                 IsBusy = true;
-                var lista = await _EmpresaController.GetAllEmpresas();
+                var lista = await _EmpresaController.GetAllEmpresas(TipoIngresado);
                 ListaEmpresas = new ObservableCollection<Empresa>(lista);
             }
             catch (Exception ex)
@@ -60,6 +72,26 @@ namespace AppPallet.ViewModels
                 IsBusy = false;
             }
         }
+
+        partial void OnTipoIngresadoChanged(string? oldValue, string newValue)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    EsCliente = newValue == "Cliente";
+                    await CargarListaEmpresas();
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
+        }
+
+
 
         [RelayCommand]
         public async Task MostrarPopupCrear()
@@ -79,6 +111,13 @@ namespace AppPallet.ViewModels
             await DisplayPopupModificar();
         }
 
+        [RelayCommand]
+        public async Task Copiar(string? texto)
+        {
+            if (!string.IsNullOrEmpty(texto))
+                await Clipboard.SetTextAsync(texto);
+        }
+
         public async Task DisplayPopupCrear()
         {
             var popupResult = await _popupService.ShowPopupAsync<EmpresaCrearViewModel>(
@@ -93,7 +132,7 @@ namespace AppPallet.ViewModels
 
             var parameters = new Dictionary<string, object>
             {
-                ["EmpresaSeleccionada"] =  EmpresaSeleccionada
+                ["EmpresaSeleccionada"] = EmpresaSeleccionada
             };
             var popupResult = await _popupService.ShowPopupAsync<EmpresaModificarViewModel>(
                 Shell.Current,

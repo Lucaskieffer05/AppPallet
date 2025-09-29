@@ -20,16 +20,31 @@ namespace AppPallet.ViewModels
         readonly GastosFijosController _gastosFijosController;
 
         [ObservableProperty]
-        public ObservableCollection<GastosFijo> listaGastosFijos = [];
+        public ObservableCollection<GastosFijos> listaGastosFijos = [];
 
         [ObservableProperty]
-        public GastosFijo? gastoFijoSeleccionado;
-
-        [ObservableProperty]
-        public DateTime mesFiltro = DateTime.Now;
+        public GastosFijos? gastoFijoSeleccionado;
 
         [ObservableProperty]
         public bool isBusy;
+
+        [ObservableProperty]
+        private int mesIngresado = DateTime.Today.Month - 1;
+
+        [ObservableProperty]
+        private int añoIngresado = DateTime.Today.Year;
+
+
+        public ObservableCollection<string> Meses { get; } = new()
+            {
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            };
+
+        public ObservableCollection<int> Años { get; } = new()
+            {
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            };
 
 
         // -------------------------------------------------------------------
@@ -56,8 +71,8 @@ namespace AppPallet.ViewModels
 
                 GastoFijoSeleccionado = null;
 
-                var gastosFijoList = await _gastosFijosController.GetAllGastosFijos(MesFiltro);
-                ListaGastosFijos = new ObservableCollection<GastosFijo>(gastosFijoList);
+                var gastosFijoList = await _gastosFijosController.GetAllGastosFijos(new DateTime(AñoIngresado, MesIngresado + 1, 1));
+                ListaGastosFijos = new ObservableCollection<GastosFijos>(gastosFijoList);
             }
             finally
             {
@@ -65,10 +80,24 @@ namespace AppPallet.ViewModels
             }
         }
 
+        partial void OnMesIngresadoChanged(int oldValue, int newValue)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    await CargarListaGastosFijos();
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
 
+            LoadAsync();
+        }
 
-
-        partial void OnMesFiltroChanged(DateTime value)
+        partial void OnAñoIngresadoChanged(int oldValue, int newValue)
         {
             async void LoadAsync()
             {
