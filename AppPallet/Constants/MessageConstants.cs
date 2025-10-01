@@ -59,6 +59,20 @@ namespace AppPallet.Constants
 
         }
 
+        public static class  HistorialHumedad
+        {
+            public const string CreateSuccess = "El historial de humedad ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el historial de humedad. Intente nuevamente.";
+            public const string NotFound = "No se encontró el historial de humedad.";
+            public const string DeleteSuccess = "El historial de humedad ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el historial de humedad. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El historial de humedad ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el historial de humedad. Intente nuevamente.";
+
+        }
+
         public static class Ingreso
         {
             public const string CreateSuccess = "El ingreso ha sido creado correctamente.";
@@ -71,6 +85,19 @@ namespace AppPallet.Constants
             public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
             public const string ModifyError = "No se pudo modificar el ingreso. Intente nuevamente.";
 
+        }
+
+        public static class Stock
+        {
+            public const string CreateSuccess = "El stock ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el stock. Intente nuevamente.";
+            public const string NotFound = "No se encontró el stock.";
+            public const string DeleteSuccess = "El stock ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el stock. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El stock ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el stock. Intente nuevamente.";
         }
 
         public static class Egreso

@@ -131,7 +131,10 @@
             Padding="100,0,100,0"
             IsRefreshing="{Binding IsBusy}">
 
-            <CollectionView ItemsSource="{Binding ListaLotes}" SelectionMode="None">
+            <CollectionView
+                ItemsSource="{Binding ListaLotes}"
+                SelectionMode="None"
+                VerticalScrollBarVisibility="Never">
                 <CollectionView.EmptyView>
                     <VerticalStackLayout
                         HorizontalOptions="Center"

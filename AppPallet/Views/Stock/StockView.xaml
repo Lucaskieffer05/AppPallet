@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.StockView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:sys="clr-namespace:System;assembly=netstandard"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Stock"
+    x:DataType="viewModels:StockViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SelectedToColorConverter x:Key="SelectedToColorConverter" />
+
+            <Color x:Key="PrimaryColor">#374151</Color>
+            <Color x:Key="SecondaryColor">#4CAF50</Color>
+            <Color x:Key="AccentColor">#FF9800</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BackgroundLight">#F5F5F5</Color>
+            <Color x:Key="CardBackground">#FFFFFF</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="22" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SubtitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="ResumenColumn" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#626262" />
+            </Style>
+
+            <Style x:Key="ValueStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="#757575" />
+            </Style>
+
+            <Style x:Key="StockValueStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!--  Header  -->
+        <Border Grid.Row="0" Stroke="Black">
+            <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,0.1*">
+                <Label
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Start"
+                    Text="GESTIÓN DE STOCK"
+                    TextColor="#F6F1EB"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!--  Loading Indicator  -->
+        <ActivityIndicator
+            Grid.Row="2"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="{StaticResource PrimaryColor}" />
+
+        <!--  Lista de Pallets  -->
+
+        <Grid Grid.Row="2" ColumnDefinitions="0.2*,*,0.2*">
+
+            <CollectionView
+                Grid.Column="1"
+                ItemsSource="{Binding ListPallets}"
+                SelectedItem="{Binding PalletSeleccionado}"
+                SelectionMode="Single"
+                VerticalScrollBarVisibility="Never">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        Spacing="20"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="48"
+                            HorizontalOptions="Center"
+                            Text="📦" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource TitleStyle}"
+                            Text="No hay pallets registrados" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource SubtitleStyle}"
+                            Text="Configure los pallets en el sistema" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:PalletStockDTO">
+                        <Grid>
+                            <Border Margin="0,15,0,0" Style="{StaticResource CardStyle}">
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*,Auto"
+                                    ColumnSpacing="20"
+                                    RowDefinitions="Auto,Auto,Auto">
+
+                                    <!--  Icono de Estado  -->
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.RowSpan="3"
+                                        Grid.Column="0"
+                                        HeightRequest="24"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding EstadoMal}"
+                                        Source="cancelar.png"
+                                        VerticalOptions="Center"
+                                        WidthRequest="24" />
+
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.RowSpan="3"
+                                        Grid.Column="0"
+                                        HeightRequest="24"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding EstadoAlert}"
+                                        Source="advertencia.png"
+                                        VerticalOptions="Center"
+                                        WidthRequest="24" />
+
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.RowSpan="3"
+                                        Grid.Column="0"
+                                        HeightRequest="24"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding EstadoBien}"
+                                        Source="comprobado.png"
+                                        VerticalOptions="Center"
+                                        WidthRequest="24" />
+
+                                    <!--  Información Principal del Pallet  -->
+                                    <VerticalStackLayout
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Spacing="5">
+
+                                        <HorizontalStackLayout Spacing="10">
+                                            <Label Style="{StaticResource TitleStyle}" Text="{Binding Nombre}" />
+
+                                            <Border
+                                                Padding="3,0"
+                                                BackgroundColor="{Binding EstadoColor}"
+                                                StrokeThickness="0">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="12" />
+                                                </Border.StrokeShape>
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="10"
+                                                    Text="{Binding EstadoStock}"
+                                                    TextColor="White"
+                                                    VerticalTextAlignment="Center" />
+                                            </Border>
+                                        </HorizontalStackLayout>
+
+                                        <Label
+                                            LineBreakMode="WordWrap"
+                                            Style="{StaticResource ValueStyle}"
+                                            Text="{Binding Descripcion}" />
+                                    </VerticalStackLayout>
+
+                                    <!--  Stock y Especificaciones  -->
+                                    <Grid
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        ColumnDefinitions="*,*,*"
+                                        ColumnSpacing="15"
+                                        RowDefinitions="Auto,Auto">
+
+                                        <!--  Especificaciones  -->
+                                        <VerticalStackLayout
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Spacing="2">
+                                            <Label Style="{StaticResource SubtitleStyle}" Text="Estructura" />
+
+                                            <Label Style="{StaticResource ValueStyle}" Text="{Binding Estructura}" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Spacing="2">
+
+                                            <Label Style="{StaticResource SubtitleStyle}" Text="Tratamiento" />
+                                            <Label Style="{StaticResource ValueStyle}" Text="{Binding Tratamiento}" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            Spacing="2">
+
+                                            <Label Style="{StaticResource SubtitleStyle}" Text="Sello" />
+                                            <Label Style="{StaticResource ValueStyle}" Text="{Binding Sello}" />
+                                        </VerticalStackLayout>
+
+                                        <!--  Información de Peso  -->
+                                        <VerticalStackLayout
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Spacing="2">
+
+                                            <Label Style="{StaticResource SubtitleStyle}" Text="Peso" />
+                                            <Label Style="{StaticResource ValueStyle}" Text="{Binding Peso, StringFormat='{0} kg'}" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="0,10,0,0"
+                                            Spacing="2">
+
+                                            <Label Style="{StaticResource SubtitleStyle}" Text="Tolerancia" />
+                                            <Label Style="{StaticResource ValueStyle}" Text="{Binding ToleranciaPeso, StringFormat='{0} kg'}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!--  Stock y Acciones  -->
+                                    <VerticalStackLayout
+                                        Grid.Row="0"
+                                        Grid.RowSpan="3"
+                                        Grid.Column="2"
+                                        HorizontalOptions="End"
+                                        Spacing="10"
+                                        VerticalOptions="Center">
+
+                                        <!--  Display de Stock  -->
+                                        <Border
+                                            Padding="15,10"
+                                            BackgroundColor="{Binding EstadoColor}"
+                                            StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="Center"
+                                                    Text="STOCK ACTUAL"
+                                                    TextColor="White" />
+                                                <Entry
+                                                    Style="{StaticResource StockValueStyle}"
+                                                    Text="{Binding Stock, Mode=TwoWay}"
+                                                    TextColor="White" />
+                                            </VerticalStackLayout>
+                                        </Border>
+
+                                        <!--  Botón de Detalles  -->
+                                        <Button
+                                            Padding="15,8"
+                                            BackgroundColor="#374151"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:StockViewModel}}, Path=AjustarStockCommand}"
+                                            CommandParameter="{Binding}"
+                                            CornerRadius="8"
+                                            FontSize="11"
+                                            Text="Guardar Stock"
+                                            TextColor="White" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+        <!--  Footer con Estadísticas  -->
+        <Border
+            Grid.Row="3"
+            Padding="16,12"
+            BackgroundColor="{StaticResource BackgroundLight}">
+
+            <Grid ColumnDefinitions="*,*,*,*">
+                <VerticalStackLayout
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Total Pallets" />
+                    <Label Style="{StaticResource ValueStyle}" Text="{Binding TotalPallets, Mode=TwoWay}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Stock Total" />
+                    <Label Style="{StaticResource ValueStyle}" Text="{Binding TotalStock, Mode=TwoWay}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="2"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Bajo Stock" />
+                    <Label
+                        Style="{StaticResource ValueStyle}"
+                        Text="{Binding PalletsBajoStock, Mode=TwoWay}"
+                        TextColor="#FF9800" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="3"
+                    HorizontalOptions="Center"
+                    Spacing="2">
+                    <Label Style="{StaticResource SubtitleStyle}" Text="Sin Stock" />
+                    <Label
+                        Style="{StaticResource ValueStyle}"
+                        Text="{Binding PalletsSinStock, Mode=TwoWay}"
+                        TextColor="#F44336" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

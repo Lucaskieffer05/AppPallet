@@ -52,6 +52,7 @@ namespace AppPallet
             builder.Services.AddTransient<LoteController>();
             builder.Services.AddTransient<PedidoController>();
             builder.Services.AddTransient<PalletController>();
+            builder.Services.AddTransient<HistorialHumedadController>();
 
 
             // Registro de Vistas y ViewModels
@@ -127,6 +128,9 @@ namespace AppPallet
 
             builder.Services.AddTransient<PedidoModificarView>();
             builder.Services.AddTransient<PedidoModificarViewModel>();
+
+            builder.Services.AddTransient<StockView>();
+            builder.Services.AddTransient<StockViewModel>();
 
 
 

@@ -34,6 +34,36 @@ namespace AppPallet.Controllers
             }
         }
 
+        // actualizar pallet
+        public async Task<MessageResult> UpdatePallet(Pallet pallet)
+        {
+            try
+            {
+                var existingPallet = await _context.Pallet.FindAsync(pallet.PalletId);
+                if (existingPallet == null)
+                {
+                    return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Pallet.NotFound);
+                }
+                existingPallet.Nombre = pallet.Nombre;
+                existingPallet.Descripcion = pallet.Descripcion;
+                existingPallet.Estructura = pallet.Estructura;
+                existingPallet.Tratamiento = pallet.Tratamiento;
+                existingPallet.Sello = pallet.Sello;
+                existingPallet.Peso = pallet.Peso;
+                existingPallet.ToleranciaPeso = pallet.ToleranciaPeso;
+                existingPallet.Stock = pallet.Stock;
+                existingPallet.FechaCreacion = pallet.FechaCreacion;
+                existingPallet.FechaModificacion = DateTime.Today;
+                await _context.SaveChangesAsync();
+                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Pallet.ModifySuccess);
+            }
+            catch (Exception ex)
+            {
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Pallet.ModifyError} Detalles: {ex.Message}");
+            }
+        }
+
+
         //Sumar stock
         public async Task<MessageResult> SumarStockPallet(int palletId, int cantidad)
         {

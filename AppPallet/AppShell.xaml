@@ -15,6 +15,29 @@
     Shell.TitleColor="#F6F1EB">
 
 
+    <FlyoutItem Title="Gestión de Stock" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Cubes}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:StockView}" Route="StockView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Control de Lote" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.BoxesStacked}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:LoteView}" Route="LoteView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Gestión Ventas" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.HandHoldingDollar}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:VentaView}" Route="VentaView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Ingreso - Egresos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Coins}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:IngresoEgresoView}" Route="IngresoEgresoView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Activos y Pasivos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ChartLine}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:ActivoPasivoView}" Route="ActivoPasivoView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Presupuestos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Wallet}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:PresupuestoView}" Route="PresupuestoView" />
+    </FlyoutItem>
 
     <FlyoutItem Title="Cheques" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.MoneyCheck}, Color=Black}">
         <ShellContent ContentTemplate="{DataTemplate local:ChequeView}" Route="ChequeView" />
@@ -28,25 +51,10 @@
         <ShellContent ContentTemplate="{DataTemplate local:GastosFijosView}" Route="GastosFijoView" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Presupuestos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Wallet}, Color=Black}">
-        <ShellContent ContentTemplate="{DataTemplate local:PresupuestoView}" Route="PresupuestoView" />
-    </FlyoutItem>
 
-    <FlyoutItem Title="Ingreso - Egresos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Coins}, Color=Black}">
-        <ShellContent ContentTemplate="{DataTemplate local:IngresoEgresoView}" Route="IngresoEgresoView" />
-    </FlyoutItem>
 
-    <FlyoutItem Title="Activos y Pasivos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ChartLine}, Color=Black}">
-        <ShellContent ContentTemplate="{DataTemplate local:ActivoPasivoView}" Route="ActivoPasivoView" />
-    </FlyoutItem>
 
-    <FlyoutItem Title="Gestión Ventas" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.HandHoldingDollar}, Color=Black}">
-        <ShellContent ContentTemplate="{DataTemplate local:VentaView}" Route="VentaView" />
-    </FlyoutItem>
 
-    <FlyoutItem Title="Control de Lote" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.BoxesStacked}, Color=Black}">
-        <ShellContent ContentTemplate="{DataTemplate local:LoteView}" Route="LoteView" />
-    </FlyoutItem>
 
 
 

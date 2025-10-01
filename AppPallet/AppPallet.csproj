@@ -199,6 +199,9 @@
 	  <MauiXaml Update="Views\Presupuestos\PresupuestoView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Stock\StockView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Ventas\VentaCrearView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
