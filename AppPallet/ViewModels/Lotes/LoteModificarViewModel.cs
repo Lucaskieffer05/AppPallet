@@ -238,7 +238,18 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         public async Task VolverAtras()
         {
-            await Shell.Current.GoToAsync("..");
+            try
+            {
+                // Forzar en el hilo principal
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await Shell.Current.GoToAsync("..");
+                });
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error de navegación", ex.Message);
+            }
         }
 
 
@@ -246,10 +257,7 @@ namespace AppPallet.ViewModels
         {
             var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
             if (mainPage != null)
-            {
                 await mainPage.DisplayAlert(titulo, mensaje, "OK");
-            }
-
         }
 
 

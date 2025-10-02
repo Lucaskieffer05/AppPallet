@@ -142,6 +142,7 @@ namespace AppPallet.ViewModels
             {
                 {"LoteDTO", LoteSeleccionado}
             };
+
             await Shell.Current.GoToAsync(nameof(LoteModificarView), navigationParams);
 
         }

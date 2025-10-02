@@ -130,8 +130,18 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         async Task VolverAtras()
         {
-            //Volver atras
-            await Shell.Current.GoToAsync("..");
+            try
+            {
+                // Forzar en el hilo principal
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await Shell.Current.GoToAsync("..");
+                });
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error de navegación", ex.Message);
+            }
         }
 
 

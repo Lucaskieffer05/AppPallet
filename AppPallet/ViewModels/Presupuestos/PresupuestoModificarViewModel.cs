@@ -112,7 +112,7 @@ namespace AppPallet.ViewModels
                 await MostrarAlerta("Éxito", "Los cambios se han guardado correctamente.");
 
                 //Volver atras
-                await Shell.Current.GoToAsync("..");
+                await CancelarCambios();
 
 
             }
@@ -156,7 +156,7 @@ namespace AppPallet.ViewModels
                 }
                 await MostrarAlerta("Éxito", "El costo por pallet se ha eliminado correctamente.");
                 //Volver atras
-                await Shell.Current.GoToAsync("..");
+                await CancelarCambios();
             }
             catch (Exception ex)
             {
@@ -171,8 +171,18 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         public async Task CancelarCambios()
         {
-            //Volver atras
-            await Shell.Current.GoToAsync("..");
+            try
+            {
+                // Forzar en el hilo principal
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await Shell.Current.GoToAsync("..");
+                });
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error de navegación", ex.Message);
+            }
         }
 
 
