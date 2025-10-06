@@ -47,7 +47,7 @@
 
         <!--  Encabezado  -->
         <Border Grid.Row="0" Stroke="Black">
-            <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,Auto,0.1*">
+            <Grid BackgroundColor="#374151" ColumnSpacing="40" ColumnDefinitions="Auto,*,*">
 
                 <Label
                     Grid.Column="0"
@@ -59,7 +59,7 @@
                     TextColor="#F6F1EB"
                     VerticalOptions="Center" />
 
-                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Start">
                     <Label
                         FontSize="15"
                         Text="Filtrar por mes:"
@@ -91,7 +91,6 @@
                 </HorizontalStackLayout>
                 <Button
                     Grid.Column="2"
-                    Margin="400,0,0,0"
                     Padding="20,10"
                     BackgroundColor="#F6F1EB"
                     BorderColor="#D0B595"

@@ -59,6 +59,19 @@ namespace AppPallet.Constants
 
         }
 
+        public static class Presupuesto
+        {
+            public const string CreateSuccess = "El presupuesto ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el presupuesto. Intente nuevamente.";
+            public const string NotFound = "No se encontró el presupuesto.";
+            public const string DeleteSuccess = "El presupuesto ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el presupuesto. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El presupuesto ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el presupuesto. Intente nuevamente.";
+        }
+
         public static class  HistorialHumedad
         {
             public const string CreateSuccess = "El historial de humedad ha sido creado correctamente.";

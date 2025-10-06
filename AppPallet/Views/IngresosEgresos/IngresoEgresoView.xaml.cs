@@ -3,7 +3,7 @@ using UraniumUI.Pages;
 
 namespace AppPallet.Views;
 
-public partial class IngresoEgresoView : UraniumContentPage
+public partial class IngresoEgresoView : ContentPage
 {
 	public IngresoEgresoView(IngresoEgresoViewModel viewModel)
 	{

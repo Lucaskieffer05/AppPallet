@@ -23,8 +23,11 @@ namespace AppPallet.ViewModels
         readonly GastosFijosController _gastosFijosController;
         readonly CostoPorPalletController _costoPorPalletController;
 
+        private int EmpresaId;
         public List<TotalGastoFijoPorMesDTO> TotalGastoFijoPorMesList;
 
+        [ObservableProperty]
+        private bool noHayPresu;
 
         [ObservableProperty]
         public Empresa? empresaSeleccionada;
@@ -34,6 +37,26 @@ namespace AppPallet.ViewModels
 
         [ObservableProperty]
         public string titulo;
+
+
+        [ObservableProperty]
+        private int mesIngresado = DateTime.Today.Month - 1;
+
+        [ObservableProperty]
+        private int añoIngresado = DateTime.Today.Year;
+
+
+        public ObservableCollection<string> FiltroMeses { get; } = new()
+            {
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            };
+
+        public ObservableCollection<int> FiltroAños { get; } = new()
+            {
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            };
+
 
         public ObservableCollection<string> Meses { get; } =
             [
@@ -51,7 +74,7 @@ namespace AppPallet.ViewModels
         public PresupuestoMostrarViewModel(EmpresaController empresaController, GastosFijosController gastosFijosController, CostoPorPalletController costoPorPalletController)
         {
             _empresaController = empresaController;
-            Titulo = "Presupuesto";
+            Titulo = "PRESUPUESTO";
             _gastosFijosController = gastosFijosController;
             _costoPorPalletController = costoPorPalletController;
 
@@ -67,9 +90,14 @@ namespace AppPallet.ViewModels
 
         private async Task RecargarResultado(int empresaId)
         {
+            if (empresaId <= 0)
+            {
+                await MostrarAlerta("Error", "ID de empresa inválido.");
+                return;
+            }
 
             // Vuelve a cargar los datos actualizados
-            EmpresaSeleccionada = await _empresaController.GetEmpresaById(empresaId);
+            EmpresaSeleccionada = await _empresaController.GetEmpresaById(empresaId, new DateTime(AñoIngresado, MesIngresado + 1, 1));
             TotalGastoFijoPorMesList = await _gastosFijosController.GetTotalGastoFijoPorMes();
 
             if (EmpresaSeleccionada == null)
@@ -77,7 +105,8 @@ namespace AppPallet.ViewModels
                 await MostrarAlerta("Error", "No se encontró la empresa seleccionada.");
                 return;
             }
-               
+            
+            Titulo += $" - {EmpresaSeleccionada.NomEmpresa}";
 
             Resultado = EmpresaSeleccionada.CostoPorPallet
                 .Select(c => new GastosYCostosDTO
@@ -86,12 +115,51 @@ namespace AppPallet.ViewModels
                     TotalGasto = TotalGastoFijoPorMesList.FirstOrDefault(t => t.Mes.Month == c.Mes.Month) ?? new TotalGastoFijoPorMesDTO { Mes = c.Mes, TotalGastoFijo = 0 },
                 })
                 .ToList();
+
+            NoHayPresu = Resultado.Count == 0;
         }
+
+        partial void OnMesIngresadoChanged(int oldValue, int newValue)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    await RecargarResultado(EmpresaId);
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
+        }
+
+        partial void OnAñoIngresadoChanged(int oldValue, int newValue)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    await RecargarResultado(EmpresaId);
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
+        }
+
+
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             if (query.TryGetValue("EmpresaId", out var id) && id is int empresaId)
             {
+                EmpresaId = empresaId;
                 await RecargarResultado(empresaId);
             }
 

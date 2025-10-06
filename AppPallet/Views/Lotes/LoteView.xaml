@@ -27,29 +27,29 @@
                 <Setter Property="BackgroundColor" Value="White" />
                 <Setter Property="Stroke" Value="#E0E0E0" />
                 <Setter Property="StrokeShape" Value="RoundRectangle 16" />
-                <Setter Property="Padding" Value="16" />
+                <Setter Property="Padding" Value="14" />
             </Style>
 
             <Style x:Key="TitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="22" />
+                <Setter Property="FontSize" Value="20" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="{StaticResource TextColor}" />
             </Style>
 
             <Style x:Key="SubtitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="14" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="{StaticResource TextColor}" />
             </Style>
 
             <Style x:Key="ResumenColumn" TargetType="Label">
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="14" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="#626262" />
             </Style>
 
             <Style x:Key="ValueStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontSize" Value="12" />
                 <Setter Property="TextColor" Value="#757575" />
             </Style>
         </ResourceDictionary>
@@ -82,6 +82,7 @@
                         Padding="5"
                         AccentColor="White"
                         BorderColor="White"
+                        FontSize="10"
                         InputBackgroundColor="#F6F1EB"
                         ItemsSource="{Binding Meses}"
                         SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
@@ -92,6 +93,7 @@
                         Padding="5"
                         AccentColor="White"
                         BorderColor="White"
+                        FontSize="10"
                         InputBackgroundColor="#F6F1EB"
                         ItemsSource="{Binding Años}"
                         SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
@@ -109,10 +111,11 @@
                     BorderWidth="3"
                     Command="{Binding VerCrearLoteCommand}"
                     CornerRadius="20"
+                    FontSize="15"
                     StyleClass="FilledButton"
                     Text="Nuevo Lote"
                     TextColor="Black"
-                    WidthRequest="200" />
+                    WidthRequest="170" />
             </Grid>
         </Border>
 
@@ -158,10 +161,10 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:LoteMostrarDTO">
                         <Grid>
-                            <Border Margin="0,25,0,0" Style="{StaticResource CardStyle}">
+                            <Border Margin="0,10,0,0" Style="{StaticResource CardStyle}">
                                 <Grid
                                     ColumnDefinitions="Auto,*"
-                                    ColumnSpacing="200"
+                                    ColumnSpacing="50"
                                     RowDefinitions="Auto,Auto,Auto,Auto">
 
                                     <!--  Header con Número de Lote y Estado  -->

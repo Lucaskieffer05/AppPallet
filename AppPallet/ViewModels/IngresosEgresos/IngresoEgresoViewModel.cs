@@ -21,10 +21,22 @@ namespace AppPallet.ViewModels
         public decimal totalIngresos;
 
         [ObservableProperty]
+        public decimal totalIngresosIva;
+
+        [ObservableProperty]
         public decimal totalEgresos;
 
         [ObservableProperty]
         public decimal totalEgresosIva;
+
+        [ObservableProperty]
+        public decimal neto;
+
+        [ObservableProperty]
+        public decimal netoIVA;
+
+        [ObservableProperty]
+        public decimal netoMasIVA;
 
         [ObservableProperty]
         public bool isBusy;
@@ -63,6 +75,24 @@ namespace AppPallet.ViewModels
         private DateTime MesFiltro = DateTime.Now;
 
 
+        [ObservableProperty]
+        private int mesToCopy = DateTime.Today.Month - 1;
+
+        [ObservableProperty]
+        private int añoToCopyIndex = 1;
+
+        public ObservableCollection<string> MesesCopy { get; } =
+    [
+        "01", "02", "03", "04", "05", "06",
+                "07", "08", "09", "10", "11", "12"
+    ];
+
+        public ObservableCollection<int> AñosCopy { get; } =
+            [
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            ];
+
+
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -72,6 +102,10 @@ namespace AppPallet.ViewModels
         {
             _egresoController = egresoController;
             _ingresoController = ingresoController;
+
+            // Guardar un valor ELIMINARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+            Preferences.Set("IVA", 0.21);
+
         }
 
         // -------------------------------------------------------------------
@@ -83,6 +117,7 @@ namespace AppPallet.ViewModels
         {
             try
             {
+                MesFiltro = new DateTime(AñoIngresado, MesIngresado + 1, 1);
                 IsBusy = true;
 
                 var _listEgresos = await _egresoController.GetAllEgresos(MesFiltro);
@@ -95,10 +130,16 @@ namespace AppPallet.ViewModels
                 TotalEgresos = ListEgresos.Sum(e => e.Monto);
                 TotalEgresosIva = ListEgresos.Sum(e => e.SumaIva ?? 0);
                 TotalIngresos = ListIngresos.Sum(i => i.Monto);
+                double iva = Preferences.Get("IVA", 0.0);
+                TotalIngresosIva = TotalIngresos * (decimal)iva;
+                Neto = TotalIngresos - TotalEgresos;
+                NetoMasIVA = (TotalIngresos + TotalIngresosIva) - (TotalEgresos + TotalEgresosIva);
+                NetoIVA = TotalIngresosIva - TotalEgresosIva;
 
             }
-            catch
+            catch(Exception e)
             {
+                await MostrarAlerta("Error", $"Error al cargar la lista de ingresos y egresos: {e.Message}");
 
             }
             finally
@@ -107,11 +148,38 @@ namespace AppPallet.ViewModels
             }
         }
 
-        [RelayCommand]
-        async Task FiltrarPorMes()
+        partial void OnMesIngresadoChanged(int oldValue, int newValue)
         {
-            MesFiltro = new DateTime(AñoIngresado, MesIngresado + 1, 1);
-            await CargarListaIngresosEgresos();
+            async void LoadAsync()
+            {
+                try
+                {
+                    await CargarListaIngresosEgresos();
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
+        }
+
+        partial void OnAñoIngresadoChanged(int oldValue, int newValue)
+        {
+            async void LoadAsync()
+            {
+                try
+                {
+                    await CargarListaIngresosEgresos();
+                }
+                catch (Exception ex)
+                {
+                    await MostrarAlerta("Error", $"Error al cargar la lista de gastos fijos: {ex.Message}");
+                }
+            }
+
+            LoadAsync();
         }
 
 
@@ -159,6 +227,65 @@ namespace AppPallet.ViewModels
         async Task CrearEgreso()
         {
             await Shell.Current.GoToAsync(nameof(EgresoCrearView));
+        }
+
+        [RelayCommand]
+        public async Task CopiarEgresos()
+        {
+            if (ListEgresos.Count == 0)
+            {
+                await MostrarAlerta("Error", "No hay un costo para copiar.");
+                return;
+            }
+
+            // Elimina de la lista los egresos que son "Gastos Fijos"
+            var gastosFijos = ListEgresos.Where(e => e.Comentario != null && e.Comentario.Contains("Gasto Fijo")).ToList();
+            foreach (var gastoFijo in gastosFijos)
+            {
+                ListEgresos.Remove(gastoFijo);
+            }
+
+            // Preguntar al usuario si desea copiar el presupuesto
+            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (mainPage == null)
+            {
+                await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                return;
+            }
+            bool confirmar = await mainPage.DisplayAlert("Confirmar", $"¿Desea copiar estos egresos al mes {MesToCopy + 1}-{AñosCopy[AñoToCopyIndex]}? (Solo los egresos 'Gastos Fijos' no serán copiados)", "Sí", "No");
+            if (!confirmar)
+                return;
+
+            // verificar que AñoToCopyIndex tenga valor
+            if (AñoToCopyIndex < 0 || AñoToCopyIndex >= Años.Count || MesToCopy < 0)
+            {
+                await MostrarAlerta("Error", "Año o Mes inválido para copiar el presupuesto.");
+                return;
+            }
+
+            // agregar los egresos al mes seleccionado
+            foreach (var gasto in ListEgresos)
+            {
+                var nuevoEgreso = new Egreso
+                {
+                    DescripEgreso = gasto.DescripEgreso,
+                    Fecha = gasto.Fecha,
+                    Factura = gasto.Factura,
+                    Monto = gasto.Monto,
+                    SumaIva = gasto.SumaIva,
+                    Mes = new DateTime(AñosCopy[AñoToCopyIndex], MesToCopy + 1, 1),
+                    Comentario = gasto.Comentario
+                };
+                bool response = await _egresoController.CreateEgreso(nuevoEgreso);
+                if (!response)
+                {
+                    await MostrarAlerta("Error", "Error al copiar los gastos fijos.");
+                    return;
+                }
+            }
+
+            await MostrarAlerta("Éxito", "Gastos fijos copiados correctamente.");
+            await CargarListaIngresosEgresos();
         }
 
 

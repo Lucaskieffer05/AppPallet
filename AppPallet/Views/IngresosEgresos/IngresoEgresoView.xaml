@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<uranium:UraniumContentPage
+<ContentPage
     x:Class="AppPallet.Views.IngresoEgresoView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
     xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
@@ -10,46 +11,164 @@
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
     Title="INGRESO Y EGRESO"
-    x:DataType="viewModels:IngresoEgresoViewModel">
+    x:DataType="viewModels:IngresoEgresoViewModel"
+    Shell.NavBarIsVisible="False">
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ColorByValueConverter x:Key="ColorByValueConverter" />
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+                <Setter Property="Padding" Value="7" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!--  Header  -->
+        <Border Grid.Row="0" Stroke="Black">
+            <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,Auto,0.1*">
+
+                <Label
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="23"
+                    HorizontalOptions="Start"
+                    LineBreakMode="TailTruncation"
+                    Text="GASTOS FIJOS"
+                    TextColor="#F6F1EB"
+                    VerticalOptions="Center" />
+
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label
+                        FontSize="15"
+                        Text="Filtrar por mes:"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+
+                    <material:PickerField
+                        x:Name="MesPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        BorderColor="White"
+                        FontSize="12"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding Meses}"
+                        SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+
+                    <material:PickerField
+                        x:Name="AñoPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        BorderColor="White"
+                        FontSize="12"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding Años}"
+                        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
+                        TextColor="White" />
 
 
 
-    <ScrollView>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
 
-        <Grid Padding="0,50,0,0" RowDefinitions="0.1*,*">
+        <!--  Resumen  -->
+        <Border Grid.Row="1">
+            <Border Style="{StaticResource CardStyle}" WidthRequest="500">
 
-            <HorizontalStackLayout
-                Grid.Row="0"
-                Margin="90,0,0,0"
-                Spacing="30"
-                VerticalOptions="Center">
+                <VerticalStackLayout>
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        HorizontalOptions="Center"
+                        Text="Resumen del Mes:"
+                        TextColor="Black" />
+                    <HorizontalStackLayout Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="Diferencia neta entre Egresos e Ingresos:"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="{Binding Neto, StringFormat='${0:N2}'}"
+                            TextColor="{Binding Neto, Converter={StaticResource ColorByValueConverter}}"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="Diferencia neta mas IVA:"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="{Binding NetoMasIVA, StringFormat='${0:N2}'}"
+                            TextColor="{Binding NetoMasIVA, Converter={StaticResource ColorByValueConverter}}"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="Neto IVA:"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="{Binding NetoIVA, StringFormat='${0:N2}'}"
+                            TextColor="{Binding NetoIVA, Converter={StaticResource ColorByValueConverter}}"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
 
-                <material:PickerField
-                    x:Name="MesPicker"
-                    Title="Mes"
-                    ItemsSource="{Binding Meses}"
-                    SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" />
-
-                <material:PickerField
-                    x:Name="AñoPicker"
-                    Title="Año"
-                    ItemsSource="{Binding Años}"
-                    SelectedItem="{Binding AñoIngresado, Mode=TwoWay}" />
-
-                <Button
-                    Command="{Binding FiltrarPorMesCommand}"
-                    StyleClass="OutlinedButton"
-                    Text="Cargar"
-                    VerticalOptions="Center"
-                    WidthRequest="100" />
-
-            </HorizontalStackLayout>
+            </Border>
+        </Border>
 
 
-            <Grid Grid.Row="1" ColumnDefinitions="0.1*,*,*,0.1*">
+        <!--  Ingresos y Egresos  -->
+        <ScrollView Grid.Row="2">
+            <Grid ColumnDefinitions="0.02*,*,*,0.02*" RowDefinitions="3*,*">
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Center"
+                    Text="EGRESOS"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Center"
+                    Text="INGRESOS"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
 
 
-                <VerticalStackLayout Grid.Column="1">
+                <!--  Egresos  -->
+                <VerticalStackLayout Grid.Row="1" Grid.Column="1">
 
                     <HorizontalStackLayout>
                         <Button
@@ -92,7 +211,7 @@
 
 
                     <dg:DataGrid
-                        Padding="0,0,15,0"
+                        Padding="0,0,5,0"
                         IsRefreshing="{Binding IsBusy}"
                         ItemsSource="{Binding ListEgresos}"
                         PaginationEnabled="False"
@@ -122,16 +241,77 @@
                                 </dg:DataGridColumn.CellTemplate>
                             </dg:DataGridColumn>
 
-                            <dg:DataGridColumn Title="IVA" PropertyName="SumaIva" />
+                            <dg:DataGridColumn Title="IVA">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate x:DataType="models:Egreso">
+                                        <Label
+                                            HorizontalOptions="Center"
+                                            Text="{Binding SumaIva, StringFormat='${0:N2}'}"
+                                            VerticalOptions="Center"
+                                            VerticalTextAlignment="Center" />
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+
                             <dg:DataGridColumn Title="Comentario" PropertyName="Comentario" />
 
                         </dg:DataGrid.Columns>
 
 
                     </dg:DataGrid>
+
+
+                    <HorizontalStackLayout HorizontalOptions="End">
+
+
+
+                        <material:PickerField
+                            Title="Mes"
+                            Margin="50,0,0,0"
+                            x:DataType="{x:Null}"
+                            AllowClear="False"
+                            BorderColor="#C9C9C9"
+                            BorderThickness="1"
+                            FontSize="12"
+                            HeightRequest="60"
+                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:IngresoEgresoViewModel}}, Path=MesesCopy}"
+                            SelectedIndex="{Binding MesToCopy, Mode=TwoWay}"
+                            WidthRequest="90" />
+
+                        <material:PickerField
+                            Title="Año"
+                            x:DataType="{x:Null}"
+                            AllowClear="False"
+                            BorderColor="#C9C9C9"
+                            FontSize="12"
+                            HeightRequest="60"
+                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:IngresoEgresoViewModel}}, Path=AñosCopy}"
+                            SelectedIndex="{Binding AñoToCopyIndex, Mode=TwoWay}"
+                            WidthRequest="100" />
+
+                        <ImageButton
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:IngresoEgresoViewModel}}, Path=CopiarEgresosCommand}"
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"
+                            StyleClass="OutlinedButton"
+                            VerticalOptions="Center">
+                            <ImageButton.Source>
+                                <FontImageSource
+                                    FontFamily="FASolid"
+                                    Glyph="{x:Static fa:Solid.ShareFromSquare}"
+                                    Size="17"
+                                    Color="#B5B28E" />
+                            </ImageButton.Source>
+                        </ImageButton>
+
+                    </HorizontalStackLayout>
+
+
                 </VerticalStackLayout>
 
-                <VerticalStackLayout Grid.Column="2">
+
+                <!--  Ingresos  -->
+                <VerticalStackLayout Grid.Row="1" Grid.Column="2">
 
                     <HorizontalStackLayout Margin="15,0,0,0">
                         <Button
@@ -160,6 +340,14 @@
                             FontAttributes="Bold"
                             FontSize="15"
                             Text="{Binding TotalIngresos, StringFormat='Total Ingresos: ${0:N2}'}"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+
+                        <Label
+                            Margin="0,0,15,0"
+                            FontAttributes="Bold"
+                            FontSize="15"
+                            Text="{Binding TotalIngresosIva, StringFormat='Total IVA: ${0:N2}'}"
                             TextColor="Black"
                             VerticalOptions="Center" />
 
@@ -228,17 +416,11 @@
 
 
             </Grid>
+        </ScrollView>
+
+    </Grid>
 
 
 
 
-        </Grid>
-
-
-
-    </ScrollView>
-
-
-
-
-</uranium:UraniumContentPage>
+</ContentPage>

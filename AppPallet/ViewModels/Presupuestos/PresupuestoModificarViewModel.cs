@@ -1,4 +1,5 @@
-﻿using AppPallet.Controllers;
+﻿using AppPallet.Constants;
+using AppPallet.Controllers;
 using AppPallet.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -141,21 +142,14 @@ namespace AppPallet.ViewModels
             }
 
             // Confirmar eliminación
-            bool confirmar = await mainPage.DisplayAlert("Confirmar", "¿Está seguro de que desea eliminar este presupuesto?. Los costos por camión de este presupuesto también serán eliminados", "Sí", "No");
+            bool confirmar = await mainPage.DisplayAlert("Confirmar", "¿Está seguro de que desea eliminar este presupuesto?", "Sí", "No");
             if (!confirmar)
                 return;
 
-
             try
             {
-                var respuesta = await _costoPorPalletController.DeleteCostoPorPallet(CostoPorPalletSeleccionada.CostoPorPalletId);
-                if (!respuesta)
-                {
-                    await MostrarAlerta("Error", "Ocurrió un error al eliminar el costo por pallet.");
-                    return;
-                }
-                await MostrarAlerta("Éxito", "El costo por pallet se ha eliminado correctamente.");
-                //Volver atras
+                MessageResult respuesta = await _costoPorPalletController.DeleteCostoPorPallet(CostoPorPalletSeleccionada.CostoPorPalletId);
+                await MostrarAlerta(respuesta.Title, respuesta.Message);
                 await CancelarCambios();
             }
             catch (Exception ex)

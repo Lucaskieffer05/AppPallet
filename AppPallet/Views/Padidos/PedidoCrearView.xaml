@@ -336,7 +336,7 @@
 
             <!--  Resumen y Acciones  -->
             <Border Grid.Row="3" Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="15">
+                <VerticalStackLayout Spacing="5">
                     <Label Style="{StaticResource SectionTitleStyle}" Text="Resumen del Pedido" />
 
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">

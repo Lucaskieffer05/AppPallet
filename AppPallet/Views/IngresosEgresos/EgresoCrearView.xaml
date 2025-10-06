@@ -1,62 +1,114 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.EgresoCrearView"
-              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
- xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
- xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
- xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-             x:DataType="viewModels:EgresoCrearViewModel"
-             Title="EgresoCrear">
+<ContentPage
+    x:Class="AppPallet.Views.EgresoCrearView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="EgresoCrear"
+    x:DataType="viewModels:EgresoCrearViewModel">
 
 
-    <ScrollView >
+    <ScrollView>
 
-        <VerticalStackLayout Padding="20" Spacing="15" WidthRequest="500" >
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15"
+            WidthRequest="500">
 
-            <Label Text="Registrar un Ingreso:" TextColor="Black" FontSize="20" HorizontalTextAlignment="Center"  FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Registrar un Ingreso:"
+                TextColor="Black" />
 
-            <HorizontalStackLayout Grid.Row="0" Spacing="0"  HorizontalOptions="Start">
+            <HorizontalStackLayout
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                Spacing="0">
 
-                <Label Text="Mes de Registro:" VerticalOptions="Center" TextColor="Black" Margin="0,0,15,0"/>
+                <Label
+                    Margin="0,0,15,0"
+                    Text="Mes de Registro:"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
 
-                <material:PickerField 
+                <material:PickerField
                     x:Name="MesPicker"
                     Title="Mes"
                     ItemsSource="{Binding Meses}"
                     SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" />
 
-                <material:PickerField 
+                <material:PickerField
                     x:Name="AñoPicker"
                     Title="Año"
                     ItemsSource="{Binding Años}"
-                    SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"/>
+                    SelectedItem="{Binding AñoIngresado, Mode=TwoWay}" />
 
             </HorizontalStackLayout>
 
-            
 
 
-            <material:EditorField TextColor="Black" Title="Descripción" Text="{Binding EgresoCreated.DescripEgreso}" />
+
+            <material:EditorField
+                Title="Descripción"
+                Text="{Binding EgresoCreated.DescripEgreso}"
+                TextColor="Black" />
 
 
-            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                       Title="Fecha"
-                       Date="{Binding EgresoCreated.Fecha, Mode=TwoWay}" 
-                       TextColor="Black"/>
+            <material:DatePickerField
+                Title="Fecha"
+                Date="{Binding EgresoCreated.Fecha, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
 
-            <material:EditorField TextColor="Black" Title="Factura" Text="{Binding EgresoCreated.Factura}" />
+            <material:EditorField
+                Title="Factura"
+                Text="{Binding EgresoCreated.Factura}"
+                TextColor="Black" />
 
-            <material:EditorField TextColor="Black" Title="Monto $" Text="{Binding EgresoCreated.Monto}" Keyboard="Numeric" />
+            <material:EditorField
+                Title="Monto $"
+                Keyboard="Numeric"
+                Text="{Binding EgresoCreated.Monto}"
+                TextColor="Black" />
 
-            <material:EditorField TextColor="Black" Title="IVA $" Text="{Binding EgresoCreated.SumaIva}" Keyboard="Numeric" />
+            <HorizontalStackLayout>
+                <CheckBox
+                    HorizontalOptions="Start"
+                    IsChecked="{Binding ConIva}"
+                    Color="#52D681" />
 
-            <material:EditorField TextColor="Black" Title="Comentario" Text="{Binding EgresoCreated.Comentario}"/>
+                <Label
+                    Text="Con IVA"
+                    TextColor="Black"
+                    VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleIvaCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+
+            <material:EditorField
+                Title="Comentario"
+                Text="{Binding EgresoCreated.Comentario}"
+                TextColor="Black" />
 
 
             <HorizontalStackLayout Spacing="10">
-                <Button StyleClass="FilledButton" Text="Guardar Ingreso" Command="{Binding CrearEgresoCommand}" />
-                <Button StyleClass="OutlinedButton" Text="Cancelar" Command="{Binding VolverAtrasCommand}" />
+                <Button
+                    Command="{Binding CrearEgresoCommand}"
+                    StyleClass="FilledButton"
+                    Text="Guardar Ingreso" />
+                <Button
+                    Command="{Binding VolverAtrasCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar" />
             </HorizontalStackLayout>
         </VerticalStackLayout>
 

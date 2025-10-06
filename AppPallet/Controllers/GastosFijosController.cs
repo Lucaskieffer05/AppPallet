@@ -61,7 +61,7 @@ namespace AppPallet.Controllers
         }
 
         // Crear un nuevo cheque
-        public async Task<bool> CreateGastoFijo(GastosFijos nuevoGastoFijo, bool flagEgreso = true)
+        public async Task<bool> CreateGastoFijo(GastosFijos nuevoGastoFijo, bool flagEgreso = true, bool flagPasivo = true)
         {
             try
             {
@@ -74,12 +74,26 @@ namespace AppPallet.Controllers
                     var nuevoEgreso = new Egreso
                     {
                         Fecha = nuevoGastoFijo.Mes,
-                        Mes = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                        Mes = new DateTime(nuevoGastoFijo.Mes.Year, nuevoGastoFijo.Mes.Month, 1),
                         Monto = nuevoGastoFijo.Monto,
                         DescripEgreso = nuevoGastoFijo.NombreGastoFijo,
                         Comentario = "Gasto Fijo"
                     };
                     _context.Egreso.Add(nuevoEgreso);
+                }
+
+                // crear Pasivo asociado si FlasgPasivo es true
+                if (flagPasivo)
+                {
+                    var nuevoPasivo = new ActivoPasivo
+                    {
+                        Fecha = nuevoGastoFijo.Mes,
+                        Mes = new DateTime(nuevoGastoFijo.Mes.Year, nuevoGastoFijo.Mes.Month, 1),
+                        Monto = nuevoGastoFijo.Monto,
+                        Descripcion = nuevoGastoFijo.NombreGastoFijo,
+                        Categoria = "Pasivo"
+                    };
+                    _context.ActivoPasivo.Add(nuevoPasivo);
                 }
 
                 var result = await _context.SaveChangesAsync();

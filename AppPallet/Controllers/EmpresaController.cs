@@ -35,11 +35,11 @@ namespace AppPallet.Controllers
             }
         }
 
-        public async Task<List<Empresa>> GetAllAloneEmpresas()
+        public async Task<List<Empresa>> GetAllAloneEmpresas(string tipo = "Cliente")
         {
             try
             {
-                return await _context.Empresa.AsNoTracking().ToListAsync();
+                return await _context.Empresa.AsNoTracking().Where(e => e.FechaDelete == null && e.Tipo == tipo).ToListAsync();
             }
             catch (Exception)
             {
@@ -47,7 +47,7 @@ namespace AppPallet.Controllers
             }
         }
 
-        public async Task<List<Empresa>> GetAllEmpresasCostoPallet()
+        public async Task<List<Empresa>> GetAllEmpresasCostoPallet(string tipo = "Cliente")
         {
             try
             {
@@ -55,6 +55,7 @@ namespace AppPallet.Controllers
 
                 return await _context.Empresa
                     .AsNoTracking()
+                    .Where(e => e.FechaDelete == null && e.Tipo == tipo)
                     .Select(e => new Empresa
                     {
                         EmpresaId = e.EmpresaId,
@@ -76,11 +77,13 @@ namespace AppPallet.Controllers
 
 
         // Obtener un empresa por ID
-        public async Task<Empresa?> GetEmpresaById(int empresaId) {             
+        public async Task<Empresa?> GetEmpresaById(int empresaId, DateTime filtroMes) {             
             try
             {
                 return await _context.Empresa
-                    .Include(e => e.CostoPorPallet.OrderByDescending(cp => cp.Mes))
+                    .Include(e => e.CostoPorPallet
+                        .Where(cp => cp.Mes.Year == filtroMes.Year && cp.Mes.Month == filtroMes.Month)
+                        .OrderByDescending(cp => cp.Mes))
                     .ThenInclude(cp => cp.CostoPorCamion)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(e => e.EmpresaId == empresaId);

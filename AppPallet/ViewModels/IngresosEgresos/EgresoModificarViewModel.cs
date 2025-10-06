@@ -2,11 +2,6 @@
 using AppPallet.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppPallet.ViewModels
 {
@@ -20,6 +15,9 @@ namespace AppPallet.ViewModels
 
         [ObservableProperty]
         public Egreso? egresoModificar;
+
+        [ObservableProperty]
+        private bool conIva;
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -40,6 +38,7 @@ namespace AppPallet.ViewModels
             if (query.TryGetValue("Egreso", out var egreso) && egreso is Egreso _egreso)
             {
                 EgresoModificar = _egreso;
+                ConIva = EgresoModificar.SumaIva.HasValue && EgresoModificar.SumaIva.Value > 0;
             }
         }
 
@@ -70,6 +69,8 @@ namespace AppPallet.ViewModels
             }
             try
             {
+                double iva = Preferences.Get("IVA", 0.0);
+                EgresoModificar.SumaIva = ConIva ? EgresoModificar.Monto * (decimal)iva : null;
                 bool exito = await _egresoController.UpdateEgreso(EgresoModificar);
                 if (exito)
                 {
@@ -87,6 +88,12 @@ namespace AppPallet.ViewModels
 
             await VolverAtras();
 
+        }
+
+        [RelayCommand]
+        void ToggleIva()
+        {
+            ConIva = !ConIva;
         }
 
         [RelayCommand]

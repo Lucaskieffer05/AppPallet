@@ -26,35 +26,35 @@
             <Style x:Key="CardStyle" TargetType="Border">
                 <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
                 <Setter Property="Stroke" Value="#E0E0E0" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 16" />
-                <Setter Property="Padding" Value="16" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+                <Setter Property="Padding" Value="5" />
             </Style>
 
             <Style x:Key="TitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="22" />
+                <Setter Property="FontSize" Value="16" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="{StaticResource TextColor}" />
             </Style>
 
             <Style x:Key="SubtitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="11" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="{StaticResource TextColor}" />
             </Style>
 
             <Style x:Key="ResumenColumn" TargetType="Label">
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="11" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="#626262" />
             </Style>
 
             <Style x:Key="ValueStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontSize" Value="12" />
                 <Setter Property="TextColor" Value="#757575" />
             </Style>
 
             <Style x:Key="StockValueStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontSize" Value="13" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
             </Style>
@@ -70,7 +70,7 @@
                     Grid.Column="0"
                     Margin="10,0,0,0"
                     FontAttributes="Bold"
-                    FontSize="25"
+                    FontSize="23"
                     HorizontalOptions="Start"
                     Text="GESTIÓN DE STOCK"
                     TextColor="#F6F1EB"
@@ -121,52 +121,52 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:PalletStockDTO">
                         <Grid>
-                            <Border Margin="0,15,0,0" Style="{StaticResource CardStyle}">
+                            <Border Margin="0,11,0,0" Style="{StaticResource CardStyle}">
 
                                 <Grid
                                     ColumnDefinitions="Auto,*,Auto"
-                                    ColumnSpacing="20"
+                                    ColumnSpacing="14"
                                     RowDefinitions="Auto,Auto,Auto">
 
                                     <!--  Icono de Estado  -->
                                     <Image
                                         Grid.Row="0"
-                                        Grid.RowSpan="3"
+                                        Grid.RowSpan="2"
                                         Grid.Column="0"
-                                        HeightRequest="24"
+                                        HeightRequest="19"
                                         HorizontalOptions="Center"
                                         IsVisible="{Binding EstadoMal}"
                                         Source="cancelar.png"
                                         VerticalOptions="Center"
-                                        WidthRequest="24" />
+                                        WidthRequest="19" />
 
                                     <Image
                                         Grid.Row="0"
-                                        Grid.RowSpan="3"
+                                        Grid.RowSpan="2"
                                         Grid.Column="0"
-                                        HeightRequest="24"
+                                        HeightRequest="19"
                                         HorizontalOptions="Center"
                                         IsVisible="{Binding EstadoAlert}"
                                         Source="advertencia.png"
                                         VerticalOptions="Center"
-                                        WidthRequest="24" />
+                                        WidthRequest="19" />
 
                                     <Image
                                         Grid.Row="0"
-                                        Grid.RowSpan="3"
+                                        Grid.RowSpan="2"
                                         Grid.Column="0"
-                                        HeightRequest="24"
+                                        HeightRequest="19"
                                         HorizontalOptions="Center"
                                         IsVisible="{Binding EstadoBien}"
                                         Source="comprobado.png"
                                         VerticalOptions="Center"
-                                        WidthRequest="24" />
+                                        WidthRequest="19" />
 
                                     <!--  Información Principal del Pallet  -->
                                     <VerticalStackLayout
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Spacing="5">
+                                        Spacing="3">
 
                                         <HorizontalStackLayout Spacing="10">
                                             <Label Style="{StaticResource TitleStyle}" Text="{Binding Nombre}" />
@@ -180,7 +180,7 @@
                                                 </Border.StrokeShape>
                                                 <Label
                                                     FontAttributes="Bold"
-                                                    FontSize="10"
+                                                    FontSize="7"
                                                     Text="{Binding EstadoStock}"
                                                     TextColor="White"
                                                     VerticalTextAlignment="Center" />
@@ -198,32 +198,22 @@
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         ColumnDefinitions="*,*,*"
-                                        ColumnSpacing="15"
                                         RowDefinitions="Auto,Auto">
 
                                         <!--  Especificaciones  -->
-                                        <VerticalStackLayout
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Spacing="2">
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
                                             <Label Style="{StaticResource SubtitleStyle}" Text="Estructura" />
 
                                             <Label Style="{StaticResource ValueStyle}" Text="{Binding Estructura}" />
                                         </VerticalStackLayout>
 
-                                        <VerticalStackLayout
-                                            Grid.Row="0"
-                                            Grid.Column="1"
-                                            Spacing="2">
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
 
                                             <Label Style="{StaticResource SubtitleStyle}" Text="Tratamiento" />
                                             <Label Style="{StaticResource ValueStyle}" Text="{Binding Tratamiento}" />
                                         </VerticalStackLayout>
 
-                                        <VerticalStackLayout
-                                            Grid.Row="0"
-                                            Grid.Column="2"
-                                            Spacing="2">
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="2">
 
                                             <Label Style="{StaticResource SubtitleStyle}" Text="Sello" />
                                             <Label Style="{StaticResource ValueStyle}" Text="{Binding Sello}" />
@@ -233,8 +223,7 @@
                                         <VerticalStackLayout
                                             Grid.Row="1"
                                             Grid.Column="0"
-                                            Margin="0,10,0,0"
-                                            Spacing="2">
+                                            Margin="0,7,0,0">
 
                                             <Label Style="{StaticResource SubtitleStyle}" Text="Peso" />
                                             <Label Style="{StaticResource ValueStyle}" Text="{Binding Peso, StringFormat='{0} kg'}" />
@@ -243,8 +232,7 @@
                                         <VerticalStackLayout
                                             Grid.Row="1"
                                             Grid.Column="1"
-                                            Margin="0,10,0,0"
-                                            Spacing="2">
+                                            Margin="0,7,0,0">
 
                                             <Label Style="{StaticResource SubtitleStyle}" Text="Tolerancia" />
                                             <Label Style="{StaticResource ValueStyle}" Text="{Binding ToleranciaPeso, StringFormat='{0} kg'}" />
@@ -262,7 +250,7 @@
 
                                         <!--  Display de Stock  -->
                                         <Border
-                                            Padding="15,10"
+                                            Padding="10,5"
                                             BackgroundColor="{Binding EstadoColor}"
                                             StrokeThickness="0">
                                             <Border.StrokeShape>
@@ -270,7 +258,7 @@
                                             </Border.StrokeShape>
                                             <VerticalStackLayout Spacing="2">
                                                 <Label
-                                                    FontSize="10"
+                                                    FontSize="7"
                                                     HorizontalOptions="Center"
                                                     Text="STOCK ACTUAL"
                                                     TextColor="White" />
@@ -283,12 +271,12 @@
 
                                         <!--  Botón de Detalles  -->
                                         <Button
-                                            Padding="15,8"
+                                            Padding="10,6"
                                             BackgroundColor="#374151"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:StockViewModel}}, Path=AjustarStockCommand}"
                                             CommandParameter="{Binding}"
-                                            CornerRadius="8"
-                                            FontSize="11"
+                                            CornerRadius="10"
+                                            FontSize="10"
                                             Text="Guardar Stock"
                                             TextColor="White" />
                                     </VerticalStackLayout>

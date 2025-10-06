@@ -1,37 +1,88 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<uranium:UraniumContentPage 
+<ContentPage
+    x:Class="AppPallet.Views.PresupuestoMostrarView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="AppPallet.Views.PresupuestoMostrarView"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-    xmlns:models="clr-namespace:AppPallet.Models"
     xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="{Binding Titulo}"
     x:DataType="viewModels:PresupuestoMostrarViewModel"
-    Title="{Binding Titulo}">
+    Shell.NavBarIsVisible="False">
 
 
 
     <ContentPage.Resources>
-        <converters:NullToZeroConverter x:Key="NullToZeroConverter"/>
+        <converters:NullToZeroConverter x:Key="NullToZeroConverter" />
     </ContentPage.Resources>
 
 
 
-    <ScrollView>
+    <Grid RowDefinitions="Auto,*">
 
+        <!--  Header  -->
+        <Border Grid.Row="0" Stroke="Black">
+            <Grid BackgroundColor="#374151" ColumnDefinitions="*,*">
 
-        <VerticalStackLayout Padding="20" Spacing="16" >
+                <Label
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Start"
+                    Text="{Binding Titulo}"
+                    TextColor="#F6F1EB"
+                    VerticalOptions="Center" />
 
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Start">
+                    <Label
+                        FontSize="15"
+                        Text="Filtrar por mes:"
+                        TextColor="White"
+                        VerticalOptions="Center" />
 
-            <Label Text="{Binding Titulo}" 
-               FontSize="24" 
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               TextColor="#90894A"
-               Margin="0,0,0,10"/>
+                    <material:PickerField
+                        x:Name="MesPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        AllowClear="False"
+                        BorderColor="White"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding FiltroMeses}"
+                        SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+
+                    <material:PickerField
+                        x:Name="AñoPicker"
+                        Padding="5"
+                        AccentColor="White"
+                        AllowClear="False"
+                        BorderColor="White"
+                        InputBackgroundColor="#F6F1EB"
+                        ItemsSource="{Binding FiltroAños}"
+                        SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
+                        TextColor="White" />
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!--  No hay Presupuestos  -->
+        <Border Grid.Row="1" IsVisible="{Binding NoHayPresu}">
+            <Label
+                Margin="0,30,0,0"
+                FontSize="15"
+                HorizontalOptions="Center"
+                Text="No se encontraron presupuesto para esta fecha o empresa"
+                TextColor="Gray" />
+
+        </Border>
+
+        <!--  Presupuestos  -->
+
+        <Border Grid.Row="1" Stroke="Transparent">
 
             <CollectionView ItemsSource="{Binding Resultado}">
 
@@ -43,113 +94,175 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:GastosYCostosDTO">
 
+                        <Grid>
+                            <Border
+                                Margin="40,20,40,0"
+                                Padding="10"
+                                BackgroundColor="#F8F6F2">
 
-                        <Border Padding="16" Margin="0,0,0,12" BackgroundColor="#F8F6F2">
-
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="14" />
-                            </Border.StrokeShape>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
 
 
-                            <VerticalStackLayout>
+                                <VerticalStackLayout>
 
-                                <Grid ColumnDefinitions="*,*">
-                                    
-                                    <HorizontalStackLayout VerticalOptions="Center" Grid.Column="0">
-                                        <Label Text="{Binding Costo.NombrePalletCliente}" FontSize="18" FontAttributes="Bold" TextColor="#90894A" VerticalTextAlignment="Center"/>
+                                    <Grid ColumnDefinitions="*,*">
 
-                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=MostrarPresupuestoCommand}"
-                                                     CommandParameter="{Binding .}"
-                                                     VerticalOptions="Center"
-                                                     StyleClass="OutlinedButton">
-                                            <ImageButton.Source>
-                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.PenToSquare}" Color="#B5B28E" Size="17"/>
-                                            </ImageButton.Source>
-                                        </ImageButton>
+                                        <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="18"
+                                                Text="{Binding Costo.NombrePalletCliente}"
+                                                TextColor="#90894A"
+                                                VerticalTextAlignment="Center" />
+
+                                            <ImageButton
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=MostrarPresupuestoCommand}"
+                                                CommandParameter="{Binding .}"
+                                                StyleClass="OutlinedButton"
+                                                VerticalOptions="Center">
+                                                <ImageButton.Source>
+                                                    <FontImageSource
+                                                        FontFamily="FASolid"
+                                                        Glyph="{x:Static fa:Solid.PenToSquare}"
+                                                        Size="17"
+                                                        Color="#B5B28E" />
+                                                </ImageButton.Source>
+                                            </ImageButton>
+
+                                        </HorizontalStackLayout>
+
+                                        <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
+                                            <material:PickerField
+                                                x:Name="MesPicker"
+                                                Title="Mes"
+                                                x:DataType="{x:Null}"
+                                                AllowClear="False"
+                                                BorderColor="#C9C9C9"
+                                                BorderThickness="1"
+                                                FontSize="11"
+                                                HeightRequest="60"
+                                                ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Meses}"
+                                                SelectedIndex="{Binding MesToCopy, Mode=TwoWay}"
+                                                WidthRequest="90" />
+
+                                            <material:PickerField
+                                                x:Name="AñoPicker"
+                                                Title="Año"
+                                                x:DataType="{x:Null}"
+                                                AllowClear="False"
+                                                BorderColor="#C9C9C9"
+                                                FontSize="11"
+                                                HeightRequest="60"
+                                                ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Años}"
+                                                SelectedIndex="{Binding AñoToCopyIndex, Mode=TwoWay}"
+                                                WidthRequest="100" />
+
+                                            <ImageButton
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=CopiarPresupuestoCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HorizontalOptions="End"
+                                                StyleClass="OutlinedButton"
+                                                VerticalOptions="Center">
+                                                <ImageButton.Source>
+                                                    <FontImageSource
+                                                        FontFamily="FASolid"
+                                                        Glyph="{x:Static fa:Solid.ShareFromSquare}"
+                                                        Size="17"
+                                                        Color="#B5B28E" />
+                                                </ImageButton.Source>
+                                            </ImageButton>
+
+                                        </HorizontalStackLayout>
+
+
+                                    </Grid>
+
+
+                                    <Label
+                                        FontSize="14"
+                                        Text="{Binding Costo.Mes, StringFormat='Mes: {0:MM-yyyy}'}"
+                                        TextColor="#A2A2A2" />
+
+                                    <HorizontalStackLayout Spacing="16" VerticalOptions="Center">
+                                        <HorizontalStackLayout VerticalOptions="Center">
+                                            <Label Text="Precio: $" VerticalTextAlignment="Center" />
+                                            <Editor
+                                                FontSize="16"
+                                                HorizontalTextAlignment="End"
+                                                Text="{Binding Costo.PrecioPallet}"
+                                                TextColor="#6D6D6D"
+                                                VerticalTextAlignment="Center"
+                                                WidthRequest="70" />
+                                            <ImageButton
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=GuardarPrecioCommand}"
+                                                CommandParameter="{Binding .}"
+                                                StyleClass="OutlinedButton"
+                                                VerticalOptions="Center">
+                                                <ImageButton.Source>
+                                                    <FontImageSource
+                                                        FontFamily="FASolid"
+                                                        Glyph="{x:Static fa:Solid.FloppyDisk}"
+                                                        Size="17"
+                                                        Color="#8DB58F" />
+                                                </ImageButton.Source>
+                                            </ImageButton>
+
+                                        </HorizontalStackLayout>
+                                        <Label
+                                            FontSize="16"
+                                            Text="{Binding Costo.GananciaPorCantPallet, StringFormat='Ganancia: ${0:N2}'}"
+                                            TextColor="#6D6D6D"
+                                            VerticalTextAlignment="Center" />
+                                        <Label
+                                            FontSize="16"
+                                            Text="{Binding GananciaPorCamion, StringFormat='Ganancia por camión: ${0:N2}'}"
+                                            TextColor="#6D6D6D"
+                                            VerticalTextAlignment="Center" />
+                                    </HorizontalStackLayout>
+
+                                    <Label FontSize="14" Text="{Binding CostoFinalPallet, StringFormat='Costo final del Pallet: ${0:N2}'}" />
+
+                                    <HorizontalStackLayout Padding="4" Spacing="16">
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding Costo.CantidadPorDia, StringFormat='Cantidad/día: {0}'}"
+                                            TextColor="#A2A2A2" />
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding Costo.HorasPorMes, StringFormat='Horas/mes: {0}'}"
+                                            TextColor="#A2A2A2" />
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding TotalGasto.TotalGastoFijo, StringFormat='Gasto Fijo Total: ${0:N2}'}"
+                                            TextColor="#A2A2A2" />
+
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding CantDiasCamion, StringFormat='Dias/Camion: {0:N2}'}"
+                                            TextColor="#A2A2A2" />
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding HacenPorMes, StringFormat='Cantidad/Mes: {0:N0}'}"
+                                            TextColor="#A2A2A2" />
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding GastoDelPallet, StringFormat='Gasto del Pallet: ${0:N2}'}"
+                                            TextColor="#A2A2A2" />
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding CostoTotalCamion, StringFormat='Costo por Camión: ${0:N2}'}"
+                                            TextColor="#A2A2A2" />
+
 
                                     </HorizontalStackLayout>
 
-                                    <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
-                                        <material:PickerField
-                                            x:DataType="{x:Null}"
-                                            x:Name="MesPicker"
-                                            FontSize="12"
-                                            BorderThickness="1"
-                                            AllowClear="False"
-                                            WidthRequest="90"
-                                            HeightRequest="60"
-                                            BorderColor="#C9C9C9"
-                                            Title="Mes"
-                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Meses}"
-                                            SelectedIndex="{Binding MesToCopy, Mode=TwoWay}" />
-
-                                        <material:PickerField 
-                                            x:DataType="{x:Null}"
-                                            x:Name="AñoPicker"
-                                            FontSize="12"
-                                            AllowClear="False"
-                                            WidthRequest="100"
-                                            HeightRequest="60"
-                                            BorderColor="#C9C9C9"
-                                            Title="Año"
-                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Años}"
-                                            SelectedIndex="{Binding AñoToCopyIndex, Mode=TwoWay}"  />
-                                        
-                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=CopiarPresupuestoCommand}"
-                                                     CommandParameter="{Binding .}"
-                                                     HorizontalOptions="End"
-                                                     VerticalOptions="Center"
-                                                     StyleClass="OutlinedButton">
-                                            <ImageButton.Source>
-                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.ShareFromSquare}" Color="#B5B28E" Size="17"/>
-                                            </ImageButton.Source>
-                                        </ImageButton>
-                                        
-                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
 
 
-                                </Grid>
-
-
-                                <Label Text="{Binding Costo.Mes, StringFormat='Mes: {0:MM-yyyy}'}" FontSize="14" TextColor="#A2A2A2" Margin="0,2,0,0"/>
-
-                                <HorizontalStackLayout Spacing="16" Margin="0,8,0,0" VerticalOptions="Center">
-                                    <HorizontalStackLayout VerticalOptions="Center">
-                                        <Label Text="Precio: $" VerticalTextAlignment="Center" />
-                                        <Editor Text="{Binding Costo.PrecioPallet}"  FontSize="16" TextColor="#6D6D6D" VerticalTextAlignment="Center" HorizontalTextAlignment="End" WidthRequest="70"/>
-                                        <ImageButton Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=GuardarPrecioCommand}"
-                                                     CommandParameter="{Binding .}"
-                                                     VerticalOptions="Center"
-                                                     StyleClass="OutlinedButton">
-                                            <ImageButton.Source>
-                                                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.FloppyDisk}" Color="#8DB58F" Size="17"/>
-                                            </ImageButton.Source>
-                                        </ImageButton>
-
-                                    </HorizontalStackLayout>
-                                    <Label Padding="10,0,0,0" Text="{Binding Costo.GananciaPorCantPallet, StringFormat='Ganancia: ${0:N2}'}" FontSize="16" TextColor="#6D6D6D" VerticalTextAlignment="Center"/>
-                                    <Label Padding="10,0,0,0" Text="{Binding GananciaPorCamion, StringFormat='Ganancia por camión: ${0:N2}'}" FontSize="16" TextColor="#6D6D6D" VerticalTextAlignment="Center"/>
-                                </HorizontalStackLayout>
-                                
-                                <Label Text="{Binding CostoFinalPallet, StringFormat='Costo final del Pallet: ${0:N2}'}" FontSize="14" Padding="0,10,0,10"/>
-
-                                <HorizontalStackLayout Spacing="16" Margin="0,4,0,0">
-                                    <Label Text="{Binding Costo.CantidadPorDia, StringFormat='Cantidad/día: {0}'}" FontSize="14" TextColor="#A2A2A2"/>
-                                    <Label Text="{Binding Costo.HorasPorMes, StringFormat='Horas/mes: {0}'}" FontSize="14" TextColor="#A2A2A2"/>
-                                    <Label Text="{Binding TotalGasto.TotalGastoFijo, StringFormat='Gasto Fijo Total: ${0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
-
-                                    <Label Text="{Binding CantDiasCamion, StringFormat='Dias/Camion: {0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
-                                    <Label Text="{Binding HacenPorMes, StringFormat='Cantidad/Mes: {0:N0}'}" FontSize="14" TextColor="#A2A2A2"/>
-                                    <Label Text="{Binding GastoDelPallet, StringFormat='Gasto del Pallet: ${0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
-                                    <Label Text="{Binding CostoTotalCamion, StringFormat='Costo por Camión: ${0:N2}'}" FontSize="14" TextColor="#A2A2A2"/>
-
-
-                                </HorizontalStackLayout>
-
-                            </VerticalStackLayout>
-
-
-                        </Border>
+                            </Border>
+                        </Grid>
 
 
                     </DataTemplate>
@@ -157,11 +270,10 @@
 
 
             </CollectionView>
+        </Border>
 
 
-        </VerticalStackLayout>
 
+    </Grid>
 
-    </ScrollView>
-
-</uranium:UraniumContentPage>
+</ContentPage>

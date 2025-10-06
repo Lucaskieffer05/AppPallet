@@ -33,13 +33,13 @@
                 Grid.ColumnSpan="2"
                 Stroke="Black">
 
-                <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,Auto,0.1*">
+                <Grid BackgroundColor="#374151" ColumnDefinitions="*,Auto,Auto,0.1*">
 
                     <Label
                         Grid.Column="0"
                         Margin="10,0,0,0"
                         FontAttributes="Bold"
-                        FontSize="25"
+                        FontSize="23"
                         HorizontalOptions="Start"
                         Text="ACTIVOS Y PASIVOS"
                         TextColor="#F6F1EB"
@@ -57,6 +57,7 @@
                             Padding="5"
                             AccentColor="White"
                             BorderColor="White"
+                            FontSize="12"
                             InputBackgroundColor="#F6F1EB"
                             ItemsSource="{Binding Meses}"
                             SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
@@ -67,6 +68,7 @@
                             Padding="5"
                             AccentColor="White"
                             BorderColor="White"
+                            FontSize="12"
                             InputBackgroundColor="#F6F1EB"
                             ItemsSource="{Binding Años}"
                             SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"

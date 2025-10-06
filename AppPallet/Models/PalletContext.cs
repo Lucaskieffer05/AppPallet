@@ -154,6 +154,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
             entity.Property(e => e.GananciaPorCantPallet).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.Mes).HasColumnType("datetime");
+            entity.Property(e => e.FechaDelete).HasColumnType("datetime");
             entity.Property(e => e.NombrePalletCliente)
                 .HasMaxLength(50)
                 .IsUnicode(false);

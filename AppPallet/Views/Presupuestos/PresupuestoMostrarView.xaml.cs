@@ -4,7 +4,7 @@ using UraniumUI.Pages;
 
 namespace AppPallet.Views;
 
-public partial class PresupuestoMostrarView : UraniumContentPage
+public partial class PresupuestoMostrarView : ContentPage
 {
 	public PresupuestoMostrarView(PresupuestoMostrarViewModel viewModel)
 	{

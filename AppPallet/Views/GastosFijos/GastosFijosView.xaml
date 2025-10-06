@@ -80,12 +80,10 @@
 
         <!--  Gastos fijos  -->
 
-        <Grid Grid.Row="1" RowDefinitions="Auto,Auto">
+        <Grid Grid.Row="1" RowDefinitions="50,Auto">
 
-            <Grid
-                Grid.Row="1"
-                ColumnDefinitions="0.5*,*,0.5*"
-                HeightRequest="600">
+
+            <Grid Grid.Row="1" ColumnDefinitions="0.5*,*,0.5*">
 
                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
 
@@ -141,7 +139,7 @@
 
                 <VerticalStackLayout
                     Grid.Column="2"
-                    Spacing="10"
+                    Spacing="20"
                     VerticalOptions="Center">
 
                     <Button
@@ -151,6 +149,47 @@
                         StyleClass="FilledButton"
                         Text="Modificar Gasto Fijo"
                         WidthRequest="180" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <material:PickerField
+                            Title="Mes"
+                            x:DataType="{x:Null}"
+                            AllowClear="False"
+                            BorderColor="#C9C9C9"
+                            BorderThickness="1"
+                            FontSize="12"
+                            HeightRequest="60"
+                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:GastosFijosViewModel}}, Path=MesesCopy}"
+                            SelectedIndex="{Binding MesToCopy, Mode=TwoWay}"
+                            WidthRequest="90" />
+
+                        <material:PickerField
+                            Title="Año"
+                            x:DataType="{x:Null}"
+                            AllowClear="False"
+                            BorderColor="#C9C9C9"
+                            FontSize="12"
+                            HeightRequest="60"
+                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:GastosFijosViewModel}}, Path=AñosCopy}"
+                            SelectedIndex="{Binding AñoToCopyIndex, Mode=TwoWay}"
+                            WidthRequest="100" />
+
+                        <ImageButton
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:GastosFijosViewModel}}, Path=CopiarGastosFijosCommand}"
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"
+                            StyleClass="OutlinedButton"
+                            VerticalOptions="Center">
+                            <ImageButton.Source>
+                                <FontImageSource
+                                    FontFamily="FASolid"
+                                    Glyph="{x:Static fa:Solid.ShareFromSquare}"
+                                    Size="17"
+                                    Color="#B5B28E" />
+                            </ImageButton.Source>
+                        </ImageButton>
+
+                    </HorizontalStackLayout>
 
 
                 </VerticalStackLayout>

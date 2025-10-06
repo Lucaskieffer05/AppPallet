@@ -7,15 +7,15 @@ namespace AppPallet
 {
     public partial class App : Application
     {
+
         public App()
         {
             InitializeComponent();
 
             // Forzar el idioma a español
-            var culture = new CultureInfo("es-ES"); // Cambia a "es-MX" si prefieres español latinoamericano
+            var culture = new CultureInfo("es-ES");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
-
 
             Microsoft.Maui.Handlers.WindowHandler.Mapper.AppendToMapping(nameof(App), (handler, view) =>
             {
@@ -26,22 +26,18 @@ namespace AppPallet
                 var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
                 var appWindow = AppWindow.GetFromWindowId(windowId);
 
-                // Obtener el área de trabajo de la pantalla
-                var displayArea = DisplayArea.GetFromWindowId(windowId, DisplayAreaFallback.Primary);
-
-                // Calcular 80% del ancho y alto de la pantalla
-                int width = (int)(displayArea.WorkArea.Width * 0.9);
-                int height = (int)(displayArea.WorkArea.Height * 0.9);
-
+                // Establecer tamaño fijo 1366x768
+                int width = 1366;
+                int height = 768;
                 appWindow.Resize(new SizeInt32(width, height));
 
-                // Centrar ventana
+                // Centrar ventana en la pantalla principal
+                var displayArea = DisplayArea.GetFromWindowId(windowId, DisplayAreaFallback.Primary);
                 var centerX = displayArea.WorkArea.Width / 2 - width / 2;
                 var centerY = displayArea.WorkArea.Height / 2 - height / 2;
                 appWindow.Move(new PointInt32(centerX, centerY));
 #endif
             });
-
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

@@ -1,4 +1,5 @@
-﻿using AppPallet.Models;
+﻿using AppPallet.Constants;
+using AppPallet.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -197,7 +198,7 @@ namespace AppPallet.Controllers
             }
         }
 
-        public async Task<bool> DeleteCostoPorPallet(int costoPorPalletId)
+        public async Task<MessageResult> DeleteCostoPorPallet(int costoPorPalletId)
         {
             try
             {
@@ -205,19 +206,20 @@ namespace AppPallet.Controllers
                     .Include(c => c.CostoPorCamion)
                     .FirstOrDefaultAsync(c => c.CostoPorPalletId == costoPorPalletId);
                 if (costo == null)
-                    return false;
-                // Eliminar costos por camión asociados
-                _context.CostoPorCamion.RemoveRange(costo.CostoPorCamion);
-                // Eliminar el costo por pallet
-                _context.CostoPorPallet.Remove(costo);
+                    return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Presupuesto.NotFound);
+                // Eliminar costos por camión asociados por fecha delete
+                costo.FechaDelete = DateTime.Now;
                 var respuesta = await _context.SaveChangesAsync();
-                return respuesta > 0;
+                if (respuesta <= 0)
+                {
+                    return new MessageResult(MessageConstants.Titles.Success,MessageConstants.Presupuesto.DeleteError);
+                }
+                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Presupuesto.DeleteSuccess);
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al eliminar el costo por pallet: {ex.Message}");
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Detalle: {ex.Message}");
             }
         }
     }

@@ -46,6 +46,23 @@ namespace AppPallet.ViewModels
                 DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
             };
 
+        [ObservableProperty]
+        private int mesToCopy = DateTime.Today.Month - 1;
+
+        [ObservableProperty]
+        private int añoToCopyIndex = 1;
+
+        public ObservableCollection<string> MesesCopy { get; } =
+    [
+        "01", "02", "03", "04", "05", "06",
+                "07", "08", "09", "10", "11", "12"
+    ];
+
+        public ObservableCollection<int> AñosCopy { get; } =
+            [
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            ];
+
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -70,6 +87,8 @@ namespace AppPallet.ViewModels
                 IsBusy = true;
 
                 GastoFijoSeleccionado = null;
+
+                if (MesIngresado == -1) return;
 
                 var gastosFijoList = await _gastosFijosController.GetAllGastosFijos(new DateTime(AñoIngresado, MesIngresado + 1, 1));
                 ListaGastosFijos = new ObservableCollection<GastosFijos>(gastosFijoList);
@@ -130,6 +149,58 @@ namespace AppPallet.ViewModels
             }
             await DisplayPopupModificar();
         }
+
+        [RelayCommand]
+        public async Task CopiarGastosFijos()
+        {
+            if (ListaGastosFijos.Count == 0)
+            {
+                await MostrarAlerta("Error", "No hay un costo para copiar.");
+                return;
+            }
+
+            // Preguntar al usuario si desea copiar el presupuesto
+            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (mainPage == null)
+            {
+                await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                return;
+            }
+            bool confirmar = await mainPage.DisplayAlert("Confirmar", $"¿Desea copiar estos gastos fijos al mes {MesToCopy + 1}-{AñosCopy[AñoToCopyIndex]}?", "Sí", "No");
+            if (!confirmar)
+                return;
+
+            // verificar que AñoToCopyIndex tenga valor
+            if (AñoToCopyIndex < 0 || AñoToCopyIndex >= Años.Count || MesToCopy < 0)
+            {
+                await MostrarAlerta("Error", "Año o Mes inválido para copiar el presupuesto.");
+                return;
+            }
+
+            bool flagEgreso = await mainPage.DisplayAlert("Confirmar", $"¿Quieres agregar los gastos fijos como Egresos automaticamente?", "Sí", "No");
+            bool flagPasivo = await mainPage.DisplayAlert("Confirmar", $"¿Quieres agregar los gastos fijos como Pasivos automaticamente?", "Sí", "No");
+
+            // agregar los gastos fijos al mes seleccionado
+            foreach (var gasto in ListaGastosFijos)
+            {
+                var nuevoGastoFijo = new GastosFijos
+                {
+                    NombreGastoFijo = gasto.NombreGastoFijo,
+                    Monto = gasto.Monto,
+                    Mes = new DateTime(AñosCopy[AñoToCopyIndex], MesToCopy + 1, 1)
+                };
+                bool response = await _gastosFijosController.CreateGastoFijo(nuevoGastoFijo, flagEgreso, flagPasivo);
+                if (!response)
+                {
+                    await MostrarAlerta("Error", "Error al copiar los gastos fijos.");
+                    return;
+                }
+            }
+
+            await MostrarAlerta("Éxito", "Gastos fijos copiados correctamente.");
+            await CargarListaGastosFijos();
+        }
+
 
         public async Task DisplayPopupCrear()
         {

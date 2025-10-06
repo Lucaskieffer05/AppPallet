@@ -2,12 +2,8 @@
 using AppPallet.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Maui.Storage;
 
 namespace AppPallet.ViewModels
 {
@@ -22,6 +18,9 @@ namespace AppPallet.ViewModels
 
         [ObservableProperty]
         public Egreso egresoCreated;
+
+        [ObservableProperty]
+        private bool conIva;
 
         [ObservableProperty]
         public int mesIngresado;
@@ -40,6 +39,8 @@ namespace AppPallet.ViewModels
                 DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
             ];
 
+
+
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
@@ -54,6 +55,7 @@ namespace AppPallet.ViewModels
 
             MesIngresado = DateTime.Today.Month - 1;
             AñoIngresado = DateTime.Today.Year;
+            ConIva = false;
         }
 
         // -------------------------------------------------------------------
@@ -88,11 +90,18 @@ namespace AppPallet.ViewModels
             try
             {
                 EgresoCreated.Mes = new DateTime(AñoIngresado, MesIngresado + 1, 1);
+                if (ConIva && EgresoCreated.Monto <= 0)
+                {
+                    await MostrarAlerta("Error", "Debe ingresar un Monto si seleccionó que el egreso tiene IVA");
+                    return;
+                }
+                double iva = Preferences.Get("IVA", 0.0);
+                EgresoCreated.SumaIva = ConIva ? EgresoCreated.Monto * (decimal)iva : null;
+
                 var resultado = await _egresoController.CreateEgreso(EgresoCreated);
                 if (resultado)
                 {
                     await MostrarAlerta("Éxito", "Egreso creado correctamente");
-                    await VolverAtras();
                 }
                 else
                 {
@@ -103,6 +112,14 @@ namespace AppPallet.ViewModels
             {
                 await MostrarAlerta("Error", $"Ocurrió un error: {ex.Message}");
             }
+
+            await VolverAtras();
+        }
+
+        [RelayCommand]
+        void ToggleIva()
+        {
+            ConIva = !ConIva;
         }
 
 
