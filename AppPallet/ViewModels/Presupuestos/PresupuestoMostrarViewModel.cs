@@ -106,7 +106,7 @@ namespace AppPallet.ViewModels
                 return;
             }
             
-            Titulo += $" - {EmpresaSeleccionada.NomEmpresa}";
+            Titulo = $"PRESUPUESTO - {EmpresaSeleccionada.NomEmpresa}";
 
             Resultado = EmpresaSeleccionada.CostoPorPallet
                 .Select(c => new GastosYCostosDTO
@@ -117,6 +117,33 @@ namespace AppPallet.ViewModels
                 .ToList();
 
             NoHayPresu = Resultado.Count == 0;
+
+            // bandera para saber si se detecto un cambio en gastos fijos total y por lo tanto en los costos finales de los pallets
+            bool huboCambiosEnGastosFijos = false;
+            // actualizar ganancias
+            foreach (var item in Resultado)
+            {
+                if (item.CostoFinalPallet > 0 && item.Costo != null)
+                {
+                    item.Costo.GananciaPorCantPallet = (int?)(item.Costo.PrecioPallet - item.CostoFinalPallet);
+                    bool response = await _costoPorPalletController.UpdatePrecioCostoPorPallet(item.Costo);
+                    if (response)
+                    {
+                        huboCambiosEnGastosFijos = true;
+                    }
+                }
+            }
+
+            Resultado = Resultado.ToList();
+
+            //Notificar que hubo cambios
+            if (huboCambiosEnGastosFijos)
+            {
+                await MostrarAlerta("Éxito", "Los costos finales y ganancias se han actualizado debido a cambios en los gastos fijos.");
+            }
+
+
+
         }
 
         partial void OnMesIngresadoChanged(int oldValue, int newValue)

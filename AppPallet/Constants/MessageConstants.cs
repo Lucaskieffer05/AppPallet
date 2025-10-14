@@ -59,6 +59,19 @@ namespace AppPallet.Constants
 
         }
 
+        public static class GastosFijos
+        {
+            public const string CreateSuccess = "El gasto fijo ha sido creado correctamente.";
+            public const string CreateError = "No se pudo crear el gasto fijo. Intente nuevamente.";
+            public const string NotFound = "No se encontró el gasto fijo.";
+            public const string DeleteSuccess = "El gasto fijo ha sido eliminado correctamente.";
+            public const string DeleteError = "No se pudo eliminar el gasto fijo. Intente nuevamente.";
+            public const string ValidationError = "Por favor, complete todos los campos correctamente.";
+            public const string ModifySuccess = "El gasto fijo ha sido modificado correctamente.";
+            public const string ModifyNoChanges = "No se detectarion cambios para guardar.";
+            public const string ModifyError = "No se pudo modificar el gasto fijo. Intente nuevamente.";
+        }
+
         public static class Presupuesto
         {
             public const string CreateSuccess = "El presupuesto ha sido creado correctamente.";

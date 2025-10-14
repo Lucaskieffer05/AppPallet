@@ -21,6 +21,8 @@ namespace AppPallet.ViewModels
 
         readonly IngresoController _ingresoController;
 
+        readonly ActivoPasivoController _activoPasivoController;
+
         [ObservableProperty]
         private Venta ventaCreated;
 
@@ -42,25 +44,29 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         public CostoPorPalletDTO costoPorPalletIngresado = new();
 
+        [ObservableProperty]
+        public int stockActual;
+
 
         [ObservableProperty]
         private string estadoingresado;
 
         public ObservableCollection<string> Estados { get; } =
         [
-            "En Producción", "Entregado"
+            "En Producción", "En Stock", "Entregado"
         ];
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public VentaCrearViewModel(VentaController ventaController, EmpresaController empresaController, CostoPorPalletController costoPorPalletController, IngresoController ingresoController)
+        public VentaCrearViewModel(VentaController ventaController, EmpresaController empresaController, CostoPorPalletController costoPorPalletController, IngresoController ingresoController, ActivoPasivoController activoPasivoController)
         {
             _ventaController = ventaController;
             _empresaController = empresaController;
             _costoPorPalletController = costoPorPalletController;
             _ingresoController = ingresoController;
+            _activoPasivoController = activoPasivoController;
 
             Estadoingresado = "En Producción";
             VentaCreated = new Venta
@@ -72,7 +78,6 @@ namespace AppPallet.ViewModels
                 Comentario = string.Empty,
                 FechaEntrega = null
             };
-            
         }
 
 
@@ -118,7 +123,7 @@ namespace AppPallet.ViewModels
         {
             VentaCreated.CostoPorPalletId = CostoPorPalletIngresado.CostoPorPalletId;
             VentaCreated.Estado = Estadoingresado;
-            if(Estadoingresado == "Entregado" && VentaCreated.FechaEntrega == null)
+            if (Estadoingresado == "Entregado" && VentaCreated.FechaEntrega == null)
             {
                 VentaCreated.FechaEntrega = DateTime.Now;
             }
@@ -132,26 +137,60 @@ namespace AppPallet.ViewModels
                 return;
             }
 
+            if (Estadoingresado == "Entregado" && VentaCreated.FechaCobroEstimada == null)
+            {
+                await MostrarAlerta("Error", "No se puede crear la venta como 'Entregado' sin una fecha de cobro estimada.");
+                return;
+            }
+
             MessageResult resultVenta = await _ventaController.CreateVenta(VentaCreated);
 
             await MostrarAlerta(resultVenta.Title, resultVenta.Message);
 
             if (VentaCreated.Estado == "Entregado")
             {
-                Ingreso ingreso = new Ingreso
+
+                var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+                if (mainPage == null)
                 {
-                    Fecha = VentaCreated.FechaEntrega,
-                    DescripIngreso = $"Venta de {VentaCreated.CantPallets} pallets - {CostoPorPalletIngresado.NombrePalletCliente}",
-                    Op = string.Empty,
-                    Remito = string.Empty,
-                    Factura = string.Empty,
-                    Monto = (decimal)(VentaCreated.CantPallets * (CostoPorPalletIngresado.PrecioPallet ?? 0)),
-                    Comentario = "ENTREGADO"
-                };
+                    await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                    return;
+                }
 
-                MessageResult resultIngreso = await _ingresoController.CreateIngreso(ingreso);
 
-                await MostrarAlerta(resultIngreso.Title, resultIngreso.Message);
+                bool confirmarIngreso = await mainPage.DisplayAlert("Confirmar", "Se ha detectado el estado de 'Entregado' ¿Desea registar el ingreso de esta venta?", "Sí", "No");
+                bool confirmarActivo = await mainPage.DisplayAlert("Confirmar", "¿Desea registrar también el activo de esta venta a partir de la fecha estimada de cobro?", "Sí", "No");
+
+                if (confirmarIngreso)
+                {
+                    Ingreso ingreso = new Ingreso
+                    {
+                        Fecha = VentaCreated.FechaEntrega,
+                        DescripIngreso = $"Venta de {VentaCreated.CantPallets} pallets - {CostoPorPalletIngresado.NombrePalletCliente}",
+                        Op = string.Empty,
+                        Remito = string.Empty,
+                        Factura = string.Empty,
+                        Monto = (decimal)(VentaCreated.CantPallets * (CostoPorPalletIngresado.PrecioPallet ?? 0)),
+                        Comentario = "ENTREGADO"
+                    };
+                    MessageResult resultIngreso = await _ingresoController.CreateIngreso(ingreso);
+                    await MostrarAlerta(resultIngreso.Title, resultIngreso.Message);
+                }
+
+                if (confirmarActivo)
+                {
+                    ActivoPasivo activo = new ActivoPasivo
+                    {
+                        Fecha = VentaCreated.FechaCobroEstimada,
+                        Mes = (DateTime)VentaCreated.FechaCobroEstimada,
+                        Descripcion = $"Venta a {VentaCreated.CostoPorPallet.Empresa.NomEmpresa} por {VentaCreated.CantPallets} pallets",
+                        Monto = (decimal)(VentaCreated.CantPallets * (CostoPorPalletIngresado.PrecioPallet ?? 0)),
+                        Categoria = "Activo",
+                        Estado = "Sin Pagar"
+                    };
+                    MessageResult resultActivo = await _activoPasivoController.CreateActivoPasivo(activo);
+                    await MostrarAlerta(resultActivo.Title, resultActivo.Message);
+                }
             }
 
             await VolverAtras();
@@ -179,6 +218,17 @@ namespace AppPallet.ViewModels
                 VentaCreated.CostoPorPalletId = 0;
                 PresupuestoEnabled = false;
             }
+        }
+
+        partial void OnCostoPorPalletIngresadoChanged(CostoPorPalletDTO value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            if (value.Pallet != null)
+                StockActual = value.Pallet.Stock;
         }
 
         partial void OnEstadoingresadoChanged(string value)

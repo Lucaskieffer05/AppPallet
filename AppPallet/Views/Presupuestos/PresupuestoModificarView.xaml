@@ -8,14 +8,14 @@
     xmlns:models="clr-namespace:AppPallet.Models"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-    Title="PresupuestoModificarView"
+    Title="MODIFICAR PRESUPUESTO"
     x:DataType="viewModels:PresupuestoModificarViewModel">
 
 
 
     <ScrollView>
 
-        <Grid ColumnDefinitions="0.5*,*,*,0.5*">
+        <Grid ColumnDefinitions="0.2*,*,*,0.2*">
 
 
             <VerticalStackLayout

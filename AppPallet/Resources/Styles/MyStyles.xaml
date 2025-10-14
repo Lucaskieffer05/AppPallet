@@ -63,9 +63,10 @@
     <Style x:Key="TablaComun" TargetType="dg:DataGrid">
         <Setter Property="RowHeight" Value="40" />
         <Setter Property="HeaderHeight" Value="50" />
-        <Setter Property="BorderColor" Value="#111827" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Margin" Value="1" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="HeaderBordersVisible" Value="True" />
         <Setter Property="ActiveRowColor" Value="#e4f2e2" />
         <Setter Property="HeaderBackground" Value="#D0B595" />

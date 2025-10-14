@@ -24,6 +24,14 @@ namespace AppPallet
             Routing.RegisterRoute(nameof(LoteModificarView), typeof(LoteModificarView));
             Routing.RegisterRoute(nameof(PedidoCrearView), typeof(PedidoCrearView));
             Routing.RegisterRoute(nameof(PedidoModificarView), typeof(PedidoModificarView));
+            Routing.RegisterRoute(nameof(PalletCrearView), typeof(PalletCrearView));
+            Routing.RegisterRoute(nameof(PalletModificarView), typeof(PalletModificarView));
+            Routing.RegisterRoute(nameof(HistorialHumedadView), typeof(HistorialHumedadView));
+            Routing.RegisterRoute(nameof(HistorialHumedadCrearView), typeof(HistorialHumedadCrearView));
+            Routing.RegisterRoute(nameof(HistorialHumedadModificarView), typeof(HistorialHumedadModificarView));
+            Routing.RegisterRoute(nameof(ConfiguracionView), typeof(ConfiguracionView));
+            Routing.RegisterRoute(nameof(DashboardView), typeof(DashboardView));
+
 
 
         }

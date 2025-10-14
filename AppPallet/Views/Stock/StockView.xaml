@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:models="clr-namespace:AppPallet.Models"
     xmlns:sys="clr-namespace:System;assembly=netstandard"
@@ -75,7 +76,23 @@
                     Text="GESTIÓN DE STOCK"
                     TextColor="#F6F1EB"
                     VerticalOptions="Center" />
+                <Button
+                    Margin="400,0,0,0"
+                    Padding="20,10"
+                    BackgroundColor="#F6F1EB"
+                    BorderColor="#D0B595"
+                    BorderWidth="3"
+                    Command="{Binding VerCrearPalletCommand}"
+                    CornerRadius="20"
+                    FontSize="15"
+                    StyleClass="FilledButton"
+                    Text="Nuevo Pallet"
+                    TextColor="Black"
+                    WidthRequest="170" />
             </Grid>
+
+
+
         </Border>
 
         <!--  Loading Indicator  -->
@@ -185,6 +202,16 @@
                                                     TextColor="White"
                                                     VerticalTextAlignment="Center" />
                                             </Border>
+
+                                            <Label
+                                                Text="Editar"
+                                                TextColor="#D6C352"
+                                                VerticalTextAlignment="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:StockViewModel}}, Path=ModificarPalletCommand}" CommandParameter="{Binding .}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+
                                         </HorizontalStackLayout>
 
                                         <Label

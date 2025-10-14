@@ -47,7 +47,10 @@
 
         <!--  Encabezado  -->
         <Border Grid.Row="0" Stroke="Black">
-            <Grid BackgroundColor="#374151" ColumnSpacing="40" ColumnDefinitions="Auto,*,*">
+            <Grid
+                BackgroundColor="#374151"
+                ColumnDefinitions="Auto,*,*"
+                ColumnSpacing="40">
 
                 <Label
                     Grid.Column="0"
@@ -106,54 +109,7 @@
         </Border>
 
         <!--  Indicadores de Estado  -->
-        <Border
-            Grid.Row="1"
-            BackgroundColor="#F8F9FA"
-            Style="{StaticResource CardStyle}">
-            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
-                <Border
-                    Grid.Column="0"
-                    BackgroundColor="#E8F5E8"
-                    Stroke="#4CAF50">
-                    <VerticalStackLayout
-                        HorizontalOptions="Center"
-                        Spacing="2"
-                        VerticalOptions="Center">
-                        <Label
-                            FontSize="16"
-                            HorizontalOptions="Center"
-                            Text="✅" />
-                        <Label
-                            FontAttributes="Bold"
-                            FontSize="12"
-                            HorizontalOptions="Center"
-                            Text="Activas"
-                            TextColor="#2E7D32" />
-                    </VerticalStackLayout>
-                </Border>
 
-                <Border
-                    Grid.Column="1"
-                    BackgroundColor="#FFEBEE"
-                    Stroke="#F44336">
-                    <VerticalStackLayout
-                        HorizontalOptions="Center"
-                        Spacing="2"
-                        VerticalOptions="Center">
-                        <Label
-                            FontSize="16"
-                            HorizontalOptions="Center"
-                            Text="❌" />
-                        <Label
-                            FontAttributes="Bold"
-                            FontSize="12"
-                            HorizontalOptions="Center"
-                            Text="Pendientes"
-                            TextColor="#C62828" />
-                    </VerticalStackLayout>
-                </Border>
-            </Grid>
-        </Border>
 
 
         <!--  Lista de Ventas  -->
@@ -176,7 +132,7 @@
                     IsVisible="{Binding IsBusy}" />
 
 
-                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
+                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
                     <Label
                         Grid.Column="0"
                         FontSize="16"
@@ -186,57 +142,70 @@
                     <Label
                         Grid.Column="1"
                         FontSize="16"
-                        HorizontalOptions="Center"
-                        Text="Empresa"
+                        Text="Fecha de Entrega Estimada"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="2"
                         FontSize="16"
-                        HorizontalOptions="Center"
-                        Text="Cantidad Pallets"
+                        Text="Fecha de Cobro Estimada"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="3"
                         FontSize="16"
                         HorizontalOptions="Center"
-                        Text="Presupuesto"
+                        Text="Empresa"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="4"
                         FontSize="16"
                         HorizontalOptions="Center"
-                        Text="Precio c/u"
+                        Text="Cantidad Pallets"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="5"
                         FontSize="16"
                         HorizontalOptions="Center"
-                        Text="Estado"
+                        Text="Presupuesto"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="6"
                         FontSize="16"
                         HorizontalOptions="Center"
-                        Text="Fecha de Entrega"
+                        Text="Precio c/u"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="7"
                         FontSize="16"
                         HorizontalOptions="Center"
-                        Text="Comentario"
+                        Text="Estado"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="8"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Fecha de Entrega"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="9"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Comentario"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="10"
                         HorizontalOptions="Center"
                         Text="Acción"
-                        TextColor="#BDBDBD" />
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
                 </Grid>
 
 
@@ -256,27 +225,61 @@
                                 Style="{StaticResource CardStyle}">
 
 
-                                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
+                                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
 
                                     <HorizontalStackLayout
                                         Grid.Column="0"
                                         Spacing="5"
                                         VerticalOptions="Center">
                                         <Image
-                                            HeightRequest="18"
+                                            HeightRequest="17"
                                             Source="calendario.png"
                                             VerticalOptions="Center"
-                                            WidthRequest="18" />
+                                            WidthRequest="17" />
                                         <Label
-                                            FontSize="16"
+                                            FontSize="13"
                                             HorizontalTextAlignment="Center"
                                             Text="{Binding FechaVenta, StringFormat='{0:dd/MM/yyyy}'}"
                                             TextColor="#333"
                                             VerticalTextAlignment="Center" />
                                     </HorizontalStackLayout>
 
-                                    <Label
+                                    <HorizontalStackLayout
                                         Grid.Column="1"
+                                        Spacing="5"
+                                        VerticalOptions="Center">
+                                        <Image
+                                            HeightRequest="17"
+                                            Source="entregaestimada.png"
+                                            VerticalOptions="Center"
+                                            WidthRequest="17" />
+                                        <Label
+                                            FontSize="13"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding FechaEntregaEstimada, StringFormat='{0:dd/MM/yyyy}'}"
+                                            TextColor="#333"
+                                            VerticalTextAlignment="Center" />
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout
+                                        Grid.Column="2"
+                                        Spacing="5"
+                                        VerticalOptions="Center">
+                                        <Image
+                                            HeightRequest="17"
+                                            Source="cobro.png"
+                                            VerticalOptions="Center"
+                                            WidthRequest="17" />
+                                        <Label
+                                            FontSize="13"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding FechaCobroEstimada, StringFormat='{0:dd/MM/yyyy}'}"
+                                            TextColor="#333"
+                                            VerticalTextAlignment="Center" />
+                                    </HorizontalStackLayout>
+
+                                    <Label
+                                        Grid.Column="3"
                                         FontSize="16"
                                         HorizontalOptions="Center"
                                         Text="{Binding CostoPorPallet.Empresa.NomEmpresa, StringFormat='{0}'}"
@@ -284,7 +287,7 @@
                                         VerticalOptions="Center" />
 
                                     <HorizontalStackLayout
-                                        Grid.Column="2"
+                                        Grid.Column="4"
                                         HorizontalOptions="Center"
                                         Spacing="5"
                                         VerticalOptions="Center">
@@ -303,7 +306,7 @@
                                     </HorizontalStackLayout>
 
                                     <Label
-                                        Grid.Column="3"
+                                        Grid.Column="5"
                                         FontSize="16"
                                         HorizontalOptions="Center"
                                         Text="{Binding CostoPorPallet.NombrePalletCliente, StringFormat='{0}'}"
@@ -311,7 +314,7 @@
                                         VerticalOptions="Center" />
 
                                     <Label
-                                        Grid.Column="4"
+                                        Grid.Column="6"
                                         FontSize="16"
                                         HorizontalOptions="Center"
                                         Text="{Binding CostoPorPallet.PrecioPallet, StringFormat='${0:N2}'}"
@@ -319,7 +322,7 @@
                                         VerticalOptions="Center" />
 
                                     <Label
-                                        Grid.Column="5"
+                                        Grid.Column="7"
                                         FontAttributes="Bold"
                                         FontSize="16"
                                         HorizontalOptions="Center"
@@ -328,23 +331,23 @@
                                         VerticalOptions="Center" />
 
                                     <HorizontalStackLayout
-                                        Grid.Column="6"
+                                        Grid.Column="8"
                                         HorizontalOptions="Center"
                                         Spacing="5"
                                         VerticalOptions="Center">
                                         <Image
-                                            HeightRequest="20"
+                                            HeightRequest="17"
                                             Source="cajadeentrega.png"
                                             VerticalOptions="Center"
-                                            WidthRequest="20" />
+                                            WidthRequest="17" />
                                         <Label
-                                            FontSize="16"
+                                            FontSize="13"
                                             Text="{Binding FechaEntrega, StringFormat='{0:dd/MM/yyyy}'}"
                                             TextColor="#333" />
                                     </HorizontalStackLayout>
 
                                     <Label
-                                        Grid.Column="7"
+                                        Grid.Column="9"
                                         FontSize="16"
                                         HorizontalOptions="Center"
                                         Text="{Binding Comentario, StringFormat='{0}'}"
@@ -354,7 +357,7 @@
 
 
                                     <Button
-                                        Grid.Column="8"
+                                        Grid.Column="10"
                                         BackgroundColor="#374151"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VentaViewModel}}, Path=ModificarVentaCommand}"
                                         CommandParameter="{Binding VentaId}"

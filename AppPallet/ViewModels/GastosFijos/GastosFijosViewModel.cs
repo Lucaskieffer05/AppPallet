@@ -1,4 +1,5 @@
-﻿using AppPallet.Controllers;
+﻿using AppPallet.Constants;
+using AppPallet.Controllers;
 using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,11 +20,18 @@ namespace AppPallet.ViewModels
 
         readonly GastosFijosController _gastosFijosController;
 
+        readonly EgresoController _egresoController;
+
+        readonly ActivoPasivoController _activoPasivoController;
+
         [ObservableProperty]
         public ObservableCollection<GastosFijos> listaGastosFijos = [];
 
         [ObservableProperty]
         public GastosFijos? gastoFijoSeleccionado;
+
+        [ObservableProperty]
+        private decimal totalGastosFijos;
 
         [ObservableProperty]
         public bool isBusy;
@@ -68,10 +76,12 @@ namespace AppPallet.ViewModels
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public GastosFijosViewModel(IPopupService popupService, GastosFijosController gastosFijosController)
+        public GastosFijosViewModel(IPopupService popupService, GastosFijosController gastosFijosController, ActivoPasivoController activoPasivoController, EgresoController egresoController)
         {
             _popupService = popupService;
             _gastosFijosController = gastosFijosController;
+            _activoPasivoController = activoPasivoController;
+            _egresoController = egresoController;
         }
 
 
@@ -95,6 +105,7 @@ namespace AppPallet.ViewModels
             }
             finally
             {
+                TotalGastosFijos = ListaGastosFijos.Sum(g => g.Monto);
                 IsBusy = false;
             }
         }
@@ -186,14 +197,35 @@ namespace AppPallet.ViewModels
                 var nuevoGastoFijo = new GastosFijos
                 {
                     NombreGastoFijo = gasto.NombreGastoFijo,
-                    Monto = gasto.Monto,
-                    Mes = new DateTime(AñosCopy[AñoToCopyIndex], MesToCopy + 1, 1)
+                    Monto           = gasto.Monto,
+                    Mes             = new DateTime(AñosCopy[AñoToCopyIndex], MesToCopy + 1, 1)
                 };
-                bool response = await _gastosFijosController.CreateGastoFijo(nuevoGastoFijo, flagEgreso, flagPasivo);
-                if (!response)
+                MessageResult responseGasto = await _gastosFijosController.CreateGastoFijo(nuevoGastoFijo);
+                if (responseGasto.Title == MessageConstants.Titles.Error)
                 {
-                    await MostrarAlerta("Error", "Error al copiar los gastos fijos.");
+                    await MostrarAlerta(responseGasto.Title,responseGasto.Message);
                     return;
+                }
+
+                // Crear un Egreso asociado si flagEgreso es true
+                if (flagEgreso)
+                {
+                    bool error = await CrearUnEgreso(nuevoGastoFijo);
+                    if (!error)
+                    {
+                        await MostrarAlerta("Error", "Error al crear el egreso asociado.");
+                        return;
+                    }
+                }
+                // crear Pasivo asociado si FlasgPasivo es true
+                if (flagPasivo)
+                {
+                    bool error = await CrearUnPasivo(nuevoGastoFijo);
+                    if (!error)
+                    {
+                        await MostrarAlerta("Error", "Error al crear el pasivo asociado.");
+                        return;
+                    }
                 }
             }
 
@@ -201,7 +233,52 @@ namespace AppPallet.ViewModels
             await CargarListaGastosFijos();
         }
 
-
+        public async Task<bool> CrearUnEgreso(GastosFijos nuevoGastoFijo)
+        {
+            var nuevoEgreso = new Egreso
+            {
+                Fecha = nuevoGastoFijo.Mes,
+                Mes = new DateTime(nuevoGastoFijo.Mes.Year, nuevoGastoFijo.Mes.Month, 1),
+                Monto = nuevoGastoFijo.Monto,
+                DescripEgreso = nuevoGastoFijo.NombreGastoFijo,
+                Comentario = "Gasto Fijo"
+            };
+            bool existe = await _egresoController.ExisteEgresoEnMes(nuevoEgreso.DescripEgreso, nuevoEgreso.Monto, nuevoEgreso.Mes);
+            if (!existe)
+            {
+                MessageResult responseEgreso = await _egresoController.CreateEgreso(nuevoEgreso);
+                if (responseEgreso.Title == MessageConstants.Titles.Error)
+                {
+                    await MostrarAlerta(responseEgreso.Title, responseEgreso.Message);
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        public async Task<bool> CrearUnPasivo(GastosFijos nuevoGastoFijo)
+        {
+            var nuevoPasivo = new ActivoPasivo
+            {
+                Fecha = nuevoGastoFijo.Mes,
+                Mes = new DateTime(nuevoGastoFijo.Mes.Year, nuevoGastoFijo.Mes.Month, 1),
+                Monto = nuevoGastoFijo.Monto,
+                Descripcion = nuevoGastoFijo.NombreGastoFijo,
+                Categoria = "Pasivo"
+            };
+            bool existe = await _activoPasivoController.ExistePasivoEnMes(nuevoPasivo.Descripcion, nuevoPasivo.Monto, nuevoPasivo.Mes);
+            if (!existe)
+            {
+                MessageResult responsePasivo = await _activoPasivoController.CreateActivoPasivo(nuevoPasivo);
+                if (responsePasivo.Title == MessageConstants.Titles.Error)
+                {
+                    await MostrarAlerta(responsePasivo.Title, responsePasivo.Message);
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
         public async Task DisplayPopupCrear()
         {
             var popupResult = await _popupService.ShowPopupAsync<GastosFijosCrearViewModel>(
@@ -209,7 +286,6 @@ namespace AppPallet.ViewModels
                 options: PopupOptions.Empty);
 
         }
-
         public async Task DisplayPopupModificar()
         {
             if (GastoFijoSeleccionado == null)
@@ -225,7 +301,6 @@ namespace AppPallet.ViewModels
                 options: PopupOptions.Empty,
                 shellParameters: queryAttributes);
         }
-
         private async Task MostrarAlerta(string titulo, string mensaje)
         {
             var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;

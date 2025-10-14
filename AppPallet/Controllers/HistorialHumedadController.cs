@@ -20,14 +20,19 @@ namespace AppPallet.Controllers
         }
 
         //Obtener el historial por pedido
-        public async Task<List<HistorialHumedad>> GetHistorialHumedadPedidoId(int PedidoId)
+        // Agregar al HistorialHumedadController
+        public async Task<List<HistorialHumedad>> GetHistorialByPedidoId(int pedidoId)
         {
             try
             {
-                return await _context.HistorialHumedad.AsNoTracking().Where(h => h.PedidoId == PedidoId).ToListAsync();
-
+                return await _context.HistorialHumedad
+                    .AsNoTracking()
+                    .Where(h => h.PedidoId == pedidoId)
+                    .OrderByDescending(h => h.Fecha)
+                    .ToListAsync();
             }
-            catch {
+            catch (Exception ex)
+            {
                 return new List<HistorialHumedad>();
             }
         }

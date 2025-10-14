@@ -48,7 +48,34 @@
                 TextColor="Black" />
 
             <material:DatePickerField
-                Title="Fecha de entrega"
+                Title="Fecha de entrega estimada o futura"
+                Date="{Binding VentaModified.FechaEntregaEstimada, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
+
+            <material:DatePickerField
+                Title="Fecha de cobro estimada o futura"
+                Date="{Binding VentaModified.FechaCobroEstimada, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
+
+            <HorizontalStackLayout>
+                <CheckBox
+                    HorizontalOptions="Start"
+                    IsChecked="{Binding EnStock}"
+                    Color="#52D681" />
+
+                <Label
+                    Text="En Stock"
+                    TextColor="Black"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <material:DatePickerField
+                Title="Fecha de entrega final"
                 Date="{Binding VentaModified.FechaEntrega, Mode=TwoWay}"
                 Icon="{FontImageSource FontFamily=FASolid,
                                        Glyph={x:Static fa:Solid.Calendar}}"

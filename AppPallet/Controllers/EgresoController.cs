@@ -1,4 +1,5 @@
-﻿using AppPallet.Models;
+﻿using AppPallet.Constants;
+using AppPallet.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace AppPallet.Controllers
         }
 
         // Crear un nuevo egreso
-        public async Task<bool> CreateEgreso(Egreso nuevoEgreso)
+        public async Task<MessageResult> CreateEgreso(Egreso nuevoEgreso)
         {
             try
             {
@@ -52,21 +53,19 @@ namespace AppPallet.Controllers
 
                 _context.Egreso.Add(nuevoEgreso);
                 var result = await _context.SaveChangesAsync();
-                return result > 0;
+                if (result == 0)
+                {
+                    return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Egreso.CreateError);
+                }
+                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Egreso.CreateSuccess);
             }
             catch (DbUpdateException dbEx)
             {
-                Console.WriteLine($"Error de base de datos: {dbEx.Message}");
-                if (dbEx.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
-                }
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Detalle: {dbEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error general: {ex.Message}");
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Detalle: {ex.Message}");
             }
         }
 
@@ -140,6 +139,62 @@ namespace AppPallet.Controllers
             }
         }
 
+        public async Task<bool> ExisteEgresoEnMes(string descripEgreso, decimal monto, DateTime? mes)
+        {
+            try
+            {
+                return await _context.Egreso.AnyAsync(e =>
+                    e.DescripEgreso == descripEgreso &&
+                    e.Monto == monto &&
+                    e.Mes.HasValue &&
+                    mes.HasValue &&
+                    e.Mes.Value.Month == mes.Value.Month &&
+                    e.Mes.Value.Year == mes.Value.Year &&
+                    e.Comentario == "Gasto Fijo");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
 
+            }
+        }
+
+        public async Task<List<FinanzaMensualDTO>> GetEgresosAnuales(int year)
+        {
+            try
+            {
+                var egresosAnuales = await _context.Egreso
+                    .Where(e => e.Mes.HasValue && e.Mes.Value.Year == year)
+                    .GroupBy(e => e.Mes.Value.Month)
+                    .Select(g => new FinanzaMensualDTO
+                    {
+                        Mes = g.Key,
+                        TotalFinanza = g.Sum(e => e.Monto + (e.SumaIva ?? 0))
+                    })
+                    .ToListAsync();
+                // Asegurarse de que todos los meses estén representados
+                var resultadoCompleto = new List<FinanzaMensualDTO>();
+                for (int mes = 1; mes <= 12; mes++)
+                {
+                    var finanzaMes = egresosAnuales.FirstOrDefault(f => f.Mes == mes);
+                    if (finanzaMes != null)
+                    {
+                        resultadoCompleto.Add(finanzaMes);
+                    }
+                    else
+                    {
+                        resultadoCompleto.Add(new FinanzaMensualDTO { Mes = mes, TotalFinanza = 0 });
+                    }
+                }
+                return resultadoCompleto;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener egresos anuales: {ex.Message}");
+                return new List<FinanzaMensualDTO>();
+
+            }
+        }
     }
 }

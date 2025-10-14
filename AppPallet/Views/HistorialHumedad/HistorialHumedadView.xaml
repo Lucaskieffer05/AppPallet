@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.HistorialHumedadView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="HISTORIAL DE HUMEDAD"
+    x:DataType="viewModels:HistorialHumedadViewModel"
+    Shell.BackgroundColor="#374151"
+    Shell.TitleColor="#F6F1EB">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ZeroToBoolConverter x:Key="ZeroToBoolConverter" />
+
+            <Color x:Key="PrimaryColor">#2196F3</Color>
+            <Color x:Key="SecondaryColor">#42A5F5</Color>
+            <Color x:Key="AccentColor">#FF9800</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BackgroundLight">#F5F5F5</Color>
+            <Color x:Key="CardBackground">#FFFFFF</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#374151" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+
+            <Style x:Key="SubtitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#666" />
+            </Style>
+
+            <Style x:Key="ValueStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="#757575" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView Padding="100,0,100,0">
+        <Grid
+            Padding="16"
+            RowDefinitions="Auto,Auto,Auto,Auto"
+            RowSpacing="15">
+
+            <!--  Loading Indicator  -->
+            <ActivityIndicator
+                Grid.RowSpan="4"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center"
+                Color="{StaticResource PrimaryColor}" />
+
+            <!--  Header Información del Pedido  -->
+            <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource TitleStyle}" Text="💧 Control de Humedad" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <!--  Información del Pedido  -->
+                        <VerticalStackLayout Grid.Column="0" Spacing="8">
+                            <Label Style="{StaticResource SectionTitleStyle}" Text="Información del Pedido" />
+                            <Label
+                                FontSize="18"
+                                Style="{StaticResource SubtitleStyle}"
+                                Text="{Binding PedidoInfo.NombrePallet}" />
+                            <Label Style="{StaticResource ValueStyle}" Text="{Binding PedidoInfo.FechaEInicio, StringFormat='Inicio: {0:dd/MM/yyyy}'}" />
+                            <Label Style="{StaticResource ValueStyle}" Text="{Binding PedidoInfo.Cantidad, StringFormat='Cantidad: {0} unidades'}" />
+                        </VerticalStackLayout>
+
+                        <!--  Estado del Pedido  -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label Style="{StaticResource SectionTitleStyle}" Text="Estado del Pedido" />
+                            <Border
+                                Padding="8,4"
+                                BackgroundColor="{Binding PedidoInfo.EstadoColor}"
+                                HorizontalOptions="Start"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    Text="{Binding PedidoInfo.Estado}"
+                                    TextColor="White" />
+                            </Border>
+                            <Label Style="{StaticResource ValueStyle}" Text="{Binding PedidoInfo.FechaEFinal, StringFormat='Terminado: {0:dd/MM/yyyy}'}" />
+                            <Label Style="{StaticResource ValueStyle}" Text="{Binding HistorialHumedad.Count, StringFormat='Registros: {0}'}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Formulario para Nuevo Registro  -->
+            <Border Grid.Row="1" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="➕ Nuevo Registro de Humedad" />
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                        <material:DatePickerField
+                            Title="Fecha de Medición"
+                            Grid.Column="0"
+                            Date="{Binding NuevoRegistro.Fecha, Mode=TwoWay}"
+                            TextColor="Black" />
+
+                        <material:EditorField
+                            Title="Humedad Mínima (%)"
+                            Grid.Column="1"
+                            Keyboard="Numeric"
+                            Text="{Binding NuevoRegistro.Min, Mode=TwoWay}"
+                            TextColor="Black" />
+
+                        <material:EditorField
+                            Title="Humedad Máxima (%)"
+                            Grid.Column="2"
+                            Keyboard="Numeric"
+                            Text="{Binding NuevoRegistro.Max, Mode=TwoWay}"
+                            TextColor="Black" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                        <material:EditorField
+                            Title="Peso Aproximado (Opcional)"
+                            Grid.Column="0"
+                            Text="{Binding NuevoRegistro.PesoAprox, Mode=TwoWay}"
+                            TextColor="Black" />
+
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="#374151"
+                            Command="{Binding AgregarRegistroHumedadCommand}"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            HorizontalOptions="End"
+                            StyleClass="FilledButton"
+                            Text="Agregar Registro"
+                            VerticalOptions="End"
+                            WidthRequest="180" />
+                    </Grid>
+
+                    <!--  Información de Promedio Calculado  -->
+                    <Border
+                        Padding="12"
+                        BackgroundColor="#E3F2FD"
+                        IsVisible="{Binding NuevoRegistro.Min, Converter={StaticResource ZeroToBoolConverter}}"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*,*">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    Text="📊 Promedio Calculado" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    Text="{Binding NuevoRegistro.Promedio, StringFormat='{0:F1}%'}"
+                                    TextColor="#1976D2" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    Text="Estado" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    Text="{Binding NuevoRegistro.EstadoHumedad}"
+                                    TextColor="{Binding NuevoRegistro.EstadoColor}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Historial de Registros  -->
+            <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="📈 Historial de Mediciones" />
+
+                    <CollectionView ItemsSource="{Binding HistorialHumedad}" SelectionMode="None">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout
+                                Padding="20"
+                                HorizontalOptions="Center"
+                                Spacing="10">
+                                <Label
+                                    FontSize="32"
+                                    HorizontalOptions="Center"
+                                    Text="📊" />
+                                <Label
+                                    HorizontalOptions="Center"
+                                    Text="No hay registros de humedad"
+                                    TextColor="#666" />
+                                <Label
+                                    FontSize="12"
+                                    HorizontalOptions="Center"
+                                    Text="Agrega el primer registro para comenzar el control"
+                                    TextColor="#999" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="viewModels:HistorialHumedadExtended">
+                                <Border Margin="0,5" Style="{StaticResource CardStyle}">
+                                    <Grid
+                                        ColumnDefinitions="Auto,*,Auto"
+                                        RowDefinitions="Auto,Auto"
+                                        RowSpacing="8">
+
+                                        <!--  Icono y Fecha  -->
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="0"
+                                            Margin="0,0,10,0"
+                                            FontSize="20"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding IconoEstado}"
+                                            VerticalOptions="Center" />
+
+                                        <!--  Información de la Medición  -->
+                                        <Grid
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            ColumnDefinitions="*,*,*,*"
+                                            ColumnSpacing="10">
+
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Style="{StaticResource SubtitleStyle}" Text="Fecha" />
+                                                <Label Style="{StaticResource ValueStyle}" Text="{Binding Fecha, StringFormat='{0:dd/MM/yyyy}'}" />
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Style="{StaticResource SubtitleStyle}" Text="Mínima" />
+                                                <Label Style="{StaticResource ValueStyle}" Text="{Binding Min, StringFormat='{0}%'}" />
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Style="{StaticResource SubtitleStyle}" Text="Máxima" />
+                                                <Label Style="{StaticResource ValueStyle}" Text="{Binding Max, StringFormat='{0}%'}" />
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Style="{StaticResource SubtitleStyle}" Text="Promedio" />
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    Style="{StaticResource ValueStyle}"
+                                                    Text="{Binding Promedio, StringFormat='{0:F1}%'}"
+                                                    TextColor="{Binding EstadoColor}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <!--  Estado y Acciones  -->
+                                        <Grid
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            ColumnDefinitions="*,Auto"
+                                            ColumnSpacing="10">
+
+                                            <Border
+                                                Grid.Column="0"
+                                                Padding="6,2"
+                                                BackgroundColor="{Binding EstadoColor}"
+                                                HorizontalOptions="Start"
+                                                StrokeThickness="0">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="6" />
+                                                </Border.StrokeShape>
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="10"
+                                                    Text="{Binding EstadoHumedad}"
+                                                    TextColor="White" />
+                                            </Border>
+
+                                            <Label
+                                                Grid.Column="1"
+                                                FontSize="11"
+                                                HorizontalOptions="End"
+                                                Text="{Binding PesoAprox}"
+                                                TextColor="#666" />
+                                        </Grid>
+
+                                        <!--  Botón Eliminar  -->
+                                        <Button
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="2"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:HistorialHumedadViewModel}}, Path=EliminarRegistroCommand}"
+                                            CommandParameter="{Binding}"
+                                            StyleClass="OutlinedButton"
+                                            Text="Eliminar"
+                                            TextColor="#D65265" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Botones de Acción  -->
+            <Border Grid.Row="3" StrokeThickness="0">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        BackgroundColor="#e5e7eb"
+                        BorderColor="#9ca3af"
+                        Command="{Binding VolverAtrasCommand}"
+                        StyleClass="OutlinedButton"
+                        Text="← Volver al Lote"
+                        TextColor="Black" />
+
+                    <Button
+                        Grid.Column="1"
+                        Command="{Binding AgregarRegistroHumedadCommand}"
+                        StyleClass="FilledButton"
+                        Text="Guardar y Volver" />
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

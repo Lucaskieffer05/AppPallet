@@ -16,4 +16,6 @@ public partial class ActivoPasivo
     public decimal Monto { get; set; }
 
     public string Categoria { get; set; } = null!;
+
+    public string? Estado { get; set; }
 }

@@ -40,6 +40,8 @@
                 ItemsSource="{Binding ListCostoPorPallet}"
                 SelectedItem="{Binding CostoPorPalletIngresado, Mode=TwoWay}" />
 
+            <Label Text="{Binding StockActual, Mode=TwoWay, StringFormat='Stock Actual: {0}'}" TextColor="Black" />
+
             <material:DatePickerField
                 Title="Fecha de venta"
                 Date="{Binding VentaCreated.FechaVenta, Mode=TwoWay}"
@@ -56,6 +58,20 @@
             <material:EditorField
                 Title="Comentarios:"
                 Text="{Binding VentaCreated.Comentario, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:DatePickerField
+                Title="Fecha de entrega estimada o futura"
+                Date="{Binding VentaCreated.FechaEntregaEstimada, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
+
+            <material:DatePickerField
+                Title="Fecha de cobro estimada o futura"
+                Date="{Binding VentaCreated.FechaCobroEstimada, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
                 TextColor="Black" />
 
             <material:PickerField

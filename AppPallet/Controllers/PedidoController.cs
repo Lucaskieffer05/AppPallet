@@ -15,18 +15,46 @@ namespace AppPallet.Controllers
         }
 
         // Obtener todos los pedidos
-        public async Task<List<Pedido>> GetAllPedidos()
+        public async Task<List<Pedido>> GetAllPedidos(DateTime mes)
         {
             try
             {
                 return await _context.Pedido
                     .AsNoTracking()
+                    .Where(p => p.Lote.FechaSolicitada.Month == mes.Month && p.Lote.FechaSolicitada.Year == mes.Year)
                     .OrderByDescending(p => p.FechaEInicio)
                     .ToListAsync();
             }
             catch (Exception ex)
             {
                 return new List<Pedido>();
+            }
+        }
+
+        //get pedidos pendientes viendo el lote
+        // Reemplazar el método GetPedidosPendientes para mapear correctamente a PedidoPendienteDTO
+        public async Task<List<PedidoPendienteDTO>> GetPedidosPendientes(DateTime fecha)
+        {
+            try
+            {
+                return await _context.Pedido
+                    .AsNoTracking()
+                    .Include(p => p.Pallet)
+                    .Where(p => p.Lote.FechaSolicitada.Month == fecha.Month && p.Lote.FechaSolicitada.Year == fecha.Year && p.Lote.FechaEntrega == null)
+                    .OrderByDescending(p => p.FechaEInicio)
+                    .Include(p => p.Lote)
+                    .Select(p => new PedidoPendienteDTO
+                    {
+                        NombrePallet = p.Pallet.Nombre,
+                        Cantidad = p.Cantidad,
+                        FechaSolicitada = p.Lote.FechaSolicitada,
+                        NumLote = p.Lote.NumLote
+                    })
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return new List<PedidoPendienteDTO>();
             }
         }
 

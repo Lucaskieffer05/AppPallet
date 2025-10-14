@@ -44,6 +44,10 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -65,6 +69,7 @@
 		<PackageReference Include="akgul.Maui.DataGrid" Version="4.0.6" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microcharts.Maui" Version="1.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -77,6 +82,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.100" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.100" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.1" />
 		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
 		<PackageReference Include="UraniumUI" Version="2.12.1" />
 		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.12.1" />
@@ -84,6 +90,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\Configuraciones\ConfiguracionView.xaml.cs">
+	    <DependentUpon>ConfiguracionView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\CostoPorPallet\CostoPorPalletCrearView.xaml.cs">
 	    <DependentUpon>CostoPorPalletCrearView.xaml</DependentUpon>
 	  </Compile>
@@ -136,6 +145,9 @@
 	  <MauiXaml Update="Views\Cheques\ChequeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Configuraciones\ConfiguracionView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\CostoPorPallet\CostoPorPalletCrearView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -155,6 +167,18 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\GastosFijos\GastosFijosView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Graficos\DashboardView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HistorialHumedad\HistorialHumedadCrearView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HistorialHumedad\HistorialHumedadModificarView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HistorialHumedad\HistorialHumedadView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\IngresosEgresos\EgresoCrearView.xaml">
@@ -188,6 +212,15 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Padidos\PedidoView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pallets\PalletCrearView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pallets\PalletModificarView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pallets\PalletView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Presupuestos\PresupuestoModificarView.xaml">

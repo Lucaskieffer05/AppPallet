@@ -74,8 +74,10 @@ namespace AppPallet.Controllers
                 var costos = await _context.CostoPorPallet
                     .AsNoTracking()
                     .Where(c => c.EmpresaId == empresaId &&
+                                c.FechaDelete == null &&
                                 c.Mes >= primerDiaMesAnterior &&
                                 c.Mes < primerDiaMesActual.AddMonths(1))
+                    .Include(c => c.Pallet)
                     .OrderByDescending(c => c.Mes)
                     .ToListAsync();
 
@@ -88,6 +90,7 @@ namespace AppPallet.Controllers
                     CantidadPorDia = c.CantidadPorDia,
                     CargaCamion = c.CargaCamion,
                     PalletId = c.PalletId,
+                    Pallet = c.Pallet,
                     EmpresaId = c.EmpresaId,
                     PrecioPallet = c.PrecioPallet,
                     GananciaPorCantPallet = c.GananciaPorCantPallet,
@@ -183,6 +186,12 @@ namespace AppPallet.Controllers
 
                 if (costo == null)
                     return false;
+                //No actualizar si los campos son los mimos
+                if (costo.PrecioPallet == costoPorPalletSeleccionada.PrecioPallet &&
+                    costo.GananciaPorCantPallet == costoPorPalletSeleccionada.GananciaPorCantPallet)
+                {
+                    return false; // No hay cambios, retornar true
+                }
 
                 // Actualizar solo los campos principales
                 costo.PrecioPallet = costoPorPalletSeleccionada.PrecioPallet;

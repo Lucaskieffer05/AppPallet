@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using Microsoft.Maui.Storage;
+using AppPallet.Constants;
 
 namespace AppPallet.ViewModels
 {
@@ -98,15 +99,8 @@ namespace AppPallet.ViewModels
                 double iva = Preferences.Get("IVA", 0.0);
                 EgresoCreated.SumaIva = ConIva ? EgresoCreated.Monto * (decimal)iva : null;
 
-                var resultado = await _egresoController.CreateEgreso(EgresoCreated);
-                if (resultado)
-                {
-                    await MostrarAlerta("Éxito", "Egreso creado correctamente");
-                }
-                else
-                {
-                    await MostrarAlerta("Error", "No se pudo crear el egreso");
-                }
+                MessageResult resultado = await _egresoController.CreateEgreso(EgresoCreated);
+                await MostrarAlerta(resultado.Title, resultado.Message);
             }
             catch (Exception ex)
             {

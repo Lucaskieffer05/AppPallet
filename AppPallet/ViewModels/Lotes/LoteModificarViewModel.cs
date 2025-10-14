@@ -193,6 +193,19 @@ namespace AppPallet.ViewModels
         }
 
         [RelayCommand]
+        public async Task VerHumedad(PedidoMostrarDTO pedido)
+        {
+            if (pedido == null) return;
+
+            var navigationParameters = new Dictionary<string, object>
+            {
+                { "Pedido", pedido }
+            };
+            await Shell.Current.GoToAsync(nameof(HistorialHumedadView), navigationParameters);
+        }
+
+
+        [RelayCommand]
         public async Task EliminarPedido(PedidoMostrarDTO pedido)
         {
             if (pedido == null) return;

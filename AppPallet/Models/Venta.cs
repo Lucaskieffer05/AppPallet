@@ -19,5 +19,9 @@ public partial class Venta
 
     public DateTime? FechaEntrega { get; set; }
 
+    public DateTime? FechaEntregaEstimada { get; set; }
+
+    public DateTime? FechaCobroEstimada { get; set; }
+
     public virtual CostoPorPallet CostoPorPallet { get; set; } = null!;
 }

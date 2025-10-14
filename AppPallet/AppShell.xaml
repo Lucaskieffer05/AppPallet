@@ -15,6 +15,10 @@
     Shell.TitleColor="#F6F1EB">
 
 
+
+    <FlyoutItem Title="Graficos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ChartLine}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:DashboardView}" Route="DashboardView" />
+    </FlyoutItem>
     <FlyoutItem Title="Gestión de Stock" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Cubes}, Color=Black}">
         <ShellContent ContentTemplate="{DataTemplate local:StockView}" Route="StockView" />
     </FlyoutItem>
@@ -49,6 +53,10 @@
 
     <FlyoutItem Title="Gastos Fijos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.MoneyBill}, Color=Black}">
         <ShellContent ContentTemplate="{DataTemplate local:GastosFijosView}" Route="GastosFijoView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Configuraciones" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Gear}, Color=Black}">
+        <ShellContent ContentTemplate="{DataTemplate local:ConfiguracionView}" Route="ConfiguracionView" />
     </FlyoutItem>
 
 

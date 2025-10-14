@@ -27,6 +27,8 @@ public partial class Pallet
 
     public int Stock { get; set; }
 
+    public DateTime? FechaEliminacion { get; set; }
+
     public virtual ICollection<CostoPorPallet> CostoPorPallet { get; set; } = new List<CostoPorPallet>();
 
     public virtual ICollection<PalletComponentes> PalletComponentes { get; set; } = new List<PalletComponentes>();

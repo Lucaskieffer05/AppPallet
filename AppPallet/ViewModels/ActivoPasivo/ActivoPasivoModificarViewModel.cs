@@ -42,9 +42,17 @@ namespace AppPallet.ViewModels
             ];
 
         public ObservableCollection<string> Quincenas { get; } =
-    [
-        "Primera Quincena", "Segunda Quincena"
-    ];
+            [
+                "Primera Quincena", "Segunda Quincena"
+            ];
+
+        [ObservableProperty]
+        private string? estadoSeleccionado;
+
+        public ObservableCollection<string> Estados { get; } =
+            [
+                "Sin Estado","Pagado", "Sin Pagar"
+            ];
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
@@ -69,6 +77,7 @@ namespace AppPallet.ViewModels
                 AñoIngresado = ActivoPasivoModified.Mes.Year;
                 QuincenaIngresada = ActivoPasivoModified.Mes.Day <= 15 ? 0 : 1;
                 TituloModificar = $"Modificar el {ActivoPasivoModified?.Categoria} {ActivoPasivoModified?.Descripcion}";
+                EstadoSeleccionado = ActivoPasivoModified?.Estado ?? "Sin Estado";
             }
         }
 
@@ -96,6 +105,14 @@ namespace AppPallet.ViewModels
             {
                 await MostrarAlerta("Error", "Por favor, complete todos los campos correctamente.");
                 return;
+            }
+            if (EstadoSeleccionado == "Sin Estado")
+            {
+                ActivoPasivoModified.Estado = null;
+            }
+            else
+            {
+                ActivoPasivoModified.Estado = EstadoSeleccionado;
             }
             if (QuincenaIngresada == 0)
             {

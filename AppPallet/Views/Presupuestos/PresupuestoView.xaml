@@ -108,16 +108,14 @@
                                                             Padding="0,0,5,0"
                                                             FontSize="13"
                                                             Text="Precio:" />
-                                                        <Label FontSize="13" Text="$" />
-                                                        <Label FontSize="13" Text="{Binding PrecioPallet}" />
+                                                        <Label FontSize="13" Text="{Binding PrecioPallet, StringFormat='$ {0:N2}'}" />
                                                     </HorizontalStackLayout>
                                                     <HorizontalStackLayout>
                                                         <Label
                                                             Padding="0,0,5,0"
                                                             FontSize="13"
                                                             Text="Ganancia:" />
-                                                        <Label FontSize="13" Text="$" />
-                                                        <Label FontSize="13" Text="{Binding GananciaPorCantPallet}" />
+                                                        <Label FontSize="13" Text="{Binding GananciaPorCantPallet, StringFormat='$ {0:N2}'}" />
                                                     </HorizontalStackLayout>
                                                 </HorizontalStackLayout>
                                             </DataTemplate>

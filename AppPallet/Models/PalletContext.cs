@@ -6,6 +6,7 @@ namespace AppPallet.Models;
 
 public partial class PalletContext : DbContext
 {
+    private string _connectionString = Preferences.Get("database_connection_string", "Server=localhost;Database=AppPallet;Trusted_Connection=true;");
     public PalletContext()
     {
     }
@@ -55,7 +56,7 @@ public partial class PalletContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer(_connectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,6 +67,9 @@ public partial class PalletContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Descripcion)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Estado)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Fecha).HasColumnType("datetime");
@@ -152,9 +156,9 @@ public partial class PalletContext : DbContext
         {
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
             entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
+            entity.Property(e => e.FechaDelete).HasColumnType("datetime");
             entity.Property(e => e.GananciaPorCantPallet).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.Mes).HasColumnType("datetime");
-            entity.Property(e => e.FechaDelete).HasColumnType("datetime");
             entity.Property(e => e.NombrePalletCliente)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -295,6 +299,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.FechaCreacion)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.FechaEliminacion).HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -426,7 +431,9 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.Estado)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.FechaCobroEstimada).HasColumnType("datetime");
             entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
+            entity.Property(e => e.FechaEntregaEstimada).HasColumnType("datetime");
             entity.Property(e => e.FechaVenta).HasColumnType("datetime");
 
             entity.HasOne(d => d.CostoPorPallet).WithMany(p => p.Venta)

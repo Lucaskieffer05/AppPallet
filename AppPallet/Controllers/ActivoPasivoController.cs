@@ -85,6 +85,7 @@ namespace AppPallet.Controllers
                                   activopasivoExistente.Mes != activoPasivoModificar.Mes ||
                                   activopasivoExistente.Descripcion != activoPasivoModificar.Descripcion ||
                                   activopasivoExistente.Monto != activoPasivoModificar.Monto ||
+                                  activopasivoExistente.Estado != activoPasivoModificar.Estado ||
                                   activopasivoExistente.Categoria != activoPasivoModificar.Categoria;
 
                 if (!hayCambios)
@@ -96,6 +97,7 @@ namespace AppPallet.Controllers
                 activopasivoExistente.Descripcion = activoPasivoModificar.Descripcion;
                 activopasivoExistente.Monto = activoPasivoModificar.Monto;
                 activopasivoExistente.Categoria = activoPasivoModificar.Categoria;
+                activopasivoExistente.Estado = activoPasivoModificar.Estado;
 
                 var result = await _context.SaveChangesAsync();
 
@@ -139,7 +141,19 @@ namespace AppPallet.Controllers
 
         }
 
+        public async Task<bool> ExistePasivoEnMes(string descripcion, decimal monto , DateTime mes)
+        {
+            try
+            {
+                return await _context.ActivoPasivo.AnyAsync(ap => ap.Descripcion == descripcion && ap.Monto== monto && ap.Mes.Month == mes.Month && ap.Mes.Year == mes.Year && ap.Categoria.ToLower() == "pasivo");
 
+            }
+            catch
+            {
+                return false;
+
+            }
+        }
     }
             
 }

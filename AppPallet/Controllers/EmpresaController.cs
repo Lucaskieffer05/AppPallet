@@ -82,7 +82,7 @@ namespace AppPallet.Controllers
             {
                 return await _context.Empresa
                     .Include(e => e.CostoPorPallet
-                        .Where(cp => cp.Mes.Year == filtroMes.Year && cp.Mes.Month == filtroMes.Month)
+                        .Where(cp => cp.Mes.Year == filtroMes.Year && cp.Mes.Month == filtroMes.Month && cp.FechaDelete == null)
                         .OrderByDescending(cp => cp.Mes))
                     .ThenInclude(cp => cp.CostoPorCamion)
                     .AsNoTracking()

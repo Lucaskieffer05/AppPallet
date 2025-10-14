@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.PalletModificarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="MODIFICAR PALLET"
+    x:DataType="viewModels:PalletModificarViewModel">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15"
+            WidthRequest="500">
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Registrar un nuevo tipo de pallet:"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Nombre"
+                Text="{Binding PalletModificar.Nombre, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Descripcion"
+                Text="{Binding PalletModificar.Descripcion, Mode=TwoWay}"
+                TextColor="Black" />
+            <material:EditorField
+                Title="Estructura"
+                Text="{Binding PalletModificar.Estructura, Mode=TwoWay}"
+                TextColor="Black" />
+            <material:EditorField
+                Title="Tratamiento"
+                Text="{Binding PalletModificar.Tratamiento, Mode=TwoWay}"
+                TextColor="Black" />
+            <material:EditorField
+                Title="Sello"
+                Text="{Binding PalletModificar.Sello, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Peso kg: "
+                Keyboard="Numeric"
+                Text="{Binding PalletModificar.Peso, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Tolerancia de peso kg: "
+                Keyboard="Numeric"
+                Text="{Binding PalletModificar.ToleranciaPeso, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Stock : "
+                Keyboard="Numeric"
+                Text="{Binding PalletModificar.Stock, Mode=TwoWay}"
+                TextColor="Black" />
+
+
+            <HorizontalStackLayout Spacing="10">
+                <Button
+                    Command="{Binding GuardarCambiosCommand}"
+                    StyleClass="FilledButton"
+                    Text="Guardar Pallet" />
+                <Button
+                    Command="{Binding VolverAtrasCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar" />
+                <Button
+                    BorderColor="#d65265"
+                    Command="{Binding EliminarPalletCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Eliminar pallet"
+                    TextColor="#d65265" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

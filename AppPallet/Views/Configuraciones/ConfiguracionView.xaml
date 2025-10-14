@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.ConfiguracionView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="CONFIGURACIONES"
+    x:DataType="viewModels:ConfiguracionViewModel"
+    Shell.BackgroundColor="#374151"
+    Shell.TitleColor="#F6F1EB">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+
+            <Color x:Key="PrimaryColor">#374151</Color>
+            <Color x:Key="SecondaryColor">#4CAF50</Color>
+            <Color x:Key="AccentColor">#2196F3</Color>
+            <Color x:Key="WarningColor">#FF9800</Color>
+            <Color x:Key="DangerColor">#F44336</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BackgroundLight">#F5F5F5</Color>
+            <Color x:Key="SuccessColor">#10B981</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#374151" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+
+            <Style x:Key="InfoTextStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextColor" Value="#666" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView Padding="100,0,100,0">
+        <Grid
+            Padding="16"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="15">
+
+            <!--  Loading Indicator  -->
+            <ActivityIndicator
+                Grid.RowSpan="6"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center"
+                Color="{StaticResource PrimaryColor}" />
+
+            <!--  Header  -->
+            <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource TitleStyle}" Text="⚙️ Configuración del Sistema" />
+                    <Label
+                        LineBreakMode="WordWrap"
+                        Style="{StaticResource InfoTextStyle}"
+                        Text="Configure los parámetros generales de la aplicación. Los cambios se guardan automáticamente en el dispositivo." />
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Mensaje de Estado  -->
+            <Border
+                Grid.Row="1"
+                Padding="12"
+                BackgroundColor="{Binding MostrarMensajePruebaConexion, Converter={StaticResource BoolToColorConverter}}"
+                IsVisible="{Binding MostrarMensajePruebaConexion}"
+                StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    HorizontalOptions="Center"
+                    Text="{Binding MensajeEstado, Mode=TwoWay}"
+                    TextColor="White" />
+            </Border>
+
+            <!--  Configuración de Base de Datos  -->
+            <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="🗄️ Configuración de Base de Datos" />
+
+                    <material:EditorField
+                        Title="Cadena de Conexión"
+                        HeightRequest="80"
+                        Text="{Binding ConnectionString, Mode=TwoWay}"
+                        TextColor="Black" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Button
+                            Grid.Column="0"
+                            BackgroundColor="#374151"
+                            Command="{Binding ProbarConexionCommand}"
+                            HeightRequest="40"
+                            StyleClass="FilledButton"
+                            Text="🔍 Probar Conexión" />
+
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="#6B7280"
+                            Command="{Binding RestablecerValoresPorDefectoCommand}"
+                            HeightRequest="40"
+                            StyleClass="OutlinedButton"
+                            Text="🔄 Por Defecto" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Configuración de IVA  -->
+            <Border Grid.Row="3" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="💰 Configuración de IVA" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                        <material:EditorField
+                            Title="Porcentaje de IVA (%)"
+                            Grid.Column="0"
+                            Keyboard="Numeric"
+                            Text="{Binding IvaPercentage, Mode=TwoWay}"
+                            TextColor="Black" />
+
+                        <Border
+                            Grid.Column="1"
+                            Padding="12"
+                            BackgroundColor="#E8F5E8"
+                            StrokeThickness="0"
+                            VerticalOptions="End">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                HorizontalOptions="Center"
+                                Text="{Binding IvaInfo}"
+                                TextColor="{StaticResource SuccessColor}" />
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Configuración de Humedad  -->
+            <Border Grid.Row="4" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="💧 Configuración de Niveles de Humedad" />
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                        <material:EditorField
+                            Title="Seco (Máx %)"
+                            Grid.Column="0"
+                            Keyboard="Numeric"
+                            Text="{Binding HumedadSeco, Mode=TwoWay}"
+                            TextColor="Black" />
+
+                        <material:EditorField
+                            Title="Óptimo (Máx %)"
+                            Grid.Column="1"
+                            Keyboard="Numeric"
+                            Text="{Binding HumedadOptimo, Mode=TwoWay}"
+                            TextColor="Black" />
+
+                        <material:EditorField
+                            Title="Húmedo (Máx %)"
+                            Grid.Column="2"
+                            Keyboard="Numeric"
+                            Text="{Binding HumedadHumedo, Mode=TwoWay}"
+                            TextColor="Black" />
+                    </Grid>
+
+                    <!--  Información de Rangos  -->
+                    <Border
+                        Padding="12"
+                        BackgroundColor="#E3F2FD"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="5">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                Text="📊 Rangos de Humedad Configurados"
+                                TextColor="#1976D2" />
+                            <Label
+                                FontSize="11"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding RangoHumedadInfo}"
+                                TextColor="#666" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Leyenda de Colores  -->
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="5">
+                        <Border
+                            Grid.Column="0"
+                            Padding="8,4"
+                            BackgroundColor="#EF4444"
+                            StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="6" />
+                            </Border.StrokeShape>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalOptions="Center"
+                                Text="Muy Seco"
+                                TextColor="White" />
+                        </Border>
+
+                        <Border
+                            Grid.Column="1"
+                            Padding="8,4"
+                            BackgroundColor="#10B981"
+                            StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="6" />
+                            </Border.StrokeShape>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalOptions="Center"
+                                Text="Óptimo"
+                                TextColor="White" />
+                        </Border>
+
+                        <Border
+                            Grid.Column="2"
+                            Padding="8,4"
+                            BackgroundColor="#F59E0B"
+                            StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="6" />
+                            </Border.StrokeShape>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalOptions="Center"
+                                Text="Húmedo"
+                                TextColor="White" />
+                        </Border>
+
+                        <Border
+                            Grid.Column="3"
+                            Padding="8,4"
+                            BackgroundColor="#5163D6"
+                            StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="6" />
+                            </Border.StrokeShape>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalOptions="Center"
+                                Text="Muy Húmedo"
+                                TextColor="White" />
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border
+                Grid.Row="5"
+                Padding="12"
+                BackgroundColor="{Binding MostrarMensajeExito, Converter={StaticResource BoolToColorConverter}}"
+                IsVisible="{Binding MostrarMensajeExito}"
+                StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    HorizontalOptions="Center"
+                    Text="{Binding MensajeEstado, Mode=TwoWay}"
+                    TextColor="White" />
+            </Border>
+
+            <!--  Botones de Acción  -->
+            <Border Grid.Row="6" StrokeThickness="0">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        BackgroundColor="#e5e7eb"
+                        BorderColor="#9ca3af"
+                        Command="{Binding RestablecerValoresPorDefectoCommand}"
+                        HeightRequest="45"
+                        StyleClass="OutlinedButton"
+                        Text="🔄 Restablecer Valores"
+                        TextColor="Black" />
+
+                    <Button
+                        Grid.Column="1"
+                        BackgroundColor="{StaticResource SuccessColor}"
+                        Command="{Binding GuardarConfiguracionesCommand}"
+                        HeightRequest="45"
+                        StyleClass="FilledButton"
+                        Text="💾 Guardar Configuraciones" />
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

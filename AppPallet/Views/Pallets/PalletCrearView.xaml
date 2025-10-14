@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.PalletCrearView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="CREAR TIPO PALLET"
+    x:DataType="viewModels:PalletCrearViewModel">
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15"
+            WidthRequest="500">
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Registrar un nuevo tipo de pallet:"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Nombre"
+                Text="{Binding PalletCreated.Nombre, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Descripcion"
+                Text="{Binding PalletCreated.Descripcion, Mode=TwoWay}"
+                TextColor="Black" />
+            <material:EditorField
+                Title="Estructura"
+                Text="{Binding PalletCreated.Estructura, Mode=TwoWay}"
+                TextColor="Black" />
+            <material:EditorField
+                Title="Tratamiento"
+                Text="{Binding PalletCreated.Tratamiento, Mode=TwoWay}"
+                TextColor="Black" />
+            <material:EditorField
+                Title="Sello"
+                Text="{Binding PalletCreated.Sello, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Peso kg: "
+                Keyboard="Numeric"
+                Text="{Binding PalletCreated.Peso, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Tolerancia de peso kg: "
+                Keyboard="Numeric"
+                Text="{Binding PalletCreated.ToleranciaPeso, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <material:EditorField
+                Title="Stock : "
+                Keyboard="Numeric"
+                Text="{Binding PalletCreated.Stock, Mode=TwoWay}"
+                TextColor="Black" />
+
+
+            <HorizontalStackLayout Spacing="10">
+                <Button
+                    Command="{Binding CrearPalletCommand}"
+                    StyleClass="FilledButton"
+                    Text="Guardar Pallet" />
+                <Button
+                    Command="{Binding VolverAtrasCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

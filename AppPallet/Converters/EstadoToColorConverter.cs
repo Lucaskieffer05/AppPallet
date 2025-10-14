@@ -40,6 +40,30 @@ namespace AppPallet.Converters
                 {
                     "En Producción" => Color.FromArgb("#F1E500"), // Amarillo 
                     "Entregado" => Color.FromArgb("#00EB5A"), // Verde 
+                    "En Stock" => Color.FromArgb("#EBAC00"), // Naranja
+                    _ => Colors.Transparent
+                };
+            }
+            return Colors.Transparent;
+        }
+
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class EstadoActivoToColorConverter : IValueConverter
+    {
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if (value is string estado)
+            {
+                return estado switch
+                {
+                    "Sin Pagar" => Color.FromArgb("#FFE96A"), // Amarillo 
+                    "Pagado" => Color.FromArgb("#8BFF77"), // Verde 
                     _ => Colors.Transparent
                 };
             }

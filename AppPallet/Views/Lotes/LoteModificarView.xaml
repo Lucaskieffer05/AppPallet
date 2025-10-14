@@ -139,148 +139,159 @@
             </Border>
 
             <!--  Gestión de Pedidos  -->
-            <Border
-                Grid.Row="2"
-                Margin="100,0,100,0"
-                BackgroundColor="#374151"
-                Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="15">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label
-                            Grid.Column="0"
-                            Style="{StaticResource SectionTitleStyle}"
-                            Text="📦 Pedidos del Lote" />
+            <Grid Grid.Row="2" ColumnDefinitions="0.1*,*,0.1*">
+                <Border
+                    Grid.Column="1"
+                    BackgroundColor="#374151"
+                    Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label
+                                Grid.Column="0"
+                                Style="{StaticResource SectionTitleStyle}"
+                                Text="📦 Pedidos del Lote" />
 
-                        <Button
-                            Grid.Column="1"
-                            BackgroundColor="#F6F1EB"
-                            BorderColor="#D0B595"
-                            BorderWidth="1"
-                            Command="{Binding AgregarPedidoCommand}"
-                            StyleClass="FilledButton"
-                            Text="Agregar Pedido"
-                            TextColor="Black" />
-                    </Grid>
+                            <Button
+                                Grid.Column="1"
+                                BackgroundColor="#F6F1EB"
+                                BorderColor="#D0B595"
+                                BorderWidth="1"
+                                Command="{Binding AgregarPedidoCommand}"
+                                StyleClass="FilledButton"
+                                Text="Agregar Pedido"
+                                TextColor="Black" />
+                        </Grid>
 
-                    <CollectionView ItemsSource="{Binding Pedidos}" SelectionMode="None">
-                        <CollectionView.EmptyView>
-                            <VerticalStackLayout
-                                Padding="20"
-                                HorizontalOptions="Center"
-                                Spacing="10">
-                                <Label
-                                    FontSize="32"
+                        <CollectionView ItemsSource="{Binding Pedidos}" SelectionMode="None">
+                            <CollectionView.EmptyView>
+                                <VerticalStackLayout
+                                    Padding="20"
                                     HorizontalOptions="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="📭" />
-                                <Label
-                                    HorizontalOptions="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="No hay pedidos en este lote"
-                                    TextColor="White" />
-                                <Label
-                                    FontSize="12"
-                                    HorizontalOptions="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="Agrega el primer pedido para comenzar"
-                                    TextColor="#F6F1EB" />
-                            </VerticalStackLayout>
-                        </CollectionView.EmptyView>
+                                    Spacing="10">
+                                    <Label
+                                        FontSize="32"
+                                        HorizontalOptions="Center"
+                                        HorizontalTextAlignment="Center"
+                                        Text="📭" />
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        HorizontalTextAlignment="Center"
+                                        Text="No hay pedidos en este lote"
+                                        TextColor="White" />
+                                    <Label
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        HorizontalTextAlignment="Center"
+                                        Text="Agrega el primer pedido para comenzar"
+                                        TextColor="#F6F1EB" />
+                                </VerticalStackLayout>
+                            </CollectionView.EmptyView>
 
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:PedidoMostrarDTO">
-                                <Border Margin="0,5" Style="{StaticResource CardStyle}">
-                                    <Grid
-                                        ColumnDefinitions="*,Auto"
-                                        RowDefinitions="Auto,Auto"
-                                        RowSpacing="8">
-                                        <!--  Información del Pedido  -->
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:PedidoMostrarDTO">
+                                    <Border Margin="0,5" Style="{StaticResource CardStyle}">
                                         <Grid
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            ColumnDefinitions="*,*"
-                                            RowDefinitions="Auto,Auto">
-                                            <Label
+                                            ColumnDefinitions="*,Auto"
+                                            RowDefinitions="Auto,Auto"
+                                            RowSpacing="8">
+                                            <!--  Información del Pedido  -->
+                                            <Grid
                                                 Grid.Row="0"
                                                 Grid.Column="0"
-                                                FontAttributes="Bold"
-                                                FontSize="16"
-                                                Text="{Binding NombrePallet}" />
+                                                ColumnDefinitions="Auto,*"
+                                                RowDefinitions="Auto,Auto">
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    FontAttributes="Bold"
+                                                    FontSize="16"
+                                                    Text="{Binding NombrePallet}" />
 
-                                            <Label
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="1"
+                                                    FontAttributes="Bold"
+                                                    FontSize="14"
+                                                    HorizontalOptions="Center"
+                                                    Text="{Binding Cantidad, StringFormat='Cantidad: {0}'}" />
+
+
+                                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0">
+                                                    <Label
+                                                        FontAttributes="Italic"
+                                                        FontSize="12"
+                                                        Text="{Binding FechaEInicio, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
+                                                        TextColor="#666" />
+
+                                                    <Label
+                                                        Margin="10,0,0,0"
+                                                        FontAttributes="Italic"
+                                                        FontSize="12"
+                                                        Text="{Binding FechaEFinal, StringFormat='Terminado: {0:dd/MM/yyyy}'}"
+                                                        TextColor="#666" />
+
+                                                </HorizontalStackLayout>
+
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    HorizontalOptions="Center"
+                                                    Text="{Binding Estado}"
+                                                    TextColor="{Binding EstadoColor}" />
+                                            </Grid>
+
+                                            <!--  Acciones  -->
+                                            <HorizontalStackLayout
                                                 Grid.Row="0"
+                                                Grid.RowSpan="2"
                                                 Grid.Column="1"
-                                                FontAttributes="Bold"
-                                                FontSize="14"
-                                                HorizontalOptions="Center"
-                                                Text="{Binding Cantidad, StringFormat='Cantidad: {0}'}" />
+                                                Spacing="5">
 
-
-                                            <HorizontalStackLayout Grid.Row="1">
-                                                <Label
-                                                    Grid.Column="0"
-                                                    FontAttributes="Italic"
+                                                <Button
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteModificarViewModel}}, Path=VerHumedadCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    CornerRadius="10"
                                                     FontSize="12"
-                                                    Text="{Binding FechaEInicio, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
-                                                    TextColor="#666" />
+                                                    HeightRequest="35"
+                                                    StyleClass="OutlinedButton"
+                                                    Text="Humedad"
+                                                    TextColor="#667C9D"
+                                                    WidthRequest="115" />
 
-                                                <Label
-                                                    Grid.Column="0"
-                                                    Margin="10,0,0,0"
-                                                    FontAttributes="Italic"
-                                                    FontSize="12"
-                                                    Text="{Binding FechaEFinal, StringFormat='Terminado: {0:dd/MM/yyyy}'}"
-                                                    TextColor="#666" />
+                                                <Button
+                                                    BackgroundColor="#374151"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteModificarViewModel}}, Path=ModificarPedidoCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    CornerRadius="10"
+                                                    HeightRequest="35"
+                                                    StyleClass="FilledButton"
+                                                    Text="Editar"
+                                                    WidthRequest="85" />
+
+                                                <ImageButton
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteModificarViewModel}}, Path=EliminarPedidoCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    StyleClass="OutlinedButton"
+                                                    VerticalOptions="Center">
+                                                    <ImageButton.Source>
+                                                        <FontImageSource
+                                                            FontFamily="FASolid"
+                                                            Glyph="{x:Static fa:Regular.TrashCan}"
+                                                            Size="15"
+                                                            Color="#FF8B9D" />
+                                                    </ImageButton.Source>
+                                                </ImageButton>
 
                                             </HorizontalStackLayout>
-
-                                            <Label
-                                                Grid.Row="1"
-                                                Grid.Column="1"
-                                                FontSize="12"
-                                                HorizontalOptions="Center"
-                                                Text="{Binding Estado}"
-                                                TextColor="{Binding EstadoColor}" />
                                         </Grid>
-
-                                        <!--  Acciones  -->
-                                        <HorizontalStackLayout
-                                            Grid.Row="0"
-                                            Grid.RowSpan="2"
-                                            Grid.Column="1"
-                                            Spacing="5">
-                                            <Button
-                                                BackgroundColor="#374151"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteModificarViewModel}}, Path=ModificarPedidoCommand}"
-                                                CommandParameter="{Binding}"
-                                                CornerRadius="10"
-                                                HeightRequest="35"
-                                                StyleClass="FilledButton"
-                                                Text="Editar"
-                                                WidthRequest="85" />
-
-                                            <ImageButton
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:LoteModificarViewModel}}, Path=EliminarPedidoCommand}"
-                                                CommandParameter="{Binding}"
-                                                StyleClass="OutlinedButton"
-                                                VerticalOptions="Center">
-                                                <ImageButton.Source>
-                                                    <FontImageSource
-                                                        FontFamily="FASolid"
-                                                        Glyph="{x:Static fa:Regular.TrashCan}"
-                                                        Size="15"
-                                                        Color="#FF8B9D" />
-                                                </ImageButton.Source>
-                                            </ImageButton>
-
-                                        </HorizontalStackLayout>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </Border>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
 
             <!--  Botones de Acción  -->
             <Border

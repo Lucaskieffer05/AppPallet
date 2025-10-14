@@ -82,6 +82,22 @@
 
         <Grid Grid.Row="1" RowDefinitions="50,Auto">
 
+            <HorizontalStackLayout
+                Grid.Row="0"
+                HorizontalOptions="Center"
+                Spacing="10">
+                <Label
+                    FontSize="17"
+                    Text="Total de gasto fijos:"
+                    TextColor="Gray"
+                    VerticalOptions="Center" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="17"
+                    Text="{Binding TotalGastosFijos, StringFormat='${0:N2}'}"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
 
             <Grid Grid.Row="1" ColumnDefinitions="0.5*,*,0.5*">
 
@@ -141,6 +157,8 @@
                     Grid.Column="2"
                     Spacing="20"
                     VerticalOptions="Center">
+
+
 
                     <Button
                         Background="#374151"

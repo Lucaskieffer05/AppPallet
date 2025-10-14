@@ -25,7 +25,7 @@ namespace AppPallet.Controllers
         {
             try
             {
-                return await _context.Pallet.AsNoTracking().ToListAsync();
+                return await _context.Pallet.AsNoTracking().Where(p => p.FechaEliminacion == null).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -53,6 +53,7 @@ namespace AppPallet.Controllers
                 existingPallet.ToleranciaPeso = pallet.ToleranciaPeso;
                 existingPallet.Stock = pallet.Stock;
                 existingPallet.FechaCreacion = pallet.FechaCreacion;
+                existingPallet.FechaEliminacion = pallet.FechaEliminacion;
                 existingPallet.FechaModificacion = DateTime.Today;
                 await _context.SaveChangesAsync();
                 return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Pallet.ModifySuccess);
@@ -75,14 +76,27 @@ namespace AppPallet.Controllers
                     return new MessageResult(MessageConstants.Titles.Error, MessageConstants.Pallet.NotFound);
                 }
                 pallet.Stock += cantidad;
-                if (pallet.Stock < 0)
-                    pallet.Stock = 0;
                 await _context.SaveChangesAsync();
-                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Pallet.ModifySuccess);
+                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Pallet.AddStockSuccess);
             }
             catch (Exception ex)
             {
                 return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Pallet.ModifyError} Detalles: {ex.Message}");
+            }
+        }
+
+        //crear pallet
+        public async Task<MessageResult> CrearPallet(Pallet pallet)
+        {
+            try
+            {
+                await _context.Pallet.AddAsync(pallet);
+                await _context.SaveChangesAsync();
+                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.Pallet.CreateSuccess);
+            }
+            catch (Exception ex)
+            {
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Detalles: {ex.Message}");
             }
         }
 

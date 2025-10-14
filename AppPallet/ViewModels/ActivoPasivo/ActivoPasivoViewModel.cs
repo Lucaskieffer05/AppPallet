@@ -1,4 +1,5 @@
-﻿using AppPallet.Controllers;
+﻿using AppPallet.Constants;
+using AppPallet.Controllers;
 using AppPallet.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -50,6 +51,23 @@ namespace AppPallet.ViewModels
             ];
 
         public ObservableCollection<int> Años { get; } =
+            [
+                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
+            ];
+
+        [ObservableProperty]
+        private int mesToCopy = DateTime.Today.Month - 1;
+
+        [ObservableProperty]
+        private int añoToCopyIndex = 1;
+
+        public ObservableCollection<string> MesesCopy { get; } =
+            [
+                "01", "02", "03", "04", "05", "06",
+                        "07", "08", "09", "10", "11", "12"
+            ];
+
+        public ObservableCollection<int> AñosCopy { get; } =
             [
                 DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
             ];
@@ -267,6 +285,69 @@ namespace AppPallet.ViewModels
         async Task CrearActivoPasivo()
         {
             await Shell.Current.GoToAsync(nameof(Views.ActivoPasivoCrearView));
+        }
+
+        [RelayCommand]
+        async Task CopiarPasivos()
+        {
+            try
+            {
+                if (ListPasivos.Count == 0)
+                {
+                    await MostrarAlerta("Error", "No hay pasivos para copiar.");
+                    return;
+                }
+
+                // Preguntar al usuario si desea copiar el presupuesto
+                var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+                if (mainPage == null)
+                {
+                    await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                    return;
+                }
+                bool confirmar = await mainPage.DisplayAlert("Confirmar", $"¿Desea copiar estos pasivos al mes {MesToCopy + 1}-{AñosCopy[AñoToCopyIndex]}?", "Sí", "No");
+                if (!confirmar)
+                    return;
+
+                // verificar que AñoToCopyIndex tenga valor
+                if (AñoToCopyIndex < 0 || AñoToCopyIndex >= Años.Count || MesToCopy < 0)
+                {
+                    await MostrarAlerta("Error", "Año o Mes inválido para copiar el presupuesto.");
+                    return;
+                }
+
+                // agregar los egresos al mes seleccionado
+                foreach (var pasivo in ListPasivos)
+                {
+                    var nuevoPasivo = new ActivoPasivo
+                    {
+                        Fecha = new DateTime(AñosCopy[AñoToCopyIndex], MesToCopy + 1, pasivo.Fecha?.Day ?? 1),
+                        Mes = new DateTime(AñosCopy[AñoToCopyIndex], MesToCopy + 1, pasivo.Mes.Day),
+                        Descripcion = pasivo.Descripcion,
+                        Monto = pasivo.Monto,
+                        Categoria = pasivo.Categoria,
+                        Estado = pasivo.Estado
+                    };
+                    // Mirar si ya hay un pasivo con la misma descripción en el mes y año seleccionados
+                    bool existe = await _activoPasivoController.ExistePasivoEnMes(nuevoPasivo.Descripcion, nuevoPasivo.Monto, nuevoPasivo.Mes);
+                    if (!existe)
+                    {
+                        MessageResult response = await _activoPasivoController.CreateActivoPasivo(nuevoPasivo);
+                        if (response.Title == MessageConstants.Titles.Error)
+                        {
+                            await MostrarAlerta("Error", "Error al copiar los gastos fijos.");
+                            return;
+                        }
+                    }
+                }
+
+                await MostrarAlerta("Éxito", "Gastos fijos copiados correctamente.");
+                await CargarActivosPasivos();
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error", $"Error al copiar los pasivos: {ex.Message}");
+            }
         }
 
         private async Task MostrarAlerta(string titulo, string mensaje)

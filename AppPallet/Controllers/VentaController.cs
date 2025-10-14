@@ -42,6 +42,53 @@ namespace AppPallet.Controllers
             }
         }
 
+        // obtener todas las ventas en un año agrupadas por mes
+        public async Task<List<VentaMesDTO>> GetVentasAnuales(int year)
+        {
+            try
+            {
+                var ventas = await _context.Venta
+                    .AsNoTracking()
+                    .Where(v => v.FechaVenta.Year == year)
+                    .Include(v => v.CostoPorPallet) // Asegurar que CostoPorPallet esté cargado
+                    .ToListAsync();
+
+                var ventasPorMes = ventas
+                    .GroupBy(v => v.FechaVenta.Month)
+                    .Select(g => new VentaMesDTO
+                    {
+                        Mes = g.Key,
+                        TotalVentas = g.Sum(v => (v.CostoPorPallet != null ? v.CostoPorPallet.PrecioPallet ?? 0 : 0) * v.CantPallets),
+                        TotalPallets = g.Sum(v => v.CantPallets),
+                        Ventas = g.ToList()
+                    })
+                    .OrderBy(vm => vm.Mes)
+                    .ToList();
+
+                // Asegurarse de que todos los meses estén representados
+                for (int mes = 1; mes <= 12; mes++)
+                {
+                    if (!ventasPorMes.Any(vm => vm.Mes == mes))
+                    {
+                        ventasPorMes.Add(new VentaMesDTO
+                        {
+                            Mes = mes,
+                            TotalVentas = 0,
+                            TotalPallets = 0,
+                            Ventas = new List<Venta>()
+                        });
+                    }
+                }
+                return ventasPorMes.OrderBy(vm => vm.Mes).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<VentaMesDTO>();
+            }
+        }
+
+
         // Obtener venta por ID
         public async Task<Venta?> GetVentaById(int id)
         {
@@ -62,6 +109,38 @@ namespace AppPallet.Controllers
             }
         }
 
+        // obtener un top de los clientes con mas ventas
+        public async Task<List<ClienteTopDTO>> GetTopClientes(DateTime fechaFiltro)
+        {
+            try
+            {
+                var ventas = await _context.Venta
+                    .AsNoTracking()
+                    .Include(v => v.CostoPorPallet)
+                    .ThenInclude(cp => cp.Empresa)
+                    .Where(v => v.FechaVenta.Year == fechaFiltro.Year && v.CostoPorPallet.Empresa.FechaDelete != null)
+                    .ToListAsync();
+                var topClientes = ventas
+                    .GroupBy(v => v.CostoPorPallet.Empresa.EmpresaId)
+                    .Select(g => new ClienteTopDTO
+                    {
+                        EmpresaId = g.Key,
+                        NomEmpresa = g.First().CostoPorPallet.Empresa.NomEmpresa,
+                        TotalVentas = g.Count(),
+                        TotalPallets = g.Sum(v => v.CantPallets)
+                    })
+                    .OrderByDescending(ct => ct.TotalVentas)
+                    .ToList();
+                return topClientes;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<ClienteTopDTO>();
+            }
+        }
+
+
         // Crear una nueva venta
         public async Task<MessageResult> CreateVenta(Venta nuevaVenta)
         {
@@ -75,7 +154,9 @@ namespace AppPallet.Controllers
                     Estado = nuevaVenta.Estado,
                     CostoPorPalletId = nuevaVenta.CostoPorPalletId,
                     Comentario = nuevaVenta.Comentario,
-                    FechaEntrega = nuevaVenta.FechaEntrega
+                    FechaEntrega = nuevaVenta.FechaEntrega,
+                    FechaCobroEstimada = nuevaVenta.FechaCobroEstimada,
+                    FechaEntregaEstimada = nuevaVenta.FechaEntregaEstimada
                 };
 
                 _context.Venta.Add(nuevaVenta);
@@ -108,6 +189,8 @@ namespace AppPallet.Controllers
                                  ventaExistente.Estado != ventaActualizada.Estado ||
                                  ventaExistente.CostoPorPalletId != ventaActualizada.CostoPorPalletId ||
                                  ventaExistente.Comentario != ventaActualizada.Comentario ||
+                                 ventaExistente.FechaEntregaEstimada != ventaActualizada.FechaEntregaEstimada ||
+                                 ventaExistente.FechaCobroEstimada != ventaActualizada.FechaCobroEstimada ||
                                  ventaExistente.FechaEntrega != ventaActualizada.FechaEntrega;
 
                 if (!hayCambios)
@@ -123,6 +206,8 @@ namespace AppPallet.Controllers
                 ventaExistente.CostoPorPalletId = ventaActualizada.CostoPorPalletId;
                 ventaExistente.Comentario = ventaActualizada.Comentario;
                 ventaExistente.FechaEntrega = ventaActualizada.FechaEntrega;
+                ventaExistente.FechaCobroEstimada = ventaActualizada.FechaCobroEstimada;
+                ventaExistente.FechaEntregaEstimada = ventaActualizada.FechaEntregaEstimada;
                 var respuesta = await _context.SaveChangesAsync();
                 if (respuesta > 0)
                 {

@@ -1,5 +1,6 @@
 ﻿using AppPallet.Controllers;
 using AppPallet.Models;
+using AppPallet.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -110,6 +111,30 @@ namespace AppPallet.ViewModels
             PalletSeleccionado = pallet;
             // Aquí podrías navegar a una vista de detalles si es necesario
             await MostrarAlerta("Detalles", $"{pallet.Nombre}\nStock: {pallet.Stock}\nDescripción: {pallet.Descripcion}");
+        }
+
+        [RelayCommand]
+        public async Task VerCrearPallet()
+        {
+            await Shell.Current.GoToAsync(nameof(PalletCrearView));
+        }
+
+        [RelayCommand]
+        async Task ModificarPallet(Pallet pallet)
+        {
+
+            if (pallet == null)
+            {
+                await MostrarAlerta("Error", "No hay ningún ingreso seleccionado");
+                return;
+            }
+
+            var navigationParams = new Dictionary<string, object>
+            {
+                { "Pallet", pallet }
+            };
+            await Shell.Current.GoToAsync(nameof(PalletModificarView), navigationParams);
+
         }
 
         private async Task MostrarAlerta(string titulo, string mensaje)

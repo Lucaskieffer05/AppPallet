@@ -1,4 +1,5 @@
-﻿using AppPallet.Models;
+﻿using AppPallet.Constants;
+using AppPallet.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -61,58 +62,34 @@ namespace AppPallet.Controllers
         }
 
         // Crear un nuevo cheque
-        public async Task<bool> CreateGastoFijo(GastosFijos nuevoGastoFijo, bool flagEgreso = true, bool flagPasivo = true)
+        public async Task<MessageResult> CreateGastoFijo(GastosFijos nuevoGastoFijo)
         {
             try
             {
 
-                _context.GastosFijos.Add(nuevoGastoFijo);
-
-                // Crear un Egreso asociado si flagEgreso es true
-                if (flagEgreso)
+                // crear el nuevo gasto fijo
+                GastosFijos gastoFijo = new GastosFijos
                 {
-                    var nuevoEgreso = new Egreso
-                    {
-                        Fecha = nuevoGastoFijo.Mes,
-                        Mes = new DateTime(nuevoGastoFijo.Mes.Year, nuevoGastoFijo.Mes.Month, 1),
-                        Monto = nuevoGastoFijo.Monto,
-                        DescripEgreso = nuevoGastoFijo.NombreGastoFijo,
-                        Comentario = "Gasto Fijo"
-                    };
-                    _context.Egreso.Add(nuevoEgreso);
-                }
-
-                // crear Pasivo asociado si FlasgPasivo es true
-                if (flagPasivo)
-                {
-                    var nuevoPasivo = new ActivoPasivo
-                    {
-                        Fecha = nuevoGastoFijo.Mes,
-                        Mes = new DateTime(nuevoGastoFijo.Mes.Year, nuevoGastoFijo.Mes.Month, 1),
-                        Monto = nuevoGastoFijo.Monto,
-                        Descripcion = nuevoGastoFijo.NombreGastoFijo,
-                        Categoria = "Pasivo"
-                    };
-                    _context.ActivoPasivo.Add(nuevoPasivo);
-                }
-
+                    NombreGastoFijo = nuevoGastoFijo.NombreGastoFijo,
+                    Monto = nuevoGastoFijo.Monto,
+                    Mes = nuevoGastoFijo.Mes
+                };
+                _context.GastosFijos.Add(gastoFijo);
                 var result = await _context.SaveChangesAsync();
+                if (result == 0)
+                {
+                    return new MessageResult(MessageConstants.Titles.Error, MessageConstants.GastosFijos.CreateError);
+                }
+                return new MessageResult(MessageConstants.Titles.Success, MessageConstants.GastosFijos.CreateSuccess);
 
-                return result > 0;
             }
             catch (DbUpdateException dbEx)
             {
-                Console.WriteLine($"Error de base de datos: {dbEx.Message}");
-                if (dbEx.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
-                }
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Detalles: {dbEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error general: {ex.Message}");
-                return false;
+                return new MessageResult(MessageConstants.Titles.Error, $"{MessageConstants.Generic.UnexpectedError} Detalles: {ex.Message}");
             }
         }
 

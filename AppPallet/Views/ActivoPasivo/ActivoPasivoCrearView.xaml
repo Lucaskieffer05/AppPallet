@@ -1,65 +1,96 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppPallet.Views.ActivoPasivoCrearView"
-            xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-            xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-            xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
-             Title="Registrar Activo/Pasivo"
-              x:DataType="viewModels:ActivoPasivoCrearViewModel">
+<ContentPage
+    x:Class="AppPallet.Views.ActivoPasivoCrearView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="Registrar Activo/Pasivo"
+    x:DataType="viewModels:ActivoPasivoCrearViewModel">
 
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15" WidthRequest="550">
-            <Label Text="Modificar Activo/Pasivo:" TextColor="Black" FontSize="20" HorizontalTextAlignment="Center" FontAttributes="Bold" HorizontalOptions="Center" />
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15"
+            WidthRequest="550">
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Modificar Activo/Pasivo:"
+                TextColor="Black" />
 
-            <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2" 
-                               HorizontalOptions="Center" VerticalOptions="Center"
-                               Spacing="30" Margin="0,10" >
-                <material:PickerField 
-                x:Name="MesPicker"
-                Title="Mes"
-                ItemsSource="{Binding Meses}"
-                SelectedIndex="{Binding MesIngresado, Mode=TwoWay}" 
-                WidthRequest="150"/>
+            <HorizontalStackLayout
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Margin="0,10"
+                HorizontalOptions="Center"
+                Spacing="30"
+                VerticalOptions="Center">
+                <material:PickerField
+                    x:Name="MesPicker"
+                    Title="Mes"
+                    ItemsSource="{Binding Meses}"
+                    SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
+                    WidthRequest="150" />
 
-                <material:PickerField 
-                x:Name="AñoPicker"
-                Title="Año"
-                ItemsSource="{Binding Años}"
-                SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
-                WidthRequest="100"/>
+                <material:PickerField
+                    x:Name="AñoPicker"
+                    Title="Año"
+                    ItemsSource="{Binding Años}"
+                    SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
+                    WidthRequest="100" />
 
-                <material:PickerField 
-                x:Name="QuincenaPicker"
-                Title="Mes"
-                ItemsSource="{Binding Quincenas}"
-                SelectedIndex="{Binding QuincenaIngresada, Mode=TwoWay}" 
-                WidthRequest="190"/>
+                <material:PickerField
+                    x:Name="QuincenaPicker"
+                    Title="Mes"
+                    ItemsSource="{Binding Quincenas}"
+                    SelectedIndex="{Binding QuincenaIngresada, Mode=TwoWay}"
+                    WidthRequest="190" />
 
             </HorizontalStackLayout>
 
-            <material:EditorField TextColor="Black" Title="Descripción" Text="{Binding ActivoPasivoCreated.Descripcion, Mode=TwoWay}" />
+            <material:EditorField
+                Title="Descripción"
+                Text="{Binding ActivoPasivoCreated.Descripcion, Mode=TwoWay}"
+                TextColor="Black" />
 
-            <material:DatePickerField Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.Calendar}}"
-                               Title="Fecha"
-                               Date="{Binding ActivoPasivoCreated.Fecha, Mode=TwoWay}"
-                               TextColor="Black" />
+            <material:DatePickerField
+                Title="Fecha"
+                Date="{Binding ActivoPasivoCreated.Fecha, Mode=TwoWay}"
+                Icon="{FontImageSource FontFamily=FASolid,
+                                       Glyph={x:Static fa:Solid.Calendar}}"
+                TextColor="Black" />
 
 
-            <material:EditorField TextColor="Black" Title="Monto $" Text="{Binding ActivoPasivoCreated.Monto, Mode=TwoWay}" Keyboard="Numeric" />
+            <material:EditorField
+                Title="Monto $"
+                Keyboard="Numeric"
+                Text="{Binding ActivoPasivoCreated.Monto, Mode=TwoWay}"
+                TextColor="Black" />
 
-            <material:PickerField HorizontalOptions="Start"
+            <material:PickerField
                 x:Name="CategoriaPicker"
                 Title="Categoria"
+                AllowClear="False"
+                HorizontalOptions="Start"
                 ItemsSource="{Binding Categorias}"
                 SelectedItem="{Binding ActivoPasivoCreated.Categoria, Mode=TwoWay}"
-                WidthRequest="130"/>
+                WidthRequest="130" />
 
             <HorizontalStackLayout Spacing="10">
-                <Button StyleClass="FilledButton" Text="Guardar Cambios" Command="{Binding CrearActivoPasivoCommand}" />
-                <Button StyleClass="OutlinedButton" Text="Cancelar" Command="{Binding VolverAtrasCommand}" />
+                <Button
+                    Command="{Binding CrearActivoPasivoCommand}"
+                    StyleClass="FilledButton"
+                    Text="Guardar Cambios" />
+                <Button
+                    Command="{Binding VolverAtrasCommand}"
+                    StyleClass="OutlinedButton"
+                    Text="Cancelar" />
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

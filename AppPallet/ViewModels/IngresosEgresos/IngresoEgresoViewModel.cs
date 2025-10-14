@@ -1,4 +1,5 @@
-﻿using AppPallet.Controllers;
+﻿using AppPallet.Constants;
+using AppPallet.Controllers;
 using AppPallet.Models;
 using AppPallet.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -130,7 +131,7 @@ namespace AppPallet.ViewModels
                 TotalEgresos = ListEgresos.Sum(e => e.Monto);
                 TotalEgresosIva = ListEgresos.Sum(e => e.SumaIva ?? 0);
                 TotalIngresos = ListIngresos.Sum(i => i.Monto);
-                double iva = Preferences.Get("IVA", 0.0);
+                double iva = Preferences.Get("iva_percentage", 21.0);
                 TotalIngresosIva = TotalIngresos * (decimal)iva;
                 Neto = TotalIngresos - TotalEgresos;
                 NetoMasIVA = (TotalIngresos + TotalIngresosIva) - (TotalEgresos + TotalEgresosIva);
@@ -276,11 +277,10 @@ namespace AppPallet.ViewModels
                     Mes = new DateTime(AñosCopy[AñoToCopyIndex], MesToCopy + 1, 1),
                     Comentario = gasto.Comentario
                 };
-                bool response = await _egresoController.CreateEgreso(nuevoEgreso);
-                if (!response)
+                MessageResult response = await _egresoController.CreateEgreso(nuevoEgreso);
+                if (response.Title == MessageConstants.Titles.Error)
                 {
-                    await MostrarAlerta("Error", "Error al copiar los gastos fijos.");
-                    return;
+                    await MostrarAlerta(MessageConstants.Titles.Error, response.Message);
                 }
             }
 

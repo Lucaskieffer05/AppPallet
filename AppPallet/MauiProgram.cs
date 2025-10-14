@@ -3,6 +3,7 @@ using AppPallet.Models;
 using AppPallet.ViewModels;
 using AppPallet.Views;
 using CommunityToolkit.Maui;
+using Microcharts.Maui;
 using Microsoft.Extensions.Logging;
 using UraniumUI;
 
@@ -18,6 +19,7 @@ namespace AppPallet
                 .UseMauiCommunityToolkit()
                 .UseUraniumUI()
                 .UseUraniumUIMaterial()
+                .UseMicrocharts()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -131,6 +133,34 @@ namespace AppPallet
 
             builder.Services.AddTransient<StockView>();
             builder.Services.AddTransient<StockViewModel>();
+
+            builder.Services.AddTransient<PalletView>();
+            builder.Services.AddTransient<PalletViewModel>();
+
+            builder.Services.AddTransient<PalletCrearView>();
+            builder.Services.AddTransient<PalletCrearViewModel>();
+
+            builder.Services.AddTransient<PalletModificarView>();
+            builder.Services.AddTransient<PalletModificarViewModel>();
+
+            builder.Services.AddTransient<HistorialHumedadView>();
+            builder.Services.AddTransient<HistorialHumedadViewModel>();
+
+            builder.Services.AddTransient<HistorialHumedadCrearView>();
+            builder.Services.AddTransient<HistorialHumedadCrearViewModel>();
+
+            builder.Services.AddTransient<HistorialHumedadModificarView>();
+            builder.Services.AddTransient<HistorialHumedadModificarViewModel>();
+
+            builder.Services.AddTransient<ConfiguracionView>();
+            builder.Services.AddTransient<ConfiguracionViewModel>();
+
+            builder.Services.AddTransient<DashboardView>();
+            builder.Services.AddTransient<DashboardViewModel>();
+
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 ﻿using AppPallet.Constants;
 using AppPallet.Models;
+using AppPallet.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -132,6 +133,52 @@ namespace AppPallet.Controllers
             {
                 Console.WriteLine($"Error general: {ex.Message}");
                 return false;
+            }
+
+        }
+        // obtener finanzas anuales agrupadas por mes
+        public async Task<List<FinanzaMensualDTO>> GetIngresosAnuales(int year)
+        {
+            try
+            {
+                int anio = Convert.ToInt32(year);
+                var ingresos = await _context.Ingreso
+                    .AsNoTracking()
+                    .Where(i => i.Fecha.HasValue && i.Fecha.Value.Year == anio)
+                    .ToListAsync();
+                var ventas = await _context.Venta
+                    .AsNoTracking()
+                    .Where(v => v.FechaVenta.Year == anio)
+                    .ToListAsync();
+                var finanzasPorMes = ingresos
+                    .GroupBy(i => i.Fecha.Value.Month)
+                    .Select(g => new FinanzaMensualDTO
+                    {
+                        Mes = g.Key,
+                        TotalFinanza = g.Sum(i => i.Monto),
+                        TotalVentas = ventas.Where(v => v.FechaVenta.Month == g.Key).Count()
+                    })
+                    .ToList();
+                // Asegurarse de que todos los meses estén representados
+                for (int mes = 1; mes <= 12; mes++)
+                {
+                    if (!finanzasPorMes.Any(f => f.Mes == mes))
+                    {
+                        finanzasPorMes.Add(new FinanzaMensualDTO
+                        {
+                            Mes = mes,
+                            TotalFinanza = 0,
+                            TotalVentas = 0
+                        });
+                    }
+                }
+                // Ordenar por mes antes de devolver
+                return finanzasPorMes.OrderBy(f => f.Mes).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<FinanzaMensualDTO>();
             }
 
         }

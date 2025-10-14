@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppPallet.Views.DashboardView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppPallet.Converters"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+    xmlns:models="clr-namespace:AppPallet.Models"
+    xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
+    Title="DASHBOARD"
+    x:DataType="viewModels:DashboardViewModel"
+    Shell.BackgroundColor="#374151"
+    Shell.NavBarIsVisible="False"
+    Shell.TitleColor="#F6F1EB">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BalanceColorConverter x:Key="BalanceColorConverter" />
+
+            <!--  Mismos recursos de estilo que antes  -->
+            <Color x:Key="PrimaryColor">#2E7D32</Color>
+            <Color x:Key="SecondaryColor">#4CAF50</Color>
+            <Color x:Key="AccentColor">#2196F3</Color>
+            <Color x:Key="WarningColor">#FF9800</Color>
+            <Color x:Key="DangerColor">#F44336</Color>
+            <Color x:Key="SuccessColor">#10B981</Color>
+            <Color x:Key="TextColor">#212121</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Stroke" Value="#E0E0E0" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#374151" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="15">
+
+            <!--  Loading Indicator  -->
+            <ActivityIndicator
+                Grid.RowSpan="5"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center"
+                Color="{StaticResource PrimaryColor}" />
+
+            <!--  Header  -->
+            <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+                        <Label Style="{StaticResource TitleStyle}" Text="📊 Dashboard - Panel de Control" />
+                        <Label Text="Resumen general del negocio de pallets" TextColor="#666" />
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                        <Button
+                            Command="{Binding ActualizarDashboardCommand}"
+                            HeightRequest="40"
+                            StyleClass="OutlinedButton"
+                            Text="🔄 Actualizar" />
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <!--  Header  -->
+            <Border Grid.Row="0" Stroke="Black">
+                <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,Auto,0.1*">
+
+                    <Label
+                        Grid.Column="0"
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="25"
+                        HorizontalOptions="Start"
+                        Text="GRAFICOS"
+                        TextColor="#F6F1EB"
+                        VerticalOptions="Center" />
+
+                    <HorizontalStackLayout
+                        Grid.Column="1"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="15"
+                            Text="Filtrar por mes:"
+                            TextColor="White"
+                            VerticalOptions="Center" />
+
+                        <material:PickerField
+                            x:Name="MesPicker"
+                            Padding="5"
+                            AccentColor="White"
+                            AllowClear="False"
+                            BorderColor="White"
+                            FontSize="10"
+                            InputBackgroundColor="#F6F1EB"
+                            ItemsSource="{Binding Meses}"
+                            SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
+                            TextColor="White" />
+
+                        <material:PickerField
+                            x:Name="AñoPicker"
+                            Padding="5"
+                            AccentColor="White"
+                            AllowClear="False"
+                            BorderColor="White"
+                            FontSize="10"
+                            InputBackgroundColor="#F6F1EB"
+                            ItemsSource="{Binding Años}"
+                            SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
+                            TextColor="White" />
+
+
+
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <!--  Estadísticas Rápidas  -->
+            <Grid
+                Grid.Row="1"
+                Padding="16"
+                ColumnDefinitions="*,*,*,*,*"
+                ColumnSpacing="10">
+
+                <!--  Ingresos del Mes  -->
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="💰" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="{Binding IngresosMesActual, StringFormat='${0:N2}'}"
+                            TextColor="{StaticResource SuccessColor}" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Ingresos del Mes"
+                            TextColor="#666" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Egresos del Mes  -->
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="💸" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="{Binding EgresosMesActual, StringFormat='${0:N2}'}"
+                            TextColor="{StaticResource DangerColor}" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Egresos del Mes"
+                            TextColor="#666" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Balance  -->
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="⚖️" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="{Binding BalanceMesActual, StringFormat='${0:N2}'}"
+                            TextColor="{Binding BalanceMesActual, Converter={StaticResource BalanceColorConverter}}" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Balance del Mes"
+                            TextColor="#666" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Pallets Vendidos  -->
+                <Border Grid.Column="3" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="📦" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="{Binding TotalPalletsVendidos}"
+                            TextColor="{StaticResource PrimaryColor}" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Pallets Vendidos"
+                            TextColor="#666" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Stock Total  -->
+                <Border Grid.Column="4" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="🏭" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="{Binding StockTotalPallets}"
+                            TextColor="{StaticResource AccentColor}" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="Stock Total"
+                            TextColor="#666" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!--  Gráficos con Microcharts  -->
+            <Grid
+                Grid.Row="2"
+                Padding="16"
+                ColumnDefinitions="*,*"
+                ColumnSpacing="15">
+                <!--  Gráfico de Ventas  -->
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="📈 Ventas Mensuales" />
+                        <microcharts:ChartView Chart="{Binding VentasChart}" HeightRequest="300" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Gráfico de Finanzas  -->
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="💳 Ingresos Brutos" />
+                        <microcharts:ChartView Chart="{Binding FinanzasChart}" HeightRequest="300" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <Grid
+                Grid.Row="3"
+                Padding="16"
+                ColumnDefinitions="*,*"
+                ColumnSpacing="15">
+                <!--  Gráfico de Stock  -->
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="📊 Stock por Pallet" />
+                        <microcharts:ChartView Chart="{Binding StockChart}" HeightRequest="300" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="💳 Egresos Brutos" />
+                        <microcharts:ChartView
+                            Grid.Column="1"
+                            Chart="{Binding EgresosChart}"
+                            HeightRequest="300" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!--  Información Adicional  -->
+            <Grid
+                Grid.Row="4"
+                Padding="16"
+                ColumnDefinitions="*,*"
+                ColumnSpacing="15">
+                <!--  Top Clientes  -->
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="🏆 Top 5 Clientes" />
+
+                        <CollectionView ItemsSource="{Binding TopClientes}" SelectionMode="None">
+                            <CollectionView.EmptyView>
+                                <Label
+                                    HorizontalOptions="Center"
+                                    Text="No hay datos de clientes"
+                                    TextColor="#666" />
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:ClienteTopDTO">
+                                    <Grid
+                                        Padding="10"
+                                        ColumnDefinitions="*,Auto,Auto"
+                                        RowDefinitions="Auto,Auto">
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            FontAttributes="Bold"
+                                            Text="{Binding NomEmpresa}" />
+
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            FontSize="12"
+                                            Text="{Binding TotalPallets, StringFormat='{0} pallets'}"
+                                            TextColor="#666" />
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            FontAttributes="Bold"
+                                            Text="{Binding TotalVentas, StringFormat='${0:N2}'}"
+                                            TextColor="{StaticResource SuccessColor}"
+                                            VerticalOptions="Center" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Pedidos Pendientes  -->
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="⏳ Pedidos Pendientes" />
+
+                        <Grid Padding="10" ColumnDefinitions="*,*,*,*,*,*">
+                            <Label
+                                Grid.Column="0"
+                                FontSize="12"
+                                HorizontalOptions="Start"
+                                Text="Nombre Pallet"
+                                TextColor="#666" />
+                            <Label
+                                Grid.Column="1"
+                                FontSize="12"
+                                HorizontalOptions="Center"
+                                Text="Cantidad Pallets"
+                                TextColor="#666" />
+                            <Label
+                                Grid.Column="2"
+                                FontSize="12"
+                                HorizontalOptions="Center"
+                                Text="Fecha Solicitada"
+                                TextColor="#666" />
+                            <Label
+                                Grid.Column="3"
+                                FontSize="12"
+                                HorizontalOptions="Center"
+                                Text="Numero de Lote"
+                                TextColor="#666" />
+                            <Label
+                                Grid.Column="4"
+                                FontSize="12"
+                                HorizontalOptions="Center"
+                                Text="Dias hasta hoy"
+                                TextColor="#666" />
+                            <Label
+                                Grid.Column="5"
+                                FontSize="12"
+                                HorizontalOptions="Center"
+                                Text="Estado"
+                                TextColor="#666" />
+                        </Grid>
+
+                        <CollectionView ItemsSource="{Binding PedidosPendientes}" SelectionMode="None">
+                            <CollectionView.EmptyView>
+                                <Label
+                                    HorizontalOptions="Center"
+                                    Text="No hay pedidos pendientes"
+                                    TextColor="#666" />
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:PedidoPendienteDTO">
+                                    <Grid Padding="10" ColumnDefinitions="*,*,*,*,*,*">
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            FontAttributes="Bold"
+                                            FontSize="12"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding NombrePallet}"
+                                            TextColor="Black" />
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            FontSize="12"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Cantidad, StringFormat='{0}'}"
+                                            TextColor="#3B3B3B" />
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            FontSize="12"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding FechaSolicitada, StringFormat='{0:dd/MM}'}"
+                                            TextColor="#3B3B3B" />
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="3"
+                                            FontSize="12"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding NumLote}"
+                                            TextColor="#3B3B3B" />
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="4"
+                                            FontSize="12"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding DiasConcurridos}"
+                                            TextColor="#3B3B3B" />
+
+                                        <Border
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="5"
+                                            Padding="6,2"
+                                            BackgroundColor="#FF9800"
+                                            HeightRequest="20"
+                                            StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="4" />
+                                            </Border.StrokeShape>
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="10"
+                                                HorizontalOptions="Center"
+                                                Text="Pendiente"
+                                                TextColor="White" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!--  Gastos Fijos  -->
+            <Border
+                Grid.Row="5"
+                Margin="16"
+                Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="💸 Gastos Fijos del Mes" />
+
+                    <CollectionView ItemsSource="{Binding GastosFijos}" SelectionMode="None">
+                        <CollectionView.EmptyView>
+                            <Label
+                                HorizontalOptions="Center"
+                                Text="No hay gastos fijos registrados"
+                                TextColor="#666" />
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:GastosFijos">
+                                <Grid Padding="10" ColumnDefinitions="*,Auto">
+
+                                    <Label
+                                        Grid.Column="0"
+                                        FontAttributes="Bold"
+                                        Text="{Binding NombreGastoFijo}" />
+
+                                    <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        Text="{Binding Monto, StringFormat='${0:N2}'}"
+                                        TextColor="{StaticResource DangerColor}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>
