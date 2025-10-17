@@ -294,53 +294,52 @@
                 </Border>
             </Grid>
 
+            <!--  Gráfico de Activo - Pasivo  -->
+            <Grid Grid.Row="4" Padding="16">
+
+                <Border Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="💸 Activos vs Pasivos" />
+                        <microcharts:ChartView Chart="{Binding ActivoPasivo}" HeightRequest="300" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
             <!--  Información Adicional  -->
             <Grid
-                Grid.Row="4"
+                Grid.Row="5"
+                Grid.Column="0"
                 Padding="16"
                 ColumnDefinitions="*,*"
                 ColumnSpacing="15">
                 <!--  Top Clientes  -->
-                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                <Border Grid.Row="5" Style="{StaticResource CardStyle}">
                     <VerticalStackLayout Spacing="15">
-                        <Label Style="{StaticResource SectionTitleStyle}" Text="🏆 Top 5 Clientes" />
+                        <Label Style="{StaticResource SectionTitleStyle}" Text="💸 Gastos Fijos del Mes" />
 
-                        <CollectionView ItemsSource="{Binding TopClientes}" SelectionMode="None">
+                        <CollectionView ItemsSource="{Binding GastosFijos}" SelectionMode="None">
                             <CollectionView.EmptyView>
                                 <Label
                                     HorizontalOptions="Center"
-                                    Text="No hay datos de clientes"
+                                    Text="No hay gastos fijos registrados"
                                     TextColor="#666" />
                             </CollectionView.EmptyView>
 
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:ClienteTopDTO">
-                                    <Grid
-                                        Padding="10"
-                                        ColumnDefinitions="*,Auto,Auto"
-                                        RowDefinitions="Auto,Auto">
+                                <DataTemplate x:DataType="models:GastosFijos">
+                                    <Grid Padding="10" ColumnDefinitions="*,Auto">
 
                                         <Label
-                                            Grid.Row="0"
                                             Grid.Column="0"
                                             FontAttributes="Bold"
-                                            Text="{Binding NomEmpresa}" />
+                                            Text="{Binding NombreGastoFijo}" />
 
                                         <Label
-                                            Grid.Row="1"
-                                            Grid.Column="0"
-                                            FontSize="12"
-                                            Text="{Binding TotalPallets, StringFormat='{0} pallets'}"
-                                            TextColor="#666" />
-
-                                        <Label
-                                            Grid.Row="0"
-                                            Grid.RowSpan="2"
                                             Grid.Column="1"
                                             FontAttributes="Bold"
-                                            Text="{Binding TotalVentas, StringFormat='${0:N2}'}"
-                                            TextColor="{StaticResource SuccessColor}"
-                                            VerticalOptions="Center" />
+                                            Text="{Binding Monto, StringFormat='${0:N2}'}"
+                                            TextColor="{StaticResource DangerColor}" />
                                     </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
@@ -471,41 +470,7 @@
             </Grid>
 
             <!--  Gastos Fijos  -->
-            <Border
-                Grid.Row="5"
-                Margin="16"
-                Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="15">
-                    <Label Style="{StaticResource SectionTitleStyle}" Text="💸 Gastos Fijos del Mes" />
 
-                    <CollectionView ItemsSource="{Binding GastosFijos}" SelectionMode="None">
-                        <CollectionView.EmptyView>
-                            <Label
-                                HorizontalOptions="Center"
-                                Text="No hay gastos fijos registrados"
-                                TextColor="#666" />
-                        </CollectionView.EmptyView>
-
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:GastosFijos">
-                                <Grid Padding="10" ColumnDefinitions="*,Auto">
-
-                                    <Label
-                                        Grid.Column="0"
-                                        FontAttributes="Bold"
-                                        Text="{Binding NombreGastoFijo}" />
-
-                                    <Label
-                                        Grid.Column="1"
-                                        FontAttributes="Bold"
-                                        Text="{Binding Monto, StringFormat='${0:N2}'}"
-                                        TextColor="{StaticResource DangerColor}" />
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </Border>
         </Grid>
     </ScrollView>
 </ContentPage>

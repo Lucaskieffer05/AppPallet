@@ -9,6 +9,7 @@ namespace AppPallet.Models
     public class LoteMostrarDTO : Lote
     {
         public int TotalPedidos { get; set; }
+        public string NomProveedor { get; set; } = null!;
         public int TotalPallets { get; set; }
         public decimal? CostoTotal => (PrecioProveedor ?? 0) + (PrecioCamionero ?? 0);
         public string Estado => FechaEntrega.HasValue ? "Entregado" : "Pendiente";

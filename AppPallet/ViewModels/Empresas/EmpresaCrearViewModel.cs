@@ -94,10 +94,6 @@ namespace AppPallet.ViewModels
         {
             if (string.IsNullOrWhiteSpace(empresa.NomEmpresa))
                 return false;
-            if (string.IsNullOrWhiteSpace(empresa.Cuit))
-                return false;
-            if (string.IsNullOrWhiteSpace(empresa.Domicilio))
-                return false;
             return true;
         }
 

@@ -47,10 +47,12 @@
                 Date="{Binding LoteCreated.FechaEntrega, Mode=TwoWay}"
                 TextColor="Black" />
 
-            <material:EditorField
-                Title="Proveedor"
-                Text="{Binding LoteCreated.NomProveedor, Mode=TwoWay}"
-                TextColor="Black" />
+            <material:PickerField
+                Title="Selecciona el Proveedor"
+                x:DataType="{x:Null}"
+                ItemDisplayBinding="{Binding NomEmpresa}"
+                ItemsSource="{Binding ListaProveedores}"
+                SelectedItem="{Binding ProveedorSeleccionado, Mode=TwoWay}" />
 
             <material:EditorField
                 Title="Precio Proveedor"

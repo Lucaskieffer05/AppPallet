@@ -13,7 +13,7 @@
     Shell.NavBarIsVisible="False">
 
 
-    <Grid RowDefinitions="Auto,Auto,Auto">
+    <Grid RowDefinitions="Auto,*,Auto">
 
         <Border
             Grid.Row="0"

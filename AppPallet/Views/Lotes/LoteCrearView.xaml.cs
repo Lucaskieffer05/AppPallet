@@ -9,4 +9,13 @@ public partial class LoteCrearView : ContentPage
 		InitializeComponent();
 		BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is LoteCrearViewModel vm)
+        {
+            await vm.CargarProveedores();
+        }
+    }
 }

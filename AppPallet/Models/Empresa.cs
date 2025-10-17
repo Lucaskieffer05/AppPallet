@@ -20,4 +20,6 @@ public partial class Empresa
     public virtual ICollection<ContactosEmpresa> ContactosEmpresa { get; set; } = new List<ContactosEmpresa>();
 
     public virtual ICollection<CostoPorPallet> CostoPorPallet { get; set; } = new List<CostoPorPallet>();
+
+    public virtual ICollection<Lote> Lote { get; set; } = new List<Lote>();
 }

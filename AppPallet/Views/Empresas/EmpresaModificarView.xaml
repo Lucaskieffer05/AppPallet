@@ -41,6 +41,13 @@
                 Text="{Binding EmpresaSeleccionada.Domicilio, Mode=TwoWay}"
                 TextColor="Black" />
 
+            <material:PickerField
+                x:Name="TipoPicker"
+                AccentColor="Black"
+                AllowClear="False"
+                ItemsSource="{Binding Tipos}"
+                SelectedItem="{Binding EmpresaSeleccionada.Tipo, Mode=TwoWay}" />
+
             <!--  Contactos de la empresa  -->
             <Label
                 FontAttributes="Bold"

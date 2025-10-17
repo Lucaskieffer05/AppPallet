@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
     xmlns:viewModels="clr-namespace:AppPallet.ViewModels"
     Title="CREAR TIPO PALLET"
     x:DataType="viewModels:PalletCrearViewModel">
@@ -23,10 +24,13 @@
                 Text="Registrar un nuevo tipo de pallet:"
                 TextColor="Black" />
 
-            <material:EditorField
+            <material:TextField
                 Title="Nombre"
                 Text="{Binding PalletCreated.Nombre, Mode=TwoWay}"
-                TextColor="Black" />
+                TextColor="Black">
+                <validation:RequiredValidation Message="El nombre es obligatorio" />
+                <validation:LettersOnlyValidation AllowSpaces="True" Message="El Nombre del pallet es obligatorio" />
+            </material:TextField>
 
             <material:EditorField
                 Title="Descripcion"

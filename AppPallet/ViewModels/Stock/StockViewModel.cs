@@ -82,7 +82,7 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         public async Task AjustarStock(PalletStockDTO pallet)
         {
-            if (pallet == null || pallet.Stock < 0)
+            if (pallet == null)
             {
                 await MostrarAlerta("Error", "Seleccione un pallet y especifique una cantidad válida.");
                 return;

@@ -106,7 +106,6 @@ namespace AppPallet.ViewModels
 
         bool ValidarCheque(Cheque cheque)
         {
-            if (cheque.NumCheque == null || cheque.NumCheque.Trim() == "") return false;
             if (cheque.Proveedor == null || cheque.Proveedor.Trim() == "") return false;
             if (cheque.Tipo == null || cheque.Tipo.Trim() == "") return false;
             if (cheque.Monto <= 0) return false;

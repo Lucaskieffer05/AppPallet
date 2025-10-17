@@ -14,7 +14,7 @@
     Shell.NavBarIsVisible="False">
 
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto">
+    <Grid RowDefinitions="Auto,*">
 
         <!--  Header  -->
         <Border Grid.Row="0" Stroke="Black">
@@ -80,7 +80,7 @@
 
         <!--  Gastos fijos  -->
 
-        <Grid Grid.Row="1" RowDefinitions="50,Auto">
+        <Grid Grid.Row="1" RowDefinitions="50,*">
 
             <HorizontalStackLayout
                 Grid.Row="0"
@@ -101,56 +101,59 @@
 
             <Grid Grid.Row="1" ColumnDefinitions="0.5*,*,0.5*">
 
-                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-
-                    <Border Stroke="Silver" StrokeThickness="3">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="10" />
-                        </Border.StrokeShape>
 
 
-                        <dg:DataGrid
-                            BorderColor="Transparent"
-                            IsRefreshing="{Binding IsBusy}"
-                            ItemsSource="{Binding ListaGastosFijos}"
-                            PaginationEnabled="False"
-                            SelectedItem="{Binding GastoFijoSeleccionado, Mode=TwoWay}"
-                            SelectionMode="Single"
-                            Style="{StaticResource TablaComun}">
-
-                            <dg:DataGrid.Columns>
+                <Border
+                    Grid.Column="1"
+                    Stroke="Silver"
+                    StrokeThickness="3"
+                    VerticalOptions="Start">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
 
 
-                                <dg:DataGridColumn Title="Nombre del Gasto" PropertyName="NombreGastoFijo" />
+                    <dg:DataGrid
+                        BorderColor="Transparent"
+                        IsRefreshing="{Binding IsBusy}"
+                        ItemsSource="{Binding ListaGastosFijos}"
+                        PaginationEnabled="False"
+                        SelectedItem="{Binding GastoFijoSeleccionado, Mode=TwoWay}"
+                        SelectionMode="Single"
+                        Style="{StaticResource TablaComun}">
 
-                                <dg:DataGridColumn Title="Monto">
-                                    <dg:DataGridColumn.CellTemplate>
-                                        <DataTemplate x:DataType="models:GastosFijos">
-                                            <Label
-                                                HorizontalOptions="Center"
-                                                Text="{Binding Monto, StringFormat='${0:N2}'}"
-                                                VerticalOptions="Center"
-                                                VerticalTextAlignment="Center" />
-                                        </DataTemplate>
-                                    </dg:DataGridColumn.CellTemplate>
-                                </dg:DataGridColumn>
+                        <dg:DataGrid.Columns>
 
-                                <dg:DataGridColumn Title="Fecha del Gasto">
-                                    <dg:DataGridColumn.CellTemplate>
-                                        <DataTemplate x:DataType="models:GastosFijos">
-                                            <Label
-                                                HorizontalOptions="Center"
-                                                Text="{Binding Mes, StringFormat='{0:MMMM - yyyy}'}"
-                                                VerticalOptions="Center" />
-                                        </DataTemplate>
-                                    </dg:DataGridColumn.CellTemplate>
-                                </dg:DataGridColumn>
 
-                            </dg:DataGrid.Columns>
+                            <dg:DataGridColumn Title="Nombre del Gasto" PropertyName="NombreGastoFijo" />
 
-                        </dg:DataGrid>
-                    </Border>
-                </VerticalStackLayout>
+                            <dg:DataGridColumn Title="Monto">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate x:DataType="models:GastosFijos">
+                                        <Label
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Monto, StringFormat='${0:N2}'}"
+                                            VerticalOptions="Center"
+                                            VerticalTextAlignment="Center" />
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+
+                            <dg:DataGridColumn Title="Fecha del Gasto">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate x:DataType="models:GastosFijos">
+                                        <Label
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Mes, StringFormat='{0:MMMM - yyyy}'}"
+                                            VerticalOptions="Center" />
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+
+                        </dg:DataGrid.Columns>
+
+                    </dg:DataGrid>
+                </Border>
 
 
                 <VerticalStackLayout

@@ -36,6 +36,7 @@ namespace AppPallet.Controllers
             {
                 var lotes = await _context.Lote
                     .AsNoTracking()
+                    .Include(l => l.Empresa)
                     .Include(l => l.Pedido)
                     .ThenInclude(p => p.Pallet)
                     .Where(l => l.FechaSolicitada.Year == filtroMes.Year && l.FechaSolicitada.Month == filtroMes.Month)
@@ -48,7 +49,9 @@ namespace AppPallet.Controllers
                     NumLote = l.NumLote,
                     FechaSolicitada = l.FechaSolicitada,
                     FechaEntrega = l.FechaEntrega,
-                    NomProveedor = l.NomProveedor,
+                    NomProveedor = l.Empresa.NomEmpresa,
+                    Empresa = l.Empresa,
+                    EmpresaId = l.EmpresaId,
                     PrecioProveedor = l.PrecioProveedor,
                     NumFacturaProveedor = l.NumFacturaProveedor,
                     NomCamionero = l.NomCamionero,
@@ -90,7 +93,7 @@ namespace AppPallet.Controllers
                     NumLote = nuevoLote.NumLote,
                     FechaSolicitada = nuevoLote.FechaSolicitada,
                     FechaEntrega = nuevoLote.FechaEntrega,
-                    NomProveedor = nuevoLote.NomProveedor,
+                    EmpresaId = nuevoLote.EmpresaId,
                     PrecioProveedor = nuevoLote.PrecioProveedor,
                     NumFacturaProveedor = nuevoLote.NumFacturaProveedor,
                     NomCamionero = nuevoLote.NomCamionero,
@@ -134,7 +137,7 @@ namespace AppPallet.Controllers
                 if (lote.NumLote == loteModificado.NumLote &&
                     lote.FechaSolicitada == loteModificado.FechaSolicitada &&
                     lote.FechaEntrega == loteModificado.FechaEntrega &&
-                    lote.NomProveedor == loteModificado.NomProveedor &&
+                    lote.EmpresaId == loteModificado.EmpresaId &&
                     lote.PrecioProveedor == loteModificado.PrecioProveedor &&
                     lote.NumFacturaProveedor == loteModificado.NumFacturaProveedor &&
                     lote.NomCamionero == loteModificado.NomCamionero &&
@@ -146,7 +149,7 @@ namespace AppPallet.Controllers
                 lote.NumLote = loteModificado.NumLote;
                 lote.FechaSolicitada = loteModificado.FechaSolicitada;
                 lote.FechaEntrega = loteModificado.FechaEntrega;
-                lote.NomProveedor = loteModificado.NomProveedor;
+                lote.EmpresaId = loteModificado.EmpresaId;
                 lote.PrecioProveedor = loteModificado.PrecioProveedor;
                 lote.NumFacturaProveedor = loteModificado.NumFacturaProveedor;
                 lote.NomCamionero = loteModificado.NomCamionero;

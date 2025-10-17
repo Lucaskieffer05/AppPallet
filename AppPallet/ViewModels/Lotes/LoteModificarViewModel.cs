@@ -17,6 +17,7 @@ namespace AppPallet.ViewModels
         private readonly LoteController _loteController;
         private readonly PedidoController _pedidoController;
         private readonly PalletController _palletController;
+        readonly EmpresaController _empresaController;
 
         [ObservableProperty]
         public LoteMostrarDTO? loteModified;
@@ -50,22 +51,29 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         public PedidoMostrarDTO? pedidoSeleccionado;
 
+        [ObservableProperty]
+        private ObservableCollection<Empresa> listaProveedores = [];
+
+        [ObservableProperty]
+        private int indiceProveedorSeleccionado = 1;
+
 
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
-        public LoteModificarViewModel(LoteController loteController, PedidoController pedidoController, PalletController palletController)
+        public LoteModificarViewModel(LoteController loteController, PedidoController pedidoController, PalletController palletController, EmpresaController empresaController)
         {
             _loteController = loteController;
             _pedidoController = pedidoController;
             _palletController = palletController;
+            _empresaController = empresaController;
         }
         // -------------------------------------------------------------------
         // ----------------------- Comandos y Consultas a DB -----------------
         // -------------------------------------------------------------------
 
-        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             if (query.TryGetValue("LoteDTO", out var loteDTO) && loteDTO is LoteMostrarDTO _loteDTO)
             {
@@ -74,7 +82,38 @@ namespace AppPallet.ViewModels
                 FechaEntrega = LoteModified.FechaEntrega;
                 Estado = FechaEntrega.HasValue ? "Entregado" : "Pendiente";
                 EstadoColor = FechaEntrega.HasValue ? "#4CAF50" : "#FF9800";
-                Task.Run(async () => await CargarDatosLote());
+
+                
+                await CargarProveedores();
+
+                await CargarDatosLote();
+
+                // buscar el proveedor en la lista y establecer el índice seleccionado
+                if (LoteModified.Empresa != null)
+                {
+                    var proveedorEnLista = ListaProveedores.FirstOrDefault(p => p.EmpresaId == LoteModified.Empresa.EmpresaId);
+                    if (proveedorEnLista != null)
+                    {
+                        IndiceProveedorSeleccionado = ListaProveedores.IndexOf(proveedorEnLista);
+                    }
+                }
+            }
+        }
+
+        public async Task CargarProveedores()
+        {
+
+            try
+            {
+                var proveedores = await _empresaController.GetAllEmpresas("Proveedor");
+                ListaProveedores = new ObservableCollection<Empresa>(proveedores);
+
+                // Encontrar el proveedor correspondiente en la lista
+                
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error", $"Ocurrió un error al cargar los proveedores: {ex.Message}");
             }
         }
 
@@ -125,7 +164,7 @@ namespace AppPallet.ViewModels
             if (LoteModified == null) return;
 
             // Validaciones básicas
-            if (string.IsNullOrWhiteSpace(LoteModified.NomProveedor) ||
+            if ( LoteModified.Empresa == null ||
                 string.IsNullOrWhiteSpace(LoteModified.NomCamionero))
             {
                 await MostrarAlerta("Error", "Complete todos los campos obligatorios");
@@ -160,6 +199,7 @@ namespace AppPallet.ViewModels
 
             }
             LoteModified.FechaEntrega = FechaEntrega;
+            LoteModified.EmpresaId = ListaProveedores[IndiceProveedorSeleccionado].EmpresaId;
 
             MessageResult resultado = await _loteController.UpdateLote(LoteModified);
 

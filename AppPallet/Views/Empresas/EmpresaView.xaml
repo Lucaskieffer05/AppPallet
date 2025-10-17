@@ -201,25 +201,30 @@
                                                         </DataTrigger>
                                                     </Image.Triggers>
                                                 </Image>
-                                                <Label
-                                                    FontAttributes="Bold"
-                                                    FontSize="18"
-                                                    Text="{Binding NomEmpresa}"
-                                                    VerticalTextAlignment="Center" />
+                                                <Grid ColumnDefinitions="Auto,Auto">
+                                                    <Label
+                                                        Grid.Column="0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="18"
+                                                        MaximumWidthRequest="500"
+                                                        Text="{Binding NomEmpresa}"
+                                                        VerticalTextAlignment="Center" />
 
-                                                <ImageButton
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=MostrarPopupModificarCommand}"
-                                                    CommandParameter="{Binding EmpresaId}"
-                                                    StyleClass="OutlinedButton"
-                                                    VerticalOptions="Center">
-                                                    <ImageButton.Source>
-                                                        <FontImageSource
-                                                            FontFamily="FASolid"
-                                                            Glyph="{x:Static fa:Solid.PenToSquare}"
-                                                            Size="20"
-                                                            Color="#D65265" />
-                                                    </ImageButton.Source>
-                                                </ImageButton>
+                                                    <ImageButton
+                                                        Grid.Column="1"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EmpresaViewModel}}, Path=MostrarPopupModificarCommand}"
+                                                        CommandParameter="{Binding EmpresaId}"
+                                                        StyleClass="OutlinedButton"
+                                                        VerticalOptions="Center">
+                                                        <ImageButton.Source>
+                                                            <FontImageSource
+                                                                FontFamily="FASolid"
+                                                                Glyph="{x:Static fa:Solid.PenToSquare}"
+                                                                Size="20"
+                                                                Color="#D65265" />
+                                                        </ImageButton.Source>
+                                                    </ImageButton>
+                                                </Grid>
 
 
                                             </HorizontalStackLayout>

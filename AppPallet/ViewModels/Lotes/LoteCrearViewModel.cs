@@ -14,18 +14,26 @@ namespace AppPallet.ViewModels
         // ------------------------------------------------------------------
 
         readonly LoteController _loteController;
+        readonly EmpresaController _empresaController;
 
         [ObservableProperty]
         public Lote loteCreated;
+
+        [ObservableProperty]
+        private ObservableCollection<Empresa> listaProveedores = [];
+
+        [ObservableProperty]
+        public Empresa? proveedorSeleccionado;
 
 
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public LoteCrearViewModel(LoteController loteController)
+        public LoteCrearViewModel(LoteController loteController, EmpresaController empresaController)
         {
             _loteController = loteController;
+            _empresaController = empresaController;
             LoteCreated = new();
 
             LoteCreated.FechaSolicitada = DateTime.Today;
@@ -35,6 +43,21 @@ namespace AppPallet.ViewModels
         // -------------------------------------------------------------------
         // ----------------------- Comandos y Consultas a DB -----------------
         // -------------------------------------------------------------------
+
+        public async Task CargarProveedores()
+        {
+
+            try
+            {
+                var proveedores = await _empresaController.GetAllEmpresas("Proveedor");
+                ListaProveedores = new ObservableCollection<Empresa>(proveedores);
+
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("Error", $"Ocurrió un error al cargar los proveedores: {ex.Message}");
+            }
+        }
 
         [RelayCommand]
         async Task VolverAtras()
@@ -64,7 +87,7 @@ namespace AppPallet.ViewModels
 
             try
             {
-
+                LoteCreated.EmpresaId = ProveedorSeleccionado!.EmpresaId;
                 var resultado = await _loteController.CreateLote(LoteCreated);
                 await MostrarAlerta(resultado.Title, resultado.Message);
 
@@ -87,12 +110,12 @@ namespace AppPallet.ViewModels
 
         private bool ValidarLote(Lote lote)
         {
-            if (string.IsNullOrWhiteSpace(lote.NomProveedor)) return false;
+            if (ProveedorSeleccionado == null) return false;
             if (lote.FechaSolicitada == default) return false;
             if (string.IsNullOrWhiteSpace(lote.NomCamionero)) return false;
             return true;
 
-        } 
+        }
 
 
         private async Task MostrarAlerta(string titulo, string mensaje)

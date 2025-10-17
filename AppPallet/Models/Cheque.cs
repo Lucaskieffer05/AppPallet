@@ -11,7 +11,7 @@ public partial class Cheque
 
     public string Tipo { get; set; } = null!;
 
-    public string NumCheque { get; set; } = null!;
+    public string? NumCheque { get; set; }
 
     public decimal Monto { get; set; }
 

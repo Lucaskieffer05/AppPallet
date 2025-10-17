@@ -201,7 +201,7 @@
                             <Label
                                 Margin="15,0,15,0"
                                 FontAttributes="Bold"
-                                FontSize="15"
+                                FontSize="13"
                                 Text="{Binding TotalEgresos, StringFormat='Total Egresos: ${0:N2}'}"
                                 TextColor="Black"
                                 VerticalOptions="Center" />
@@ -209,7 +209,7 @@
                             <Label
                                 Margin="0,0,15,0"
                                 FontAttributes="Bold"
-                                FontSize="15"
+                                FontSize="13"
                                 Text="{Binding TotalEgresosIva, StringFormat='Total IVA: ${0:N2}'}"
                                 TextColor="Black"
                                 VerticalOptions="Center" />
@@ -362,7 +362,7 @@
                             <Label
                                 Margin="15,0,15,0"
                                 FontAttributes="Bold"
-                                FontSize="15"
+                                FontSize="13"
                                 Text="{Binding TotalIngresos, StringFormat='Total Ingresos: ${0:N2}'}"
                                 TextColor="Black"
                                 VerticalOptions="Center" />
@@ -370,7 +370,7 @@
                             <Label
                                 Margin="0,0,15,0"
                                 FontAttributes="Bold"
-                                FontSize="15"
+                                FontSize="13"
                                 Text="{Binding TotalIngresosIva, StringFormat='Total IVA: ${0:N2}'}"
                                 TextColor="Black"
                                 VerticalOptions="Center" />

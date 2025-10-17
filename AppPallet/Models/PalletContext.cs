@@ -6,7 +6,6 @@ namespace AppPallet.Models;
 
 public partial class PalletContext : DbContext
 {
-    private string _connectionString = Preferences.Get("database_connection_string", "Server=localhost;Database=AppPallet;Trusted_Connection=true;");
     public PalletContext()
     {
     }
@@ -56,7 +55,7 @@ public partial class PalletContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer(_connectionString);
+        => optionsBuilder.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -270,12 +269,10 @@ public partial class PalletContext : DbContext
         modelBuilder.Entity<Lote>(entity =>
         {
             entity.Property(e => e.LoteId).HasColumnName("LoteID");
+            entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
             entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
             entity.Property(e => e.FechaSolicitada).HasColumnType("datetime");
             entity.Property(e => e.NomCamionero)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.NomProveedor)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.NumFacturaProveedor)
@@ -283,6 +280,11 @@ public partial class PalletContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.PrecioCamionero).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.PrecioProveedor).HasColumnType("decimal(18, 4)");
+
+            entity.HasOne(d => d.Empresa).WithMany(p => p.Lote)
+                .HasForeignKey(d => d.EmpresaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Lote_Empresa");
         });
 
         modelBuilder.Entity<Pallet>(entity =>

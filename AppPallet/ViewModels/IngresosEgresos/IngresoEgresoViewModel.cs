@@ -68,10 +68,18 @@ namespace AppPallet.ViewModels
                 "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
             ];
 
-        public ObservableCollection<int> Años { get; } =
-            [
-                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
-            ];
+        public ObservableCollection<int> Años
+        {
+            get
+            {
+                var añoMinimo = Preferences.Get("año_minimo", DateTime.Now.Year - 1);
+                var añoMaximo = Preferences.Get("año_maximo", DateTime.Now.Year + 1);
+
+                return new ObservableCollection<int>(
+                    Enumerable.Range(añoMinimo, añoMaximo - añoMinimo + 1)
+                );
+            }
+        }
 
         private DateTime MesFiltro = DateTime.Now;
 
@@ -88,10 +96,18 @@ namespace AppPallet.ViewModels
                 "07", "08", "09", "10", "11", "12"
     ];
 
-        public ObservableCollection<int> AñosCopy { get; } =
-            [
-                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
-            ];
+        public ObservableCollection<int> AñosCopy
+        {
+            get
+            {
+                var añoMinimo = Preferences.Get("año_minimo", DateTime.Now.Year - 1);
+                var añoMaximo = Preferences.Get("año_maximo", DateTime.Now.Year + 1);
+
+                return new ObservableCollection<int>(
+                    Enumerable.Range(añoMinimo, añoMaximo - añoMinimo + 1)
+                );
+            }
+        }
 
 
 
@@ -103,9 +119,6 @@ namespace AppPallet.ViewModels
         {
             _egresoController = egresoController;
             _ingresoController = ingresoController;
-
-            // Guardar un valor ELIMINARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-            Preferences.Set("IVA", 0.21);
 
         }
 
@@ -131,7 +144,7 @@ namespace AppPallet.ViewModels
                 TotalEgresos = ListEgresos.Sum(e => e.Monto);
                 TotalEgresosIva = ListEgresos.Sum(e => e.SumaIva ?? 0);
                 TotalIngresos = ListIngresos.Sum(i => i.Monto);
-                double iva = Preferences.Get("iva_percentage", 21.0);
+                double iva = Preferences.Get("iva_percentage", 0.21);
                 TotalIngresosIva = TotalIngresos * (decimal)iva;
                 Neto = TotalIngresos - TotalEgresos;
                 NetoMasIVA = (TotalIngresos + TotalIngresosIva) - (TotalEgresos + TotalEgresosIva);

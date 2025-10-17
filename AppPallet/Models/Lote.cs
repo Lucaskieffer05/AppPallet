@@ -13,8 +13,6 @@ public partial class Lote
 
     public DateTime? FechaEntrega { get; set; }
 
-    public string NomProveedor { get; set; } = null!;
-
     public decimal? PrecioProveedor { get; set; }
 
     public string? NumFacturaProveedor { get; set; }
@@ -22,6 +20,10 @@ public partial class Lote
     public string NomCamionero { get; set; } = null!;
 
     public decimal? PrecioCamionero { get; set; }
+
+    public int EmpresaId { get; set; }
+
+    public virtual Empresa Empresa { get; set; } = null!;
 
     public virtual ICollection<Pedido> Pedido { get; set; } = new List<Pedido>();
 }

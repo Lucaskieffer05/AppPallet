@@ -55,7 +55,7 @@
     <ScrollView Padding="100,0,100,0">
         <Grid
             Padding="16"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="15">
 
             <!--  Loading Indicator  -->
@@ -160,8 +160,29 @@
                 </VerticalStackLayout>
             </Border>
 
-            <!--  Configuración de Humedad  -->
+            <!--  Configuración de años  -->
             <Border Grid.Row="4" Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Style="{StaticResource SectionTitleStyle}" Text="Configuración de Años para filtrar" />
+
+                    <material:EditorField
+                        Title="Año minimo para filtrar"
+                        Grid.Column="0"
+                        Keyboard="Numeric"
+                        Text="{Binding AñoMinimo, Mode=TwoWay}"
+                        TextColor="Black" />
+                    <material:EditorField
+                        Title="Año maximo para filtrar"
+                        Grid.Column="0"
+                        Keyboard="Numeric"
+                        Text="{Binding AñoMaximo, Mode=TwoWay}"
+                        TextColor="Black" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Configuración de Humedad  -->
+            <Border Grid.Row="5" Style="{StaticResource CardStyle}">
                 <VerticalStackLayout Spacing="15">
                     <Label Style="{StaticResource SectionTitleStyle}" Text="💧 Configuración de Niveles de Humedad" />
 
@@ -280,7 +301,7 @@
             </Border>
 
             <Border
-                Grid.Row="5"
+                Grid.Row="6"
                 Padding="12"
                 BackgroundColor="{Binding MostrarMensajeExito, Converter={StaticResource BoolToColorConverter}}"
                 IsVisible="{Binding MostrarMensajeExito}"
@@ -297,7 +318,7 @@
             </Border>
 
             <!--  Botones de Acción  -->
-            <Border Grid.Row="6" StrokeThickness="0">
+            <Border Grid.Row="7" StrokeThickness="0">
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Button
                         Grid.Column="0"

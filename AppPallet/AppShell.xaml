@@ -35,7 +35,7 @@
         <ShellContent ContentTemplate="{DataTemplate local:IngresoEgresoView}" Route="IngresoEgresoView" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Activos y Pasivos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ChartLine}, Color=Black}">
+    <FlyoutItem Title="Activos - Pasivos" Icon="{FontImageSource FontFamily=FASolid, Glyph={x:Static fa:Solid.ScaleBalanced}, Color=Black}">
         <ShellContent ContentTemplate="{DataTemplate local:ActivoPasivoView}" Route="ActivoPasivoView" />
     </FlyoutItem>
 

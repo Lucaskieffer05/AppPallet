@@ -22,23 +22,22 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto">
+    <Grid RowDefinitions="Auto,*">
 
         <!--  Header  -->
         <Border Grid.Row="0" Stroke="Black">
-            <Grid BackgroundColor="#374151" ColumnDefinitions="0.3*,Auto,Auto,0.1*">
+            <Grid BackgroundColor="#374151" ColumnDefinitions="Auto,*,*">
 
                 <Label
                     Grid.Column="0"
                     Margin="10,0,0,0"
                     FontAttributes="Bold"
                     FontSize="25"
-                    HorizontalOptions="Start"
                     Text="CHEQUES"
                     TextColor="#F6F1EB"
                     VerticalOptions="Center" />
 
-                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
                     <Label
                         FontSize="15"
                         Text="Filtrar por mes:"
@@ -70,7 +69,6 @@
                 </HorizontalStackLayout>
                 <Button
                     Grid.Column="2"
-                    Margin="400,0,0,0"
                     Padding="20,10"
                     BackgroundColor="#F6F1EB"
                     BorderColor="#D0B595"
@@ -86,10 +84,9 @@
         </Border>
 
         <!--  Lista Cheques  -->
-        <Grid Grid.Row="1" RowDefinitions="Auto,Auto">
+        <Grid Grid.Row="1" >
 
             <Grid
-                Grid.Row="1"
                 ColumnDefinitions="0.2*,*,0.3*"
                 HorizontalOptions="Center">
 
@@ -100,9 +97,6 @@
                     IsRefreshing="{Binding IsBusy}"
                     ItemsSource="{Binding ListaCheques}"
                     MinimumWidthRequest="800"
-                    PageNumber="1"
-                    PageSize="20"
-                    PaginationEnabled="True"
                     SelectedItem="{Binding ChequeSeleccionado, Mode=TwoWay}"
                     SelectionMode="Single"
                     Style="{StaticResource TablaComun}">

@@ -22,6 +22,11 @@ namespace AppPallet.ViewModels
 
         readonly EmpresaController _empresaController;
 
+        public ObservableCollection<string> Tipos { get; } =
+            [
+                "Cliente", "Proveedor"
+            ];
+
 
 
         // -------------------------------------------------------------------
@@ -119,9 +124,7 @@ namespace AppPallet.ViewModels
 
         bool ValidarEmpresa()
         {
-            if (string.IsNullOrWhiteSpace(EmpresaSeleccionada?.NomEmpresa) ||
-                string.IsNullOrWhiteSpace(EmpresaSeleccionada?.Domicilio) ||
-                string.IsNullOrWhiteSpace(EmpresaSeleccionada?.Cuit))
+            if (string.IsNullOrWhiteSpace(EmpresaSeleccionada?.NomEmpresa))
             {
                 return false;
             }

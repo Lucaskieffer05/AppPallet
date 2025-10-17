@@ -51,7 +51,7 @@ namespace AppPallet.Controllers
 
                 _context.ActivoPasivo.Add(nuevoActivoPasivo);
                 var result = await _context.SaveChangesAsync();
-                
+
                 if (result == 0)
                 {
                     return new MessageResult(MessageConstants.Titles.Error, MessageConstants.ActivoPasivo.CreateError);
@@ -89,7 +89,7 @@ namespace AppPallet.Controllers
                                   activopasivoExistente.Categoria != activoPasivoModificar.Categoria;
 
                 if (!hayCambios)
-                    return new MessageResult(MessageConstants.Titles.Success, MessageConstants.ActivoPasivo.ModifiedNoChanges) ;
+                    return new MessageResult(MessageConstants.Titles.Success, MessageConstants.ActivoPasivo.ModifiedNoChanges);
 
                 // Actualizar los campos del activo o pasivo
                 activopasivoExistente.Fecha = activoPasivoModificar.Fecha;
@@ -141,17 +141,69 @@ namespace AppPallet.Controllers
 
         }
 
-        public async Task<bool> ExistePasivoEnMes(string descripcion, decimal monto , DateTime mes)
+        public async Task<bool> ExistePasivoEnMes(string descripcion, decimal monto, DateTime mes)
         {
             try
             {
-                return await _context.ActivoPasivo.AnyAsync(ap => ap.Descripcion == descripcion && ap.Monto== monto && ap.Mes.Month == mes.Month && ap.Mes.Year == mes.Year && ap.Categoria.ToLower() == "pasivo");
+                return await _context.ActivoPasivo.AnyAsync(ap => ap.Descripcion == descripcion && ap.Monto == monto && ap.Mes.Month == mes.Month && ap.Mes.Year == mes.Year && ap.Categoria.ToLower() == "pasivo");
 
             }
             catch
             {
                 return false;
 
+            }
+        }
+
+        public async Task<IEnumerable<ActivoPasivoMensualDTO>> GetActivoPasivoAnual(int year)
+        {
+            try
+            {
+                var resultado = await _context.ActivoPasivo
+                    .Where(ap => ap.Mes.Year == year)
+                    .GroupBy(ap => new { ap.Mes.Month, ap.Categoria })
+                    .Select(g => new
+                    {
+                        Mes = g.Key.Month,
+                        Categoria = g.Key.Categoria,
+                        TotalMonto = g.Sum(ap => ap.Monto)
+                    })
+                    .ToListAsync();
+
+                // Agrupar por mes y calcular totales
+                var resultadoAgrupado = resultado
+                    .GroupBy(r => r.Mes)
+                    .Select(g => new ActivoPasivoMensualDTO
+                    {
+                        Mes = g.Key,
+                        TotalActivo = g.Where(x => x.Categoria.ToLower() == "activo").Sum(x => x.TotalMonto),
+                        TotalPasivo = g.Where(x => x.Categoria.ToLower() == "pasivo").Sum(x => x.TotalMonto)
+                    })
+                    .ToList();
+
+                // Calcular capital neto
+                foreach (var item in resultadoAgrupado)
+                {
+                    item.TotalCapitalNeta = item.TotalActivo - item.TotalPasivo;
+                }
+
+                // Asegurarse de que todos los meses estén representados
+                var mesesCompletos = Enumerable.Range(1, 12)
+                    .Select(mes => resultadoAgrupado.FirstOrDefault(r => r.Mes == mes) ?? new ActivoPasivoMensualDTO
+                    {
+                        Mes = mes,
+                        TotalActivo = 0,
+                        TotalPasivo = 0,
+                        TotalCapitalNeta = 0
+                    })
+                    .OrderBy(r => r.Mes)
+                    .ToList();
+
+                return mesesCompletos;
+            }
+            catch (Exception ex)
+            {
+                return new List<ActivoPasivoMensualDTO>();
             }
         }
     }

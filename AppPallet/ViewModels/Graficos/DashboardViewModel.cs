@@ -17,6 +17,7 @@ namespace AppPallet.ViewModels
         private readonly EmpresaController _empresaController;
         private readonly PalletController _palletController;
         private readonly GastosFijosController _gastosFijosController;
+        private readonly ActivoPasivoController _activoPasivoController;
 
         [ObservableProperty]
         private bool isBusy;
@@ -54,7 +55,7 @@ namespace AppPallet.ViewModels
         private ObservableCollection<Pallet> stockPallets = [];
 
         [ObservableProperty]
-        private ObservableCollection<ClienteTopDTO> topClientes = [];
+        private ObservableCollection<ActivoPasivoMensualDTO> activoPasivoAnual = [];
 
         [ObservableProperty]
         private ObservableCollection<PedidoPendienteDTO> pedidosPendientes = [];
@@ -73,10 +74,17 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         private Chart egresosChart = null!;
 
-
-
         [ObservableProperty]
         private Chart stockChart = null!;
+
+        [ObservableProperty]
+        private Chart activo = null!;
+
+        [ObservableProperty]
+        private Chart pasivo = null!;
+
+        [ObservableProperty]
+        private Chart activoPasivo = null!;
 
 
         [ObservableProperty]
@@ -92,10 +100,18 @@ namespace AppPallet.ViewModels
                 "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
             };
 
-        public ObservableCollection<int> Años { get; } = new()
+        public ObservableCollection<int> Años
+        {
+            get
             {
-                DateTime.Now.Year - 1, DateTime.Now.Year, DateTime.Now.Year + 1
-            };
+                var añoMinimo = Preferences.Get("año_minimo", DateTime.Now.Year - 1);
+                var añoMaximo = Preferences.Get("año_maximo", DateTime.Now.Year + 1);
+
+                return new ObservableCollection<int>(
+                    Enumerable.Range(añoMinimo, añoMaximo - añoMinimo + 1)
+                );
+            }
+        }
 
 
         public DashboardViewModel(
@@ -105,7 +121,8 @@ namespace AppPallet.ViewModels
             PedidoController pedidoController,
             EmpresaController empresaController,
             GastosFijosController gastosFijosController,
-            PalletController palletController)
+            PalletController palletController,
+            ActivoPasivoController activoPasivoController)
         {
             _ventaController = ventaController;
             _ingresoController = ingresoController;
@@ -114,6 +131,7 @@ namespace AppPallet.ViewModels
             _empresaController = empresaController;
             _palletController = palletController;
             _gastosFijosController = gastosFijosController;
+            _activoPasivoController = activoPasivoController;
 
             // Inicializar gráficos vacíos
 
@@ -132,8 +150,8 @@ namespace AppPallet.ViewModels
                 await CargarVentasMensuales();
                 await CargarFinanzasMensuales();
                 await CargarStockPallets();
-                await CargarTopClientes();
                 await CargarPedidosPendientes();
+                await CargarActivoPasivoAnuales();
                 await CargarGastosFijos();
                 await CargarEstadisticasGenerales();
 
@@ -149,7 +167,7 @@ namespace AppPallet.ViewModels
 
         private void CrearGraficos()
         {
-            // 1. Gráfico de Ventas Mensuales (BarChart)
+            #region 1. Gráfico de Ventas Mensuales (BarChart)
             var ventasEntries = new List<ChartEntry>();
             foreach (var venta in VentasMensuales)
             {
@@ -162,7 +180,6 @@ namespace AppPallet.ViewModels
                     ValueLabelColor = SKColor.Parse("#374151")
                 });
             }
-
             VentasChart = new BarChart
             {
                 Entries = ventasEntries,
@@ -173,8 +190,9 @@ namespace AppPallet.ViewModels
                 LabelOrientation = Microcharts.Orientation.Horizontal,
                 ValueLabelOrientation = Microcharts.Orientation.Vertical
             };
+            #endregion
 
-            // 2. Gráfico de ingresos
+            #region 2. Gráfico de ingresos
             var ingresosEntries = new List<ChartEntry>();
             foreach (var finanza in IngresosMensuales)
             {
@@ -182,12 +200,11 @@ namespace AppPallet.ViewModels
                 {
                     Label = Meses[finanza.Mes - 1],
                     ValueLabel = "$" + finanza.TotalFinanza.ToString("N0"),
-                    Color = SKColor.Parse("#2196F3"), // Azul
+                    Color = SKColor.Parse("#52D660"), // Azul
                     TextColor = SKColor.Parse("#374151"),
                     ValueLabelColor = SKColor.Parse("#374151")
                 });
             }
-
             FinanzasChart = new LineChart
             {
                 Entries = ingresosEntries,
@@ -200,7 +217,9 @@ namespace AppPallet.ViewModels
                 PointSize = 10
             };
 
-            // Gráfico de Egresos
+            #endregion
+
+            #region 3. Gráfico de Egresos
             var egresosEntries = new List<ChartEntry>();
             foreach (var egreso in EgresosMensuales)
             {
@@ -225,8 +244,92 @@ namespace AppPallet.ViewModels
                 LineSize = 4,
                 PointSize = 10
             };
+            #endregion
 
-            // 3. Gráfico de Stock (DonutChart)
+            #region 4. Gráfico de Activos y Pasivos
+            var activoEntries = new List<ChartEntry>();
+            var pasivoEntries = new List<ChartEntry>();
+            var activoPasivoEntries = new List<ChartEntry>();
+
+            foreach (var item in ActivoPasivoAnual)
+            {
+                activoPasivoEntries.Add(new ChartEntry((float)item.TotalCapitalNeta)
+                {
+                    Label = Meses[item.Mes - 1],
+                    ValueLabel = "$" + item.TotalCapitalNeta.ToString("N0"), 
+                    Color = SKColor.Parse("#52A7D6"), 
+                    TextColor = SKColor.Parse("#374151"),
+                    ValueLabelColor = SKColor.Parse("#374151")
+                });
+
+                /*
+                // Entries para Activos (sin ValueLabel)
+                activoEntries.Add(new ChartEntry((float)item.TotalActivo)
+                {
+                    Label = Meses[item.Mes - 1],
+                    ValueLabel = "$" + item.TotalCapitalNeta.ToString("N0"), // Sin etiqueta de valor
+                    Color = SKColor.Parse("#4CAF50"), // Verde para activos
+                    TextColor = SKColor.Parse("#E1E1E1"),
+                    ValueLabelColor = SKColor.Parse("#E1E1E1")
+                });
+
+                // Entries para Pasivos (con ValueLabel mostrando la diferencia neta)
+                pasivoEntries.Add(new ChartEntry((float)item.TotalPasivo)
+                {
+                    Label = Meses[item.Mes - 1],
+                    ValueLabel = "$" + item.TotalCapitalNeta.ToString("N0"), // Diferencia neta
+                    Color = SKColor.Parse("#F44336"), // Rojo para pasivos
+                    TextColor = SKColor.Parse("#374151"),
+                    ValueLabelColor = SKColor.Parse("#374151")
+                });
+                */
+            }
+
+            // Gráficos
+            ActivoPasivo = new LineChart
+            {
+                Entries = activoPasivoEntries,
+                AnimationDuration = TimeSpan.FromSeconds(3),
+                LineMode = LineMode.Spline,
+                EnableYFadeOutGradient = true,
+                LabelTextSize = 12,
+                PointMode = PointMode.Circle,
+                LabelOrientation = Microcharts.Orientation.Horizontal,
+                ValueLabelOrientation = Microcharts.Orientation.Horizontal
+            };
+
+
+            /*
+            Activo = new LineChart
+            {
+                Entries = activoEntries,
+                AnimationDuration = TimeSpan.FromSeconds(0),
+                AnimationProgress = 1,
+                LabelTextSize = 12,
+                LineMode = LineMode.Straight,
+                PointMode = PointMode.Circle,
+                LabelOrientation = Microcharts.Orientation.Horizontal,
+                ValueLabelOrientation = Microcharts.Orientation.Horizontal
+            };
+
+            // Gráfico de Pasivos 
+            Pasivo = new LineChart
+            {
+                Entries = pasivoEntries,
+                BackgroundColor = SKColors.Transparent,
+                AnimationDuration = TimeSpan.FromSeconds(0),
+                AnimationProgress = 1,
+                LabelTextSize = 12,
+                LineMode = LineMode.Straight,
+                PointMode = PointMode.Circle,
+                LabelOrientation = Microcharts.Orientation.Horizontal,
+                ValueLabelOrientation = Microcharts.Orientation.Horizontal
+            };
+            */
+
+            #endregion
+
+            #region 5. Gráfico de Stock (DonutChart)
             var stockEntries = new List<ChartEntry>();
             var colors = new[]
             {
@@ -259,6 +362,9 @@ namespace AppPallet.ViewModels
                 GraphPosition = GraphPosition.Center,
                 HoleRadius = 0.4f
             };
+            #endregion
+
+
         }
 
         // Métodos auxiliares para cargar datos reales (cuando los tengas implementados)
@@ -323,11 +429,12 @@ namespace AppPallet.ViewModels
             StockPallets = new ObservableCollection<Pallet>(stock);
         }
 
-        private async Task CargarTopClientes()
+        private async Task CargarActivoPasivoAnuales()
         {
+            // Ejemplo de implementación real
             DateTime FechaIngresada = new(AñoIngresado, MesIngresado + 1, 1);
-            var clientes = await _ventaController.GetTopClientes(FechaIngresada);
-            TopClientes = new ObservableCollection<ClienteTopDTO>(clientes.Take(5));
+            var activoPasivo = await _activoPasivoController.GetActivoPasivoAnual(FechaIngresada.Year);
+            ActivoPasivoAnual = new ObservableCollection<ActivoPasivoMensualDTO>(activoPasivo);
         }
 
         private async Task CargarPedidosPendientes()

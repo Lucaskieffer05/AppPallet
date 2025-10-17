@@ -12,19 +12,25 @@ namespace AppPallet.ViewModels
         private const string HumedadSecoKey = "humedad_seco";
         private const string HumedadOptimoKey = "humedad_optimo";
         private const string HumedadHumedoKey = "humedad_humedo";
+        private const string AñoMinimoKey = "año_minimo";
+        private const string AñoMaximoKey = "año_maximo";
 
         // Valores por defecto
         private const string DefaultConnectionString = "Server=localhost;Database=AppPallet;Trusted_Connection=true;";
-        private const double DefaultIvaPercentage = 21.0;
+        private const double DefaultIvaPercentage = 21;
         private const int DefaultHumedadSeco = 12;
         private const int DefaultHumedadOptimo = 18;
         private const int DefaultHumedadHumedo = 22;
+        private int DefaultAñoMinimo = DateTime.Now.Year - 1;
+        private int DefaultAñoMaximo = DateTime.Now.Year + 1;
 
         [ObservableProperty]
         private string connectionString = string.Empty;
 
         [ObservableProperty]
         private double ivaPercentage;
+
+        private double IvaNoPercentage;
 
         [ObservableProperty]
         private int humedadSeco;
@@ -34,6 +40,12 @@ namespace AppPallet.ViewModels
 
         [ObservableProperty]
         private int humedadHumedo;
+
+        [ObservableProperty]
+        private int añoMinimo;
+
+        [ObservableProperty]
+        private int añoMaximo;
 
         [ObservableProperty]
         private bool isBusy;
@@ -63,12 +75,17 @@ namespace AppPallet.ViewModels
                 ConnectionString = Preferences.Get(ConnectionStringKey, DefaultConnectionString);
 
                 // Cargar configuración de IVA
-                IvaPercentage = Preferences.Get(IvaPercentageKey, DefaultIvaPercentage);
+                IvaNoPercentage = Preferences.Get(IvaPercentageKey, DefaultIvaPercentage / 100);
+                IvaPercentage = IvaNoPercentage * 100;
 
                 // Cargar configuración de humedad
                 HumedadSeco = Preferences.Get(HumedadSecoKey, DefaultHumedadSeco);
                 HumedadOptimo = Preferences.Get(HumedadOptimoKey, DefaultHumedadOptimo);
                 HumedadHumedo = Preferences.Get(HumedadHumedoKey, DefaultHumedadHumedo);
+
+                // Configuración de años para selección
+                AñoMinimo = Preferences.Get(AñoMinimoKey, DefaultAñoMinimo);
+                AñoMaximo = Preferences.Get(AñoMaximoKey, DefaultAñoMaximo);
 
                 MensajeEstado = "Configuraciones cargadas correctamente";
             }
@@ -99,12 +116,15 @@ namespace AppPallet.ViewModels
                 Preferences.Set(ConnectionStringKey, ConnectionString);
 
                 // Guardar configuración de IVA
-                Preferences.Set(IvaPercentageKey, IvaPercentage);
+                Preferences.Set(IvaPercentageKey, IvaPercentage / 100);
 
                 // Guardar configuración de humedad
                 Preferences.Set(HumedadSecoKey, HumedadSeco);
                 Preferences.Set(HumedadOptimoKey, HumedadOptimo);
                 Preferences.Set(HumedadHumedoKey, HumedadHumedo);
+
+                Preferences.Set(AñoMinimoKey, AñoMinimo);
+                Preferences.Set(AñoMaximoKey, AñoMaximo);
 
                 MensajeEstado = "✅ Configuraciones guardadas correctamente";
                 MostrarMensajeExito = true;
@@ -131,6 +151,8 @@ namespace AppPallet.ViewModels
             HumedadSeco = DefaultHumedadSeco;
             HumedadOptimo = DefaultHumedadOptimo;
             HumedadHumedo = DefaultHumedadHumedo;
+            AñoMinimo = DefaultAñoMinimo;
+            AñoMaximo = DefaultAñoMaximo;
 
             MensajeEstado = "Valores por defecto restablecidos";
         }
