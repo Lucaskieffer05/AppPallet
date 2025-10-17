@@ -40,9 +40,9 @@ namespace AppPallet.Controllers
                 return await _context.Pedido
                     .AsNoTracking()
                     .Include(p => p.Pallet)
+                    .Include(p => p.Lote)
                     .Where(p => p.Lote.FechaSolicitada.Month == fecha.Month && p.Lote.FechaSolicitada.Year == fecha.Year && p.Lote.FechaEntrega == null)
                     .OrderByDescending(p => p.FechaEInicio)
-                    .Include(p => p.Lote)
                     .Select(p => new PedidoPendienteDTO
                     {
                         NombrePallet = p.Pallet.Nombre,

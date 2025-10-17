@@ -198,19 +198,55 @@
                                                 </DataTemplate>
                                             </dg:DataGridColumn.CellTemplate>
                                         </dg:DataGridColumn>
-                                        <dg:DataGridColumn
-                                            Title="Fecha"
-                                            Width="80"
-                                            PropertyName="Fecha"
-                                            StringFormat="{}{0:dd-MM-yyyy}" />
-                                        <dg:DataGridColumn Title="Descripción" PropertyName="Descripcion" />
+                                        <dg:DataGridColumn Title="Fecha" Width="80">
+                                            <dg:DataGridColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ActivoPasivo">
+                                                    <Label
+                                                        BackgroundColor="{Binding Estado, Converter={StaticResource EstadoActivoToColorConverter}}"
+                                                        HorizontalOptions="Fill"
+                                                        HorizontalTextAlignment="Center"
+                                                        Text="{Binding Fecha, StringFormat='{}{0:dd-MM-yyyy}'}"
+                                                        VerticalOptions="Fill"
+                                                        VerticalTextAlignment="Center" />
+                                                </DataTemplate>
+                                            </dg:DataGridColumn.CellTemplate>
+                                        </dg:DataGridColumn>
+                                        <dg:DataGridColumn Title="Descripción">
+                                            <dg:DataGridColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ActivoPasivo">
+                                                    <Label
+                                                        BackgroundColor="{Binding Estado, Converter={StaticResource EstadoActivoToColorConverter}}"
+                                                        HorizontalOptions="Fill"
+                                                        HorizontalTextAlignment="Center"
+                                                        Text="{Binding Descripcion}"
+                                                        VerticalOptions="Fill"
+                                                        VerticalTextAlignment="Center" />
+                                                </DataTemplate>
+                                            </dg:DataGridColumn.CellTemplate>
+                                        </dg:DataGridColumn>
                                         <dg:DataGridColumn Title="Monto">
                                             <dg:DataGridColumn.CellTemplate>
                                                 <DataTemplate x:DataType="models:ActivoPasivo">
                                                     <Label
-                                                        HorizontalOptions="Center"
+                                                        BackgroundColor="{Binding Estado, Converter={StaticResource EstadoActivoToColorConverter}}"
+                                                        HorizontalOptions="Fill"
+                                                        HorizontalTextAlignment="Center"
                                                         Text="{Binding Monto, StringFormat='${0:N2}'}"
-                                                        VerticalOptions="Center" />
+                                                        VerticalOptions="Fill"
+                                                        VerticalTextAlignment="Center" />
+                                                </DataTemplate>
+                                            </dg:DataGridColumn.CellTemplate>
+                                        </dg:DataGridColumn>
+                                        <dg:DataGridColumn Title="Estado" Width="100">
+                                            <dg:DataGridColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ActivoPasivo">
+                                                    <Label
+                                                        BackgroundColor="{Binding Estado, Converter={StaticResource EstadoActivoToColorConverter}}"
+                                                        HorizontalOptions="Fill"
+                                                        HorizontalTextAlignment="Center"
+                                                        Text="{Binding Estado}"
+                                                        VerticalOptions="Fill"
+                                                        VerticalTextAlignment="Center" />
                                                 </DataTemplate>
                                             </dg:DataGridColumn.CellTemplate>
                                         </dg:DataGridColumn>

@@ -69,7 +69,7 @@ namespace AppPallet.ViewModels
             }
             try
             {
-                double iva = Preferences.Get("IVA", 0.0);
+                double iva = Preferences.Get("iva_percentage", 0.21);
                 EgresoModificar.SumaIva = ConIva ? EgresoModificar.Monto * (decimal)iva : null;
                 bool exito = await _egresoController.UpdateEgreso(EgresoModificar);
                 if (exito)
