@@ -161,7 +161,7 @@
                                     IsRefreshing="{Binding BindingContext.IsBusy, Source={x:Reference RootPage}}"
                                     ItemsSource="{Binding Items}"
                                     PaginationEnabled="False"
-                                    RowHeight="35"
+                                    RowHeight="45"
                                     Style="{StaticResource TablaComun}">
                                     <dg:DataGrid.Columns>
                                         <dg:DataGridColumn Title="Acciones" Width="80">
@@ -367,7 +367,7 @@
                                     IsRefreshing="{Binding BindingContext.IsBusy, Source={x:Reference RootPage}}"
                                     ItemsSource="{Binding Items}"
                                     PaginationEnabled="False"
-                                    RowHeight="35"
+                                    RowHeight="50"
                                     SelectionMode="None"
                                     Style="{StaticResource TablaComun}">
                                     <dg:DataGrid.Columns>
@@ -418,7 +418,7 @@
                                                 </DataTemplate>
                                             </dg:DataGridColumn.CellTemplate>
                                         </dg:DataGridColumn>
-                                        <dg:DataGridColumn Title="Descripción">
+                                        <dg:DataGridColumn Title="Descripción" Width="230">
                                             <dg:DataGridColumn.CellTemplate>
                                                 <DataTemplate x:DataType="models:ActivoPasivo">
                                                     <Label

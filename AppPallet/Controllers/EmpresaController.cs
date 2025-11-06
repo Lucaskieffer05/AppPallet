@@ -63,7 +63,7 @@ namespace AppPallet.Controllers
                         Cuit = e.Cuit,
                         Domicilio = e.Domicilio,
                         CostoPorPallet = e.CostoPorPallet
-                            .Where(cp => cp.Mes.Year == mesActual.Year && cp.Mes.Month == mesActual.Month)
+                            .Where(cp => cp.Mes.Year == mesActual.Year && cp.Mes.Month == mesActual.Month && cp.FechaDelete == null)
                             .ToList(),
                     })
                     .ToListAsync();

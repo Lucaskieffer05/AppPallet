@@ -15,9 +15,6 @@ public partial class PalletContext : DbContext
     {
     }
 
-    //Conexion a base de datos
-    readonly string connectionString = Preferences.Get("database_connection_string", "Server=localhost;Database=AppPallet;Trusted_Connection=true;");
-
     public virtual DbSet<ActivoPasivo> ActivoPasivo { get; set; }
 
     public virtual DbSet<Area> Area { get; set; }
@@ -58,7 +55,7 @@ public partial class PalletContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer(connectionString);
+        => optionsBuilder.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,7 +66,7 @@ public partial class PalletContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Estado)
                 .HasMaxLength(50)
@@ -83,7 +80,7 @@ public partial class PalletContext : DbContext
         {
             entity.Property(e => e.AreaId).HasColumnName("AreaID");
             entity.Property(e => e.NomArea)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
         });
 
@@ -119,13 +116,13 @@ public partial class PalletContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.Pallet)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Sello)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Telefono)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Area).WithMany(p => p.ContactosEmpresa)
@@ -145,7 +142,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
             entity.Property(e => e.Monto).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.NombreCosto)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.CostoPorPallet).WithMany(p => p.CostoPorCamion)
@@ -162,7 +159,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.GananciaPorCantPallet).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.Mes).HasColumnType("datetime");
             entity.Property(e => e.NombrePalletCliente)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.PalletId).HasColumnName("PalletID");
             entity.Property(e => e.PrecioPallet).HasColumnType("decimal(18, 0)");
@@ -182,10 +179,10 @@ public partial class PalletContext : DbContext
         {
             entity.Property(e => e.EgresoId).HasColumnName("EgresoID");
             entity.Property(e => e.Comentario)
-                .HasMaxLength(100)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.DescripEgreso)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Factura)
                 .HasMaxLength(50)
@@ -208,11 +205,11 @@ public partial class PalletContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("CUIT");
             entity.Property(e => e.Domicilio)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.FechaDelete).HasColumnType("datetime");
             entity.Property(e => e.NomEmpresa)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Tipo)
                 .HasMaxLength(50)
@@ -226,7 +223,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.Mes).HasColumnType("datetime");
             entity.Property(e => e.Monto).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.NombreGastoFijo)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
         });
 
@@ -250,10 +247,10 @@ public partial class PalletContext : DbContext
         {
             entity.Property(e => e.IngresoId).HasColumnName("IngresoID");
             entity.Property(e => e.Comentario)
-                .HasMaxLength(100)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.DescripIngreso)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Factura)
                 .HasMaxLength(50)
@@ -430,7 +427,7 @@ public partial class PalletContext : DbContext
         {
             entity.Property(e => e.VentaId).HasColumnName("VentaID");
             entity.Property(e => e.Comentario)
-                .HasMaxLength(100)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
             entity.Property(e => e.Estado)

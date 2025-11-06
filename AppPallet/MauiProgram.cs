@@ -4,6 +4,7 @@ using AppPallet.ViewModels;
 using AppPallet.Views;
 using CommunityToolkit.Maui;
 using Microcharts.Maui;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UraniumUI;
 
@@ -32,7 +33,8 @@ namespace AppPallet
             options.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True"));
             */
 
-            builder.Services.AddSingleton<PalletContext>();
+            builder.Services.AddDbContextFactory<PalletContext>(options =>
+                options.UseSqlServer(Preferences.Get("database_connection_string", "Server=localhost;Database=AppPallet;Trusted_Connection=true;")));
 
             //builder.Services.AddTransient<AppShell>();
             //builder.Services.AddTransient<IPopupService, PopupService>();
