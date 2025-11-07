@@ -80,7 +80,7 @@ public partial class PalletContext : DbContext
         {
             entity.Property(e => e.AreaId).HasColumnName("AreaID");
             entity.Property(e => e.NomArea)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
         });
 
@@ -116,13 +116,13 @@ public partial class PalletContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.Pallet)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Sello)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Telefono)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Area).WithMany(p => p.ContactosEmpresa)
@@ -142,7 +142,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
             entity.Property(e => e.Monto).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.NombreCosto)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.CostoPorPallet).WithMany(p => p.CostoPorCamion)
@@ -159,7 +159,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.GananciaPorCantPallet).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.Mes).HasColumnType("datetime");
             entity.Property(e => e.NombrePalletCliente)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.PalletId).HasColumnName("PalletID");
             entity.Property(e => e.PrecioPallet).HasColumnType("decimal(18, 0)");
@@ -205,7 +205,7 @@ public partial class PalletContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("CUIT");
             entity.Property(e => e.Domicilio)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.FechaDelete).HasColumnType("datetime");
             entity.Property(e => e.NomEmpresa)
@@ -223,7 +223,7 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.Mes).HasColumnType("datetime");
             entity.Property(e => e.Monto).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.NombreGastoFijo)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
         });
 
@@ -247,10 +247,10 @@ public partial class PalletContext : DbContext
         {
             entity.Property(e => e.IngresoId).HasColumnName("IngresoID");
             entity.Property(e => e.Comentario)
-                .HasMaxLength(200)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.DescripIngreso)
-                .HasMaxLength(200)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Factura)
                 .HasMaxLength(50)

@@ -33,7 +33,7 @@ namespace AppPallet
             options.UseSqlServer("Data Source=LUCAS\\SQLEXPRESS;Initial Catalog=Pallet;Persist Security Info=True;User ID=sa;Password=42559251;Trust Server Certificate=True"));
             */
 
-            builder.Services.AddDbContextFactory<PalletContext>(options =>
+            builder.Services.AddDbContext<PalletContext>(options =>
                 options.UseSqlServer(Preferences.Get("database_connection_string", "Server=localhost;Database=AppPallet;Trusted_Connection=true;")));
 
             //builder.Services.AddTransient<AppShell>();
