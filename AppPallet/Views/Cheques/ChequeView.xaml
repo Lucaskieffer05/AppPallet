@@ -198,16 +198,181 @@
                 <VerticalStackLayout
                     Grid.Column="2"
                     HorizontalOptions="Center"
-                    Spacing="10"
-                    VerticalOptions="Center">
+                    Spacing="15"
+                    VerticalOptions="Start"
+                    Margin="20,10,20,0">
+
+                    <!-- Panel de Resumen por Estado -->
+                    <Border
+                        BackgroundColor="#F6F1EB"
+                        Padding="15"
+                        Stroke="#D0B595"
+                        StrokeThickness="2"
+                        StrokeShape ="5">
+                        <VerticalStackLayout Spacing="12">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HorizontalOptions="Center"
+                                Text="Resumen por Estado"
+                                TextColor="Black" />
+
+                            <!-- Sin Estado -->
+                            <Border
+                                BackgroundColor="#E8F5E9"
+                                Padding="10"
+                                StrokeThickness="1"
+                                Stroke="#D0B595"
+                                StrokeShape ="5">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="Sin Estado"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding CantidadSinEstado, StringFormat='Cantidad: {0}'}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding MontoSinEstado, StringFormat='Monto: ${0:N2}'}"
+                                        TextColor="Black" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Pagado -->
+                            <Border
+                                BackgroundColor="#FFE553"
+                                Padding="10"
+                                StrokeThickness="1"
+                                Stroke="#D0B595"
+                                StrokeShape ="5">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="Pagado"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding CantidadPagado, StringFormat='Cantidad: {0}'}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding MontoPagado, StringFormat='Monto: ${0:N2}'}"
+                                        TextColor="Black" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Vencido -->
+                            <Border
+                                BackgroundColor="#FFA353"
+                                Padding="10"
+                                StrokeThickness="1"
+                                Stroke="#D0B595"
+                                StrokeShape ="5">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="Vencido"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding CantidadVencido, StringFormat='Cantidad: {0}'}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding MontoVencido, StringFormat='Monto: ${0:N2}'}"
+                                        TextColor="Black" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Pago Inmediato -->
+                            <Border
+                                BackgroundColor="#D65265"
+                                Padding="10"
+                                StrokeThickness="1"
+                                Stroke="#D0B595"
+                                StrokeShape ="5">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="Pago inmediato"
+                                        TextColor="White" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding CantidadPagoInmediato, StringFormat='Cantidad: {0}'}"
+                                        TextColor="White" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding MontoPagoInmediato, StringFormat='Monto: ${0:N2}'}"
+                                        TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Próximo a Pagar -->
+                            <Border
+                                BackgroundColor="#58D651"
+                                Padding="10"
+                                StrokeThickness="1"
+                                Stroke="#D0B595"
+                                StrokeShape ="5">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="Próximo a pagar"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding CantidadProximoAPagar, StringFormat='Cantidad: {0}'}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding MontoProximoAPagar, StringFormat='Monto: ${0:N2}'}"
+                                        TextColor="Black" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Total -->
+                            <Border
+                                BackgroundColor="#374151"
+                                Padding="10"
+                                StrokeThickness="2"
+                                Stroke="#D0B595"
+                                StrokeShape ="5">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="TOTAL"
+                                        TextColor="#F6F1EB" />
+                                    <Label
+                                        FontSize="14"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding CantidadTotal, StringFormat='Cantidad: {0}'}"
+                                        TextColor="#F6F1EB" />
+                                    <Label
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding MontoTotal, StringFormat='Monto: ${0:N2}'}"
+                                        TextColor="#F6F1EB" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Border>
 
                     <Button
-                        Margin="40"
+                        Margin="40,0"
                         Command="{Binding MostrarPopupChequeModificarCommand}"
                         StyleClass="OutlinedButton"
                         Text="Modificar cheque"
                         WidthRequest="180" />
-
 
                 </VerticalStackLayout>
 

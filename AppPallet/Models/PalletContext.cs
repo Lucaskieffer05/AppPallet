@@ -438,6 +438,15 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
             entity.Property(e => e.FechaEntregaEstimada).HasColumnType("datetime");
             entity.Property(e => e.FechaVenta).HasColumnType("datetime");
+            entity.Property(e => e.NumeroOrden)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.NumeroRemito)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.NumeroFactura)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.CostoPorPallet).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.CostoPorPalletId)

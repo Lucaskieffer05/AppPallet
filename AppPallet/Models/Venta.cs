@@ -23,5 +23,11 @@ public partial class Venta
 
     public DateTime? FechaCobroEstimada { get; set; }
 
+    public string? NumeroOrden { get; set; }
+
+    public string? NumeroRemito { get; set; }
+
+    public string? NumeroFactura { get; set; }
+
     public virtual CostoPorPallet CostoPorPallet { get; set; } = null!;
 }

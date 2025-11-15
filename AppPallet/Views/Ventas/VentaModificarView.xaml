@@ -42,6 +42,24 @@
                 Text="{Binding VentaModified.CantPallets, Mode=TwoWay}"
                 TextColor="Black" />
 
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <material:EditorField
+                    Grid.Column="0"
+                    Title="N° de Orden:"
+                    Text="{Binding VentaModified.NumeroOrden, Mode=TwoWay}"
+                    TextColor="Black" />
+                <material:EditorField
+                    Grid.Column="1"
+                    Title="N° de Remito:"
+                    Text="{Binding VentaModified.NumeroRemito, Mode=TwoWay}"
+                    TextColor="Black" />
+                <material:EditorField
+                    Grid.Column="2"
+                    Title="N° de Factura:"
+                    Text="{Binding VentaModified.NumeroFactura, Mode=TwoWay}"
+                    TextColor="Black" />
+            </Grid>
+
             <material:EditorField
                 Title="Comentarios:"
                 Text="{Binding VentaModified.Comentario, Mode=TwoWay}"

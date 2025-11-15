@@ -39,6 +39,42 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         private int añoIngresado = DateTime.Today.Year;
 
+        // Propiedades para sumatorias por estado
+        [ObservableProperty]
+        private int cantidadSinEstado;
+
+        [ObservableProperty]
+        private decimal montoSinEstado;
+
+        [ObservableProperty]
+        private int cantidadPagado;
+
+        [ObservableProperty]
+        private decimal montoPagado;
+
+        [ObservableProperty]
+        private int cantidadVencido;
+
+        [ObservableProperty]
+        private decimal montoVencido;
+
+        [ObservableProperty]
+        private int cantidadPagoInmediato;
+
+        [ObservableProperty]
+        private decimal montoPagoInmediato;
+
+        [ObservableProperty]
+        private int cantidadProximoAPagar;
+
+        [ObservableProperty]
+        private decimal montoProximoAPagar;
+
+        [ObservableProperty]
+        private int cantidadTotal;
+
+        [ObservableProperty]
+        private decimal montoTotal;
 
         public ObservableCollection<string> Meses { get; } = new()
             {
@@ -88,11 +124,61 @@ namespace AppPallet.ViewModels
                 var chequesList = await _chequeController.GetAllCheques(new DateTime(AñoIngresado, MesIngresado + 1, 1));
                 ListaCheques = new ObservableCollection<Cheque>(chequesList);
                 HayCheques = ListaCheques.Count == 0;
+                CalcularSumatorias();
             }
             finally
             {
                 IsBusy = false;
                 _isLoading = false;
+            }
+        }
+
+        private void CalcularSumatorias()
+        {
+            CantidadSinEstado = 0;
+            MontoSinEstado = 0;
+            CantidadPagado = 0;
+            MontoPagado = 0;
+            CantidadVencido = 0;
+            MontoVencido = 0;
+            CantidadPagoInmediato = 0;
+            MontoPagoInmediato = 0;
+            CantidadProximoAPagar = 0;
+            MontoProximoAPagar = 0;
+            CantidadTotal = 0;
+            MontoTotal = 0;
+
+            foreach (var cheque in ListaCheques)
+            {
+                var estado = cheque.Estado ?? 0;
+                var monto = cheque.Monto;
+
+                CantidadTotal++;
+                MontoTotal += monto;
+
+                switch (estado)
+                {
+                    case 0:
+                        CantidadSinEstado++;
+                        MontoSinEstado += monto;
+                        break;
+                    case 1:
+                        CantidadPagado++;
+                        MontoPagado += monto;
+                        break;
+                    case 2:
+                        CantidadVencido++;
+                        MontoVencido += monto;
+                        break;
+                    case 3:
+                        CantidadPagoInmediato++;
+                        MontoPagoInmediato += monto;
+                        break;
+                    case 4:
+                        CantidadProximoAPagar++;
+                        MontoProximoAPagar += monto;
+                        break;
+                }
             }
         }
 
@@ -156,6 +242,7 @@ namespace AppPallet.ViewModels
             var popupResult = await _popupService.ShowPopupAsync<ChequeCrearViewModel>(
                 Shell.Current,
                 options: PopupOptions.Empty);
+            await CargarListaCheques();
         }
 
         public async Task DisplayPopupModificar()
@@ -172,7 +259,7 @@ namespace AppPallet.ViewModels
                 Shell.Current,
                 options: PopupOptions.Empty,
                 shellParameters: queryAttributes);
-
+            await CargarListaCheques();
         }
 
         private async Task MostrarAlerta(string titulo, string mensaje)

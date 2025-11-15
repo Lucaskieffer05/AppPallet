@@ -70,7 +70,7 @@
                         IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=0}"
                         Value="0" />
                     <RadioButton
-                        Content="Cobrado"
+                        Content="Pagado"
                         GroupName="EstadoGroup"
                         IsChecked="{Binding EstadoSeleccionado, Converter={StaticResource IndexToBoolConverter}, ConverterParameter=1}"
                         Value="1" />

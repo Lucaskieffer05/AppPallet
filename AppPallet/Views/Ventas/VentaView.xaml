@@ -132,76 +132,98 @@
                     IsVisible="{Binding IsBusy}" />
 
 
-                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
+                <Grid ColumnDefinitions="0.9*,0.9*,0.9*,1*,0.7*,1*,0.8*,0.7*,0.9*,0.7*,0.7*,0.7*,1*,0.8*" ColumnSpacing="5">
                     <Label
                         Grid.Column="0"
-                        FontSize="16"
-                        Text="Fecha de Venta"
+                        FontSize="14"
+                        Text="Fecha Venta"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="1"
-                        FontSize="16"
-                        Text="Fecha de Entrega Estimada"
+                        FontSize="14"
+                        Text="F. Entrega Est."
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="2"
-                        FontSize="16"
-                        Text="Fecha de Cobro Estimada"
+                        FontSize="14"
+                        Text="F. Cobro Est."
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="3"
-                        FontSize="16"
+                        FontSize="14"
                         HorizontalOptions="Center"
                         Text="Empresa"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="4"
-                        FontSize="16"
+                        FontSize="14"
                         HorizontalOptions="Center"
-                        Text="Cantidad Pallets"
+                        Text="Cant. Pallets"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="5"
-                        FontSize="16"
+                        FontSize="14"
                         HorizontalOptions="Center"
                         Text="Presupuesto"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="6"
-                        FontSize="16"
+                        FontSize="14"
                         HorizontalOptions="Center"
                         Text="Precio c/u"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="7"
-                        FontSize="16"
+                        FontSize="14"
                         HorizontalOptions="Center"
                         Text="Estado"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="8"
-                        FontSize="16"
+                        FontSize="14"
                         HorizontalOptions="Center"
-                        Text="Fecha de Entrega"
+                        Text="F. Entrega"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="9"
-                        FontSize="16"
+                        FontSize="14"
+                        HorizontalOptions="Center"
+                        Text="N° Orden"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="10"
+                        FontSize="14"
+                        HorizontalOptions="Center"
+                        Text="N° Remito"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="11"
+                        FontSize="14"
+                        HorizontalOptions="Center"
+                        Text="N° Factura"
+                        TextColor="#BDBDBD"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="12"
+                        FontSize="14"
                         HorizontalOptions="Center"
                         Text="Comentario"
                         TextColor="#BDBDBD"
                         VerticalOptions="Center" />
                     <Label
-                        Grid.Column="10"
+                        Grid.Column="13"
+                        FontSize="14"
                         HorizontalOptions="Center"
                         Text="Acción"
                         TextColor="#BDBDBD"
@@ -225,7 +247,7 @@
                                 Style="{StaticResource CardStyle}">
 
 
-                                <Grid ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,2*,1*" ColumnSpacing="8">
+                                <Grid ColumnDefinitions="0.9*,0.9*,0.9*,1*,0.7*,1*,0.8*,0.7*,0.9*,0.7*,0.7*,0.7*,1*,0.8*" ColumnSpacing="5">
 
                                     <HorizontalStackLayout
                                         Grid.Column="0"
@@ -237,7 +259,7 @@
                                             VerticalOptions="Center"
                                             WidthRequest="17" />
                                         <Label
-                                            FontSize="13"
+                                            FontSize="12"
                                             HorizontalTextAlignment="Center"
                                             Text="{Binding FechaVenta, StringFormat='{0:dd/MM/yyyy}'}"
                                             TextColor="#333"
@@ -254,7 +276,7 @@
                                             VerticalOptions="Center"
                                             WidthRequest="17" />
                                         <Label
-                                            FontSize="13"
+                                            FontSize="12"
                                             HorizontalTextAlignment="Center"
                                             Text="{Binding FechaEntregaEstimada, StringFormat='{0:dd/MM/yyyy}'}"
                                             TextColor="#333"
@@ -271,7 +293,7 @@
                                             VerticalOptions="Center"
                                             WidthRequest="17" />
                                         <Label
-                                            FontSize="13"
+                                            FontSize="12"
                                             HorizontalTextAlignment="Center"
                                             Text="{Binding FechaCobroEstimada, StringFormat='{0:dd/MM/yyyy}'}"
                                             TextColor="#333"
@@ -280,7 +302,7 @@
 
                                     <Label
                                         Grid.Column="3"
-                                        FontSize="16"
+                                        FontSize="13"
                                         HorizontalOptions="Center"
                                         Text="{Binding CostoPorPallet.Empresa.NomEmpresa, StringFormat='{0}'}"
                                         TextColor="#333"
@@ -293,7 +315,7 @@
                                         VerticalOptions="Center">
 
                                         <Label
-                                            FontSize="16"
+                                            FontSize="13"
                                             Text="{Binding CantPallets}"
                                             TextColor="#333"
                                             VerticalOptions="Center" />
@@ -307,7 +329,7 @@
 
                                     <Label
                                         Grid.Column="5"
-                                        FontSize="16"
+                                        FontSize="13"
                                         HorizontalOptions="Center"
                                         Text="{Binding CostoPorPallet.NombrePalletCliente, StringFormat='{0}'}"
                                         TextColor="#333"
@@ -315,7 +337,7 @@
 
                                     <Label
                                         Grid.Column="6"
-                                        FontSize="16"
+                                        FontSize="13"
                                         HorizontalOptions="Center"
                                         Text="{Binding CostoPorPallet.PrecioPallet, StringFormat='${0:N2}'}"
                                         TextColor="#333"
@@ -324,7 +346,7 @@
                                     <Label
                                         Grid.Column="7"
                                         FontAttributes="Bold"
-                                        FontSize="16"
+                                        FontSize="13"
                                         HorizontalOptions="Center"
                                         Text="{Binding Estado}"
                                         TextColor="{Binding Estado, Converter={StaticResource EstadoVentaToColor}}"
@@ -341,23 +363,45 @@
                                             VerticalOptions="Center"
                                             WidthRequest="17" />
                                         <Label
-                                            FontSize="13"
+                                            FontSize="12"
                                             Text="{Binding FechaEntrega, StringFormat='{0:dd/MM/yyyy}'}"
                                             TextColor="#333" />
                                     </HorizontalStackLayout>
 
                                     <Label
                                         Grid.Column="9"
-                                        FontSize="16"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding NumeroOrden, StringFormat='{0}'}"
+                                        TextColor="#333"
+                                        VerticalOptions="Center" />
+
+                                    <Label
+                                        Grid.Column="10"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding NumeroRemito, StringFormat='{0}'}"
+                                        TextColor="#333"
+                                        VerticalOptions="Center" />
+
+                                    <Label
+                                        Grid.Column="11"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding NumeroFactura, StringFormat='{0}'}"
+                                        TextColor="#333"
+                                        VerticalOptions="Center" />
+
+                                    <Label
+                                        Grid.Column="12"
+                                        FontSize="13"
                                         HorizontalOptions="Center"
                                         Text="{Binding Comentario, StringFormat='{0}'}"
                                         TextColor="#333"
                                         VerticalOptions="Center" />
 
-
-
                                     <Button
-                                        Grid.Column="10"
+                                        Grid.Column="13"
                                         BackgroundColor="#374151"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VentaViewModel}}, Path=ModificarVentaCommand}"
                                         CommandParameter="{Binding VentaId}"
