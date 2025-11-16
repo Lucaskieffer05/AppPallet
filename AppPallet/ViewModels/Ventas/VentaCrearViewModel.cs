@@ -30,6 +30,15 @@ namespace AppPallet.ViewModels
         public bool presupuestoEnabled = false;
 
         [ObservableProperty]
+        public bool usarPrecioManual = false;
+
+        [ObservableProperty]
+        public decimal? precioManual;
+
+        [ObservableProperty]
+        public bool mostrarPresupuesto = true;
+
+        [ObservableProperty]
         public bool entregadoFlag = false;
 
         [ObservableProperty]
@@ -72,9 +81,9 @@ namespace AppPallet.ViewModels
             VentaCreated = new Venta
             {
                 FechaVenta = DateTime.Now,
-                CantPallets = 1,
+                CantPallets = 0,
                 Estado = "En Producción",
-                CostoPorPalletId = 0,
+                CostoPorPalletId = null,
                 Comentario = string.Empty,
                 FechaEntrega = null
             };
@@ -121,7 +130,19 @@ namespace AppPallet.ViewModels
         [RelayCommand]
         async Task CrearVenta()
         {
-            VentaCreated.CostoPorPalletId = CostoPorPalletIngresado.CostoPorPalletId;
+            if (UsarPrecioManual)
+            {
+                VentaCreated.CostoPorPalletId = null;
+                VentaCreated.PrecioManual = PrecioManual;
+                VentaCreated.EmpresaId = EmpresaIngresada?.EmpresaId;
+            }
+            else
+            {
+                VentaCreated.CostoPorPalletId = CostoPorPalletIngresado?.CostoPorPalletId > 0 ? CostoPorPalletIngresado.CostoPorPalletId : null;
+                VentaCreated.PrecioManual = null;
+                // Opcional: asociar empresa también cuando hay presupuesto
+                VentaCreated.EmpresaId = CostoPorPalletIngresado?.EmpresaId;
+            }
             VentaCreated.Estado = Estadoingresado;
             if (Estadoingresado == "Entregado" && VentaCreated.FechaEntrega == null)
             {
@@ -161,16 +182,23 @@ namespace AppPallet.ViewModels
                 bool confirmarIngreso = await mainPage.DisplayAlert("Confirmar", "Se ha detectado el estado de 'Entregado' ¿Desea registar el ingreso de esta venta?", "Sí", "No");
                 bool confirmarActivo = await mainPage.DisplayAlert("Confirmar", "¿Desea registrar también el activo de esta venta a partir de la fecha estimada de cobro?", "Sí", "No");
 
+                var precioUnitario = (decimal)(CostoPorPalletIngresado?.PrecioPallet ?? VentaCreated.PrecioManual ?? 0);
+                var empresaNombre = EmpresaIngresada?.NomEmpresa ?? "Sin empresa";
+                var comentarioTexto = string.IsNullOrWhiteSpace(VentaCreated.Comentario) ? "Sin comentarios" : VentaCreated.Comentario;
+                var montoTotal = VentaCreated.CostoPorPalletId != null
+                    ? (decimal)(VentaCreated.CantPallets * precioUnitario)
+                    : (decimal)(VentaCreated.PrecioManual ?? 0);
+
                 if (confirmarIngreso)
                 {
                     Ingreso ingreso = new Ingreso
                     {
                         Fecha = VentaCreated.FechaEntrega,
-                        DescripIngreso = $"Venta de {VentaCreated.CantPallets} pallets - {CostoPorPalletIngresado.NombrePalletCliente}",
+                        DescripIngreso = $"Venta a {empresaNombre} - {comentarioTexto}",
                         Op = string.Empty,
                         Remito = string.Empty,
                         Factura = string.Empty,
-                        Monto = (decimal)(VentaCreated.CantPallets * (CostoPorPalletIngresado.PrecioPallet ?? 0)),
+                        Monto = montoTotal,
                         Comentario = "ENTREGADO"
                     };
                     MessageResult resultIngreso = await _ingresoController.CreateIngreso(ingreso);
@@ -183,8 +211,8 @@ namespace AppPallet.ViewModels
                     {
                         Fecha = VentaCreated.FechaCobroEstimada,
                         Mes = (DateTime)VentaCreated.FechaCobroEstimada,
-                        Descripcion = $"Venta a {VentaCreated.CostoPorPallet.Empresa.NomEmpresa} por {VentaCreated.CantPallets} pallets",
-                        Monto = (decimal)(VentaCreated.CantPallets * (CostoPorPalletIngresado.PrecioPallet ?? 0)),
+                        Descripcion = $"Venta a {empresaNombre} - {comentarioTexto}",
+                        Monto = montoTotal,
                         Categoria = "Activo",
                         Estado = "Sin Pagar"
                     };
@@ -210,13 +238,15 @@ namespace AppPallet.ViewModels
             if (ListCostoPorPallet.Count > 0)
             {
                 CostoPorPalletIngresado = ListCostoPorPallet.FirstOrDefault()!;
-                PresupuestoEnabled = true;
+                PresupuestoEnabled = !UsarPrecioManual;
+                MostrarPresupuesto = !UsarPrecioManual;
             }
             else
             {
                 CostoPorPalletIngresado = new CostoPorPalletDTO();
-                VentaCreated.CostoPorPalletId = 0;
+                VentaCreated.CostoPorPalletId = null;
                 PresupuestoEnabled = false;
+                MostrarPresupuesto = false;
             }
         }
 
@@ -250,6 +280,12 @@ namespace AppPallet.ViewModels
             }
         }
 
+        partial void OnUsarPrecioManualChanged(bool value)
+        {
+            MostrarPresupuesto = !value;
+            PresupuestoEnabled = !value && ListCostoPorPallet.Count > 0;
+        }
+
         private async Task MostrarAlerta(string titulo, string mensaje)
         {
             var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
@@ -263,14 +299,22 @@ namespace AppPallet.ViewModels
 
         private bool ValidarVenta(Venta venta)
         {
-            if (venta.CantPallets <= 0)
+            if (venta.CantPallets < 0)
                 return false;
             if (venta.FechaVenta == default)
                 return false;
             if (string.IsNullOrWhiteSpace(venta.Estado))
                 return false;
-            if (venta.CostoPorPalletId <= 0)
-                return false;
+            if (UsarPrecioManual)
+            {
+                if (PrecioManual == null || PrecioManual <= 0)
+                    return false;
+            }
+            else
+            {
+                if (venta.CostoPorPalletId == null || venta.CostoPorPalletId <= 0)
+                    return false;
+            }
             return true;
 
         }

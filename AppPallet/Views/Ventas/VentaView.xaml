@@ -304,7 +304,7 @@
                                         Grid.Column="3"
                                         FontSize="13"
                                         HorizontalOptions="Center"
-                                        Text="{Binding CostoPorPallet.Empresa.NomEmpresa, StringFormat='{0}'}"
+                                        Text="{Binding EmpresaNombreMostrar, StringFormat='{0}'}"
                                         TextColor="#333"
                                         VerticalOptions="Center" />
 
@@ -331,7 +331,7 @@
                                         Grid.Column="5"
                                         FontSize="13"
                                         HorizontalOptions="Center"
-                                        Text="{Binding CostoPorPallet.NombrePalletCliente, StringFormat='{0}'}"
+                                        Text="{Binding CostoPorPallet.NombrePalletCliente, TargetNullValue=Sin presupuesto, StringFormat='{0}'}"
                                         TextColor="#333"
                                         VerticalOptions="Center" />
 
@@ -339,7 +339,7 @@
                                         Grid.Column="6"
                                         FontSize="13"
                                         HorizontalOptions="Center"
-                                        Text="{Binding CostoPorPallet.PrecioPallet, StringFormat='${0:N2}'}"
+                                        Text="{Binding PrecioUnitarioMostrar, StringFormat='${0:N2}'}"
                                         TextColor="#333"
                                         VerticalOptions="Center" />
 

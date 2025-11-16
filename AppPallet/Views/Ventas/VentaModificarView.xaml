@@ -20,7 +20,7 @@
         <VerticalStackLayout
             Padding="20"
             Spacing="15"
-            WidthRequest="550">
+            WidthRequest="650">
             <Label
                 FontAttributes="Bold"
                 FontSize="20"
@@ -44,18 +44,18 @@
 
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                 <material:EditorField
-                    Grid.Column="0"
                     Title="N° de Orden:"
+                    Grid.Column="0"
                     Text="{Binding VentaModified.NumeroOrden, Mode=TwoWay}"
                     TextColor="Black" />
                 <material:EditorField
-                    Grid.Column="1"
                     Title="N° de Remito:"
+                    Grid.Column="1"
                     Text="{Binding VentaModified.NumeroRemito, Mode=TwoWay}"
                     TextColor="Black" />
                 <material:EditorField
-                    Grid.Column="2"
                     Title="N° de Factura:"
+                    Grid.Column="2"
                     Text="{Binding VentaModified.NumeroFactura, Mode=TwoWay}"
                     TextColor="Black" />
             </Grid>
@@ -100,6 +100,11 @@
                 TextColor="Black" />
 
             <HorizontalStackLayout Spacing="10">
+                <Button
+                    BackgroundColor="#374151"
+                    Command="{Binding GenerarIngresoCommand}"
+                    StyleClass="FilledButton"
+                    Text="Generar Ingreso" />
                 <Button
                     Command="{Binding ModificarVentaCommand}"
                     StyleClass="FilledButton"

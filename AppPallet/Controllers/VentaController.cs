@@ -26,6 +26,7 @@ namespace AppPallet.Controllers
             {
                 return await _context.Venta
                     .AsNoTracking()
+                    .Include(v => v.Empresa)
                     .Include(v => v.CostoPorPallet)
                     .ThenInclude(cp => cp.Empresa)
                     .Include(v => v.CostoPorPallet)
@@ -58,7 +59,10 @@ namespace AppPallet.Controllers
                     .Select(g => new VentaMesDTO
                     {
                         Mes = g.Key,
-                        TotalVentas = g.Sum(v => (v.CostoPorPallet != null ? v.CostoPorPallet.PrecioPallet ?? 0 : 0) * v.CantPallets),
+                        // Si hay presupuesto: precio*pallets; si es manual: usar el precio manual tal cual (no multiplicar)
+                        TotalVentas = g.Sum(v => v.CostoPorPalletId != null
+                            ? ((v.CostoPorPallet?.PrecioPallet ?? 0) * v.CantPallets)
+                            : (v.PrecioManual ?? 0)),
                         TotalPallets = g.Sum(v => v.CantPallets),
                         Ventas = g.ToList()
                     })
@@ -96,6 +100,7 @@ namespace AppPallet.Controllers
             {
                 return await _context.Venta
                     .AsNoTracking()
+                    .Include(v => v.Empresa)
                     .Include(v => v.CostoPorPallet)
                     .ThenInclude(cp => cp.Empresa)
                     .Include(v => v.CostoPorPallet)
@@ -118,7 +123,7 @@ namespace AppPallet.Controllers
                     .AsNoTracking()
                     .Include(v => v.CostoPorPallet)
                     .ThenInclude(cp => cp.Empresa)
-                    .Where(v => v.FechaVenta.Year == fechaFiltro.Year && v.CostoPorPallet.Empresa.FechaDelete != null)
+                    .Where(v => v.FechaVenta.Year == fechaFiltro.Year && v.CostoPorPalletId != null && v.CostoPorPallet.Empresa.FechaDelete != null)
                     .ToListAsync();
                 var topClientes = ventas
                     .GroupBy(v => v.CostoPorPallet.Empresa.EmpresaId)
@@ -153,6 +158,8 @@ namespace AppPallet.Controllers
                     CantPallets = nuevaVenta.CantPallets,
                     Estado = nuevaVenta.Estado,
                     CostoPorPalletId = nuevaVenta.CostoPorPalletId,
+                    PrecioManual = nuevaVenta.PrecioManual,
+                    EmpresaId = nuevaVenta.EmpresaId,
                     Comentario = nuevaVenta.Comentario,
                     FechaEntrega = nuevaVenta.FechaEntrega,
                     FechaCobroEstimada = nuevaVenta.FechaCobroEstimada,
@@ -188,6 +195,8 @@ namespace AppPallet.Controllers
                                  ventaExistente.CantPallets != ventaActualizada.CantPallets ||
                                  ventaExistente.Estado != ventaActualizada.Estado ||
                                  ventaExistente.CostoPorPalletId != ventaActualizada.CostoPorPalletId ||
+                                 ventaExistente.PrecioManual != ventaActualizada.PrecioManual ||
+                                 ventaExistente.EmpresaId != ventaActualizada.EmpresaId ||
                                  ventaExistente.Comentario != ventaActualizada.Comentario ||
                                  ventaExistente.FechaEntregaEstimada != ventaActualizada.FechaEntregaEstimada ||
                                  ventaExistente.FechaCobroEstimada != ventaActualizada.FechaCobroEstimada ||
@@ -204,6 +213,8 @@ namespace AppPallet.Controllers
                 ventaExistente.CantPallets = ventaActualizada.CantPallets;
                 ventaExistente.Estado = ventaActualizada.Estado;
                 ventaExistente.CostoPorPalletId = ventaActualizada.CostoPorPalletId;
+                ventaExistente.PrecioManual = ventaActualizada.PrecioManual;
+                ventaExistente.EmpresaId = ventaActualizada.EmpresaId;
                 ventaExistente.Comentario = ventaActualizada.Comentario;
                 ventaExistente.FechaEntrega = ventaActualizada.FechaEntrega;
                 ventaExistente.FechaCobroEstimada = ventaActualizada.FechaCobroEstimada;

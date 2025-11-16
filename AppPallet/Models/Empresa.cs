@@ -22,4 +22,6 @@ public partial class Empresa
     public virtual ICollection<CostoPorPallet> CostoPorPallet { get; set; } = new List<CostoPorPallet>();
 
     public virtual ICollection<Lote> Lote { get; set; } = new List<Lote>();
+
+    public virtual ICollection<Venta> Venta { get; set; } = new List<Venta>();
 }

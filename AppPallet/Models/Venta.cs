@@ -13,7 +13,11 @@ public partial class Venta
 
     public string Estado { get; set; } = null!;
 
-    public int CostoPorPalletId { get; set; }
+    public int? CostoPorPalletId { get; set; }
+
+    public decimal? PrecioManual { get; set; }
+
+    public int? EmpresaId { get; set; }
 
     public string? Comentario { get; set; }
 
@@ -29,5 +33,11 @@ public partial class Venta
 
     public string? NumeroFactura { get; set; }
 
-    public virtual CostoPorPallet CostoPorPallet { get; set; } = null!;
+    public virtual CostoPorPallet? CostoPorPallet { get; set; }
+
+    public virtual Empresa? Empresa { get; set; }
+
+    public decimal PrecioUnitarioMostrar => (decimal)(CostoPorPallet?.PrecioPallet ?? PrecioManual ?? 0);
+
+    public string EmpresaNombreMostrar => CostoPorPallet?.Empresa?.NomEmpresa ?? Empresa?.NomEmpresa ?? string.Empty;
 }

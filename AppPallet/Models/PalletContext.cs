@@ -431,6 +431,8 @@ public partial class PalletContext : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.CostoPorPalletId).HasColumnName("CostoPorPalletID");
+            entity.Property(e => e.PrecioManual).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.EmpresaId).HasColumnName("EmpresaID");
             entity.Property(e => e.Estado)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -438,20 +440,23 @@ public partial class PalletContext : DbContext
             entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
             entity.Property(e => e.FechaEntregaEstimada).HasColumnType("datetime");
             entity.Property(e => e.FechaVenta).HasColumnType("datetime");
+            entity.Property(e => e.NumeroFactura)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.NumeroOrden)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.NumeroRemito)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.NumeroFactura)
-                .HasMaxLength(50)
-                .IsUnicode(false);
 
             entity.HasOne(d => d.CostoPorPallet).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.CostoPorPalletId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Venta_CostoPorPallet");
+
+            entity.HasOne(d => d.Empresa).WithMany(p => p.Venta)
+                .HasForeignKey(d => d.EmpresaId)
+                .HasConstraintName("FK_Venta_Empresa");
         });
 
         OnModelCreatingPartial(modelBuilder);

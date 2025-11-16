@@ -32,15 +32,43 @@
                 ItemsSource="{Binding ListEmpresas}"
                 SelectedItem="{Binding EmpresaIngresada, Mode=TwoWay}" />
 
+            <Grid
+                Padding="0,10,0,0"
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="10">
+                <Label
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Precio manual:"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+                <Switch
+                    Grid.Column="1"
+                    IsToggled="{Binding UsarPrecioManual, Mode=TwoWay}"
+                    OnColor="#374151"
+                    ThumbColor="White" />
+            </Grid>
+
             <material:PickerField
                 Title="Selecciona el presupuesto:"
                 x:DataType="{x:Null}"
                 IsEnabled="{Binding PresupuestoEnabled}"
+                IsVisible="{Binding MostrarPresupuesto}"
                 ItemDisplayBinding="{Binding FechaNombre}"
                 ItemsSource="{Binding ListCostoPorPallet}"
                 SelectedItem="{Binding CostoPorPalletIngresado, Mode=TwoWay}" />
 
-            <Label Text="{Binding StockActual, Mode=TwoWay, StringFormat='Stock Actual: {0}'}" TextColor="Black" />
+            <material:EditorField
+                Title="Precio final de venta ($) — no depende de la cantidad de pallets"
+                IsVisible="{Binding UsarPrecioManual}"
+                Keyboard="Numeric"
+                Text="{Binding PrecioManual, Mode=TwoWay}"
+                TextColor="Black" />
+
+            <Label
+                IsVisible="{Binding MostrarPresupuesto}"
+                Text="{Binding StockActual, Mode=TwoWay, StringFormat='Stock Actual: {0}'}"
+                TextColor="Black" />
 
             <material:DatePickerField
                 Title="Fecha de venta"
@@ -57,18 +85,18 @@
 
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                 <material:EditorField
-                    Grid.Column="0"
                     Title="N° de Orden:"
+                    Grid.Column="0"
                     Text="{Binding VentaCreated.NumeroOrden, Mode=TwoWay}"
                     TextColor="Black" />
                 <material:EditorField
-                    Grid.Column="1"
                     Title="N° de Remito:"
+                    Grid.Column="1"
                     Text="{Binding VentaCreated.NumeroRemito, Mode=TwoWay}"
                     TextColor="Black" />
                 <material:EditorField
-                    Grid.Column="2"
                     Title="N° de Factura:"
+                    Grid.Column="2"
                     Text="{Binding VentaCreated.NumeroFactura, Mode=TwoWay}"
                     TextColor="Black" />
             </Grid>

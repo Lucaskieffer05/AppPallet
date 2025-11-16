@@ -69,7 +69,10 @@ namespace AppPallet.ViewModels
             }
             else
             {
-                TituloPage = $"Modificar venta a {VentaModified.CostoPorPallet.Empresa.NomEmpresa} con precio: ${VentaModified.CostoPorPallet.PrecioPallet}";
+                var empresaNombre = VentaModified.CostoPorPallet?.Empresa?.NomEmpresa ?? VentaModified.Empresa?.NomEmpresa ?? "Sin empresa";
+                var precio = (VentaModified.CostoPorPallet?.PrecioPallet ?? VentaModified.PrecioManual) ?? 0;
+                var origenPrecio = VentaModified.CostoPorPalletId != null ? "presupuesto" : "precio manual";
+                TituloPage = $"Modificar venta a {empresaNombre} con {origenPrecio}: ${precio}";
                 auxEstado = VentaModified.Estado;
                 EnStock = VentaModified.Estado == "En Stock";
             }
@@ -127,27 +130,15 @@ namespace AppPallet.ViewModels
                         return;
                     }
 
-                    bool confirmarIngreso = await mainPage.DisplayAlert("Confirmar", "Se ha detectado el estado de 'Entregado' ¿Desea registar el ingreso de esta venta?", "Sí", "No");
                     bool confirmarActivo = await mainPage.DisplayAlert("Confirmar", "¿Desea registrar también el activo de esta venta a partir de la fecha estimada de cobro?", "Sí", "No");
 
-                    if (confirmarIngreso)
-                    {
-                        Ingreso ingreso = new Ingreso
-                        {
-                            Fecha = VentaModified.FechaEntrega,
-                            DescripIngreso = $"Venta de {VentaModified.CantPallets} pallets - {VentaModified.CostoPorPallet.NombrePalletCliente}",
-                            Op = string.Empty,
-                            Remito = string.Empty,
-                            Factura = string.Empty,
-                            Monto = (decimal)(VentaModified.CantPallets * (VentaModified.CostoPorPallet.PrecioPallet ?? 0)),
-                            Comentario = "ENTREGADO"
-                        };
-
-
-                        MessageResult resultIngreso = await _ingresoController.CreateIngreso(ingreso);
-
-                        await MostrarAlerta(resultIngreso.Title, resultIngreso.Message);
-                    }
+                    var precioUnitario = (decimal)((VentaModified.CostoPorPallet?.PrecioPallet ?? VentaModified.PrecioManual) ?? 0);
+                    var nombrePalletCliente = VentaModified.CostoPorPallet?.NombrePalletCliente ?? "Sin presupuesto";
+                    var empresaNombre = VentaModified.CostoPorPallet?.Empresa?.NomEmpresa ?? VentaModified.Empresa?.NomEmpresa ?? "Sin empresa";
+                    var comentarioTexto = string.IsNullOrWhiteSpace(VentaModified.Comentario) ? "Sin comentarios" : VentaModified.Comentario;
+                    var montoTotal = VentaModified.CostoPorPalletId != null
+                        ? (decimal)(VentaModified.CantPallets * precioUnitario)
+                        : (decimal)(VentaModified.PrecioManual ?? 0);
 
                     //registrar activo
                     if (confirmarActivo)
@@ -156,8 +147,8 @@ namespace AppPallet.ViewModels
                         {
                             Fecha = VentaModified.FechaCobroEstimada,
                             Mes = (DateTime)VentaModified.FechaCobroEstimada,
-                            Descripcion = $"Venta a {VentaModified.CostoPorPallet.Empresa.NomEmpresa} por {VentaModified.CantPallets} pallets",
-                            Monto = (decimal)(VentaModified.CantPallets * (VentaModified.CostoPorPallet.PrecioPallet ?? 0)),
+                            Descripcion = $"Venta a {empresaNombre} - {comentarioTexto}",
+                            Monto = montoTotal,
                             Categoria = "Activo",
                             Estado = "Sin Pagar"
                         };
@@ -166,9 +157,11 @@ namespace AppPallet.ViewModels
                     }
 
                     // Restar stock
-                    MessageResult palletResult = await _palletController.SumarStockPallet(VentaModified.CostoPorPallet.PalletId, -VentaModified.CantPallets);
-                    
-                    await MostrarAlerta(palletResult.Title, palletResult.Message);
+                    if (VentaModified.CostoPorPallet != null)
+                    {
+                        MessageResult palletResult = await _palletController.SumarStockPallet(VentaModified.CostoPorPallet.PalletId, -VentaModified.CantPallets);
+                        await MostrarAlerta(palletResult.Title, palletResult.Message);
+                    }
 
                 }
 
@@ -182,6 +175,50 @@ namespace AppPallet.ViewModels
             {
                 await MostrarAlerta("Error", "No hay datos de venta para modificar.");
             }
+        }
+
+        [RelayCommand]
+        public async Task GenerarIngreso()
+        {
+            if (VentaModified == null)
+            {
+                await MostrarAlerta("Error", "No hay datos de venta para generar ingreso.");
+                return;
+            }
+            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (mainPage == null)
+            {
+                await MostrarAlerta("Error", "No se pudo obtener la página principal.");
+                return;
+            }
+            bool confirmarIngreso = await mainPage.DisplayAlert("Confirmar", "¿Desea generar un ingreso para esta venta?", "Sí", "No");
+            if (!confirmarIngreso)
+            {
+                return;
+            }
+            var precioUnitario = (decimal)((VentaModified.CostoPorPallet?.PrecioPallet ?? VentaModified.PrecioManual) ?? 0);
+            var empresaNombre = VentaModified.CostoPorPallet?.Empresa?.NomEmpresa ?? VentaModified.Empresa?.NomEmpresa ?? "Sin empresa";
+            var comentarioTexto = string.IsNullOrWhiteSpace(VentaModified.Comentario) ? "Sin comentarios" : VentaModified.Comentario;
+            var montoTotal = VentaModified.CostoPorPalletId != null
+                ? (decimal)(VentaModified.CantPallets * precioUnitario)
+                : (decimal)(VentaModified.PrecioManual ?? 0);
+
+            var comentarioEstado = (VentaModified.FechaEntrega != null || string.Equals(VentaModified.Estado, "Entregado", StringComparison.OrdinalIgnoreCase))
+                ? "ENTREGADO"
+                : "SIN ENTREGAR";
+
+            Ingreso ingreso = new Ingreso
+            {
+                Fecha = VentaModified.FechaEntrega ?? DateTime.Now,
+                DescripIngreso = $"Venta a {empresaNombre} - {comentarioTexto}",
+                Op = string.Empty,
+                Remito = string.Empty,
+                Factura = string.Empty,
+                Monto = montoTotal,
+                Comentario = comentarioEstado
+            };
+            MessageResult resultIngreso = await _ingresoController.CreateIngreso(ingreso);
+            await MostrarAlerta(resultIngreso.Title, resultIngreso.Message);
         }
 
         [RelayCommand]
@@ -224,14 +261,20 @@ namespace AppPallet.ViewModels
 
         private bool ValidarVenta(Venta venta)
         {
-            if (venta.CantPallets <= 0)
+            if (venta.CantPallets < 0)
                 return false;
             if (venta.FechaVenta == default)
                 return false;
             if (string.IsNullOrWhiteSpace(venta.Estado))
                 return false;
-            if (venta.CostoPorPalletId <= 0)
-                return false;
+            // Permitir presupuesto o precio manual + empresa
+            if (venta.CostoPorPalletId == null || venta.CostoPorPalletId <= 0)
+            {
+                if (venta.PrecioManual == null || venta.PrecioManual <= 0)
+                    return false;
+                if (venta.EmpresaId == null || venta.EmpresaId <= 0)
+                    return false;
+            }
             return true;
 
         }
