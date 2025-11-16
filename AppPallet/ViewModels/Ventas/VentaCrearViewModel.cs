@@ -189,12 +189,17 @@ namespace AppPallet.ViewModels
                     ? (decimal)(VentaCreated.CantPallets * precioUnitario)
                     : (decimal)(VentaCreated.PrecioManual ?? 0);
 
+                // Descripción según si hay presupuesto o precio manual
+                var descripcionIngreso = VentaCreated.CostoPorPalletId != null
+                    ? $"Venta de {VentaCreated.CantPallets} pallets - {empresaNombre}"
+                    : $"Venta a {empresaNombre} - {comentarioTexto}";
+
                 if (confirmarIngreso)
                 {
                     Ingreso ingreso = new Ingreso
                     {
                         Fecha = VentaCreated.FechaEntrega,
-                        DescripIngreso = $"Venta a {empresaNombre} - {comentarioTexto}",
+                        DescripIngreso = descripcionIngreso,
                         Op = string.Empty,
                         Remito = string.Empty,
                         Factura = string.Empty,
@@ -211,7 +216,7 @@ namespace AppPallet.ViewModels
                     {
                         Fecha = VentaCreated.FechaCobroEstimada,
                         Mes = (DateTime)VentaCreated.FechaCobroEstimada,
-                        Descripcion = $"Venta a {empresaNombre} - {comentarioTexto}",
+                        Descripcion = descripcionIngreso,
                         Monto = montoTotal,
                         Categoria = "Activo",
                         Estado = "Sin Pagar"

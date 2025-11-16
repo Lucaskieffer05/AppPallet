@@ -79,6 +79,7 @@
 
             <material:EditorField
                 Title="Cantidad Pallets:"
+                IsVisible="{Binding MostrarPresupuesto}"
                 Keyboard="Numeric"
                 Text="{Binding VentaCreated.CantPallets, Mode=TwoWay}"
                 TextColor="Black" />

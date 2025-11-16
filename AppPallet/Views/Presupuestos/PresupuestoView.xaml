@@ -12,143 +12,198 @@
     x:DataType="viewModels:PresupuestoViewModel"
     Shell.NavBarIsVisible="False">
 
-
     <Grid RowDefinitions="Auto,*,Auto">
-
+        <!--  Header  -->
         <Border
             Grid.Row="0"
             BackgroundColor="#374151"
-            HeightRequest="60"
+            HeightRequest="70"
             Stroke="Black">
-            <Grid ColumnDefinitions="0.3*,Auto,Auto,0.1*">
-
+            <Grid Padding="20,0" ColumnDefinitions="*,Auto">
                 <Label
                     Grid.Column="0"
-                    Margin="10,0,0,0"
                     FontAttributes="Bold"
-                    FontSize="25"
+                    FontSize="28"
                     HorizontalOptions="Start"
                     Text="PRESUPUESTOS"
                     TextColor="#F6F1EB"
                     VerticalOptions="Center" />
                 <Button
-                    Grid.Column="2"
-                    Padding="20,10"
+                    Grid.Column="1"
+                    Padding="25,12"
                     BackgroundColor="#F6F1EB"
                     BorderColor="#D0B595"
-                    BorderWidth="3"
+                    BorderWidth="2"
                     Command="{Binding CrearPresupuestoCommand}"
-                    CornerRadius="20"
-                    HeightRequest="43"
+                    CornerRadius="25"
+                    FontAttributes="Bold"
+                    FontSize="15"
+                    HeightRequest="50"
                     HorizontalOptions="End"
                     StyleClass="FilledButton"
-                    Text="Crear nuevo presupuesto"
+                    Text="➕ Nuevo Presupuesto"
                     TextColor="Black"
-                    WidthRequest="200" />
+                    WidthRequest="220" />
             </Grid>
         </Border>
 
+        <!--  Content  -->
+        <ScrollView Grid.Row="1" Padding="10">
+            <VerticalStackLayout>
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    VerticalOptions="Center" />
 
+                <FlexLayout
+                    AlignItems="Start"
+                    BindableLayout.ItemsSource="{Binding ListaEmpresas}"
+                    Direction="Row"
+                    JustifyContent="Start"
+                    Wrap="Wrap">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Empresa">
+                            <Border
+                                Margin="6"
+                                Padding="0"
+                                BackgroundColor="White"
+                                HeightRequest="280"
+                                Stroke="#E5E7EB"
+                                StrokeThickness="1"
+                                WidthRequest="420">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
 
-        <ScrollView Grid.Row="1">
-            <FlexLayout
-                BindableLayout.ItemsSource="{Binding ListaEmpresas}"
-                Direction="Row"
-                Wrap="Wrap">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="models:Empresa">
-                        <Border
-                            Margin="10"
-                            HeightRequest="200"
-                            WidthRequest="400">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="12" />
-                            </Border.StrokeShape>
+                                <Grid RowDefinitions="Auto,*,Auto">
+                                    <!--  Header con gradiente  -->
+                                    <Border
+                                        Grid.Row="0"
+                                        BackgroundColor="#D0B595"
+                                        HeightRequest="90">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="16,16,0,0" />
+                                        </Border.StrokeShape>
+                                        <Grid Padding="20,15" RowDefinitions="Auto,Auto">
+                                            <Label
+                                                Grid.Row="0"
+                                                FontAttributes="Bold"
+                                                FontSize="20"
+                                                Text="{Binding NomEmpresa}"
+                                                TextColor="White" />
+                                            <Label
+                                                Grid.Row="1"
+                                                Margin="0,5,0,0"
+                                                FontSize="13"
+                                                Text="{Binding Cuit}"
+                                                TextColor="#F5F5F5" />
+                                        </Grid>
+                                    </Border>
 
+                                    <!--  Contenido de presupuestos  -->
+                                    <VerticalStackLayout
+                                        Grid.Row="1"
+                                        Padding="20,15"
+                                        Spacing="8">
+                                        <Label
+                                            Margin="0,0,0,5"
+                                            FontAttributes="Bold"
+                                            FontSize="14"
+                                            HorizontalTextAlignment="Center"
+                                            Text="Presupuestos del Mes Actual"
+                                            TextColor="#6B7280" />
 
-                            <Grid RowDefinitions="Auto,*,30">
-                                <!--  Parte superior con color pastel  -->
-                                <BoxView BackgroundColor="#D0B595" HeightRequest="80" />
+                                        <CollectionView
+                                            Margin="0,5,0,0"
+                                            ItemsSource="{Binding CostoPorPallet}"
+                                            MaximumHeightRequest="140">
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout ItemSpacing="2" Orientation="Vertical" />
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:CostoPorPallet">
+                                                    <Border
+                                                        Padding="11,8"
+                                                        BackgroundColor="#F9FAFB"
+                                                        Stroke="#E5E7EB"
+                                                        StrokeThickness="1">
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="8" />
+                                                        </Border.StrokeShape>
+                                                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                                                            <Label
+                                                                Grid.Column="0"
+                                                                FontAttributes="Bold"
+                                                                FontSize="14"
+                                                                Text="{Binding NombrePalletCliente}"
+                                                                TextColor="#1F2937"
+                                                                VerticalOptions="Center" />
+                                                            <HorizontalStackLayout
+                                                                Grid.Column="1"
+                                                                Spacing="5"
+                                                                VerticalOptions="Center">
+                                                                <Label
+                                                                    FontSize="12"
+                                                                    Text="Precio:"
+                                                                    TextColor="#6B7280" />
+                                                                <Label
+                                                                    FontAttributes="Bold"
+                                                                    FontSize="13"
+                                                                    Text="{Binding PrecioPallet, StringFormat='${0:N0}'}"
+                                                                    TextColor="#059669" />
+                                                            </HorizontalStackLayout>
+                                                            <HorizontalStackLayout
+                                                                Grid.Column="2"
+                                                                Spacing="5"
+                                                                VerticalOptions="Center">
+                                                                <Label
+                                                                    FontSize="12"
+                                                                    Text="Ganancia:"
+                                                                    TextColor="#6B7280" />
+                                                                <Label
+                                                                    FontAttributes="Bold"
+                                                                    FontSize="13"
+                                                                    Text="{Binding GananciaPorCantPallet, StringFormat='${0:N0}'}"
+                                                                    TextColor="#DC2626" />
+                                                            </HorizontalStackLayout>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
 
-                                <!--  Parte inferior con texto  -->
-                                <StackLayout Padding="10">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        FontSize="16"
-                                        Text="{Binding NomEmpresa}" />
-                                    <Label FontSize="14" Text="{Binding Cuit}" />
-                                </StackLayout>
-
-                                <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center">
-
-                                    <Label
-                                        Padding="0,5,0,0"
-                                        FontAttributes="Bold"
-                                        FontSize="15"
-                                        HorizontalTextAlignment="Center"
-                                        Text="Presupuesto de este mes:"
-                                        TextColor="#A2A2A2" />
-
-                                    <CollectionView
-                                        Margin="20"
-                                        HorizontalOptions="Center"
-                                        ItemsSource="{Binding CostoPorPallet}">
-                                        <CollectionView.ItemsLayout>
-                                            <LinearItemsLayout Orientation="Vertical" />
-                                        </CollectionView.ItemsLayout>
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate x:DataType="models:CostoPorPallet">
-                                                <HorizontalStackLayout Padding="0,0,0,5" Spacing="15">
-                                                    <Label
-                                                        FontSize="13"
-                                                        Text="{Binding NombrePalletCliente}"
-                                                        TextColor="#90894A" />
-                                                    <HorizontalStackLayout>
-                                                        <Label
-                                                            Padding="0,0,5,0"
-                                                            FontSize="13"
-                                                            Text="Precio:" />
-                                                        <Label FontSize="13" Text="{Binding PrecioPallet, StringFormat='$ {0:N2}'}" />
-                                                    </HorizontalStackLayout>
-                                                    <HorizontalStackLayout>
-                                                        <Label
-                                                            Padding="0,0,5,0"
-                                                            FontSize="13"
-                                                            Text="Ganancia:" />
-                                                        <Label FontSize="13" Text="{Binding GananciaPorCantPallet, StringFormat='$ {0:N2}'}" />
-                                                    </HorizontalStackLayout>
-                                                </HorizontalStackLayout>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
-                                </VerticalStackLayout>
-
-
-                                <Button
-                                    Grid.Row="2"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoViewModel}}, Path=MostrarPresupuestoCommand}"
-                                    CommandParameter="{Binding EmpresaId}"
-                                    HorizontalOptions="End"
-                                    StyleClass="TextButton"
-                                    Text="Ver"
-                                    TextColor="#D0B595" />
-
-
-
-                            </Grid>
-
-
-
-
-                        </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
-
-
+                                    <!--  Footer con botón  -->
+                                    <Border
+                                        Grid.Row="2"
+                                        BackgroundColor="#F9FAFB"
+                                        HeightRequest="50">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="0,0,16,16" />
+                                        </Border.StrokeShape>
+                                        <Button
+                                            Margin="0,0,15,0"
+                                            BackgroundColor="Transparent"
+                                            BorderColor="#D0B595"
+                                            BorderWidth="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoViewModel}}, Path=MostrarPresupuestoCommand}"
+                                            CommandParameter="{Binding EmpresaId}"
+                                            CornerRadius="8"
+                                            FontAttributes="Bold"
+                                            FontSize="14"
+                                            HeightRequest="36"
+                                            HorizontalOptions="End"
+                                            Text="Ver Detalles →"
+                                            TextColor="#D0B595"
+                                            WidthRequest="140" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </VerticalStackLayout>
         </ScrollView>
     </Grid>
-
-
-
 </ContentPage>

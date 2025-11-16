@@ -206,6 +206,28 @@ namespace AppPallet.Controllers
                 return new List<ActivoPasivoMensualDTO>();
             }
         }
+
+        // Buscar pasivo por descripción de cheque, monto y fecha
+        public async Task<ActivoPasivo?> BuscarPasivoPorCheque(string descripcionCheque, decimal monto, DateTime fechaPago)
+        {
+            try
+            {
+                // No usar AsNoTracking para que la entidad pueda ser modificada
+                return await _context.ActivoPasivo
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(ap => 
+                        ap.Descripcion == descripcionCheque &&
+                        ap.Monto == monto &&
+                        ap.Fecha.HasValue &&
+                        ap.Fecha.Value.Date == fechaPago.Date &&
+                        ap.Categoria.ToLower() == "pasivo");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al buscar pasivo por cheque: {ex.Message}");
+                return null;
+            }
+        }
     }
             
 }

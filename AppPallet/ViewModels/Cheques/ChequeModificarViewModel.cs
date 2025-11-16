@@ -1,4 +1,5 @@
-﻿using AppPallet.Controllers;
+﻿using AppPallet.Constants;
+using AppPallet.Controllers;
 using AppPallet.Models;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -34,14 +35,20 @@ namespace AppPallet.ViewModels
 
         readonly ChequeController _chequeController;
 
+        readonly EgresoController _egresoController;
+
+        readonly ActivoPasivoController _activoPasivoController;
+
         // -------------------------------------------------------------------
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public ChequeModificarViewModel(IPopupService popupService, ChequeController chequeController)
+        public ChequeModificarViewModel(IPopupService popupService, ChequeController chequeController, EgresoController egresoController, ActivoPasivoController activoPasivoController)
         {
             _popupService = popupService;
             _chequeController = chequeController;
+            _egresoController = egresoController;
+            _activoPasivoController = activoPasivoController;
             EstadoSeleccionado = 0; 
         }
 
@@ -64,10 +71,107 @@ namespace AppPallet.ViewModels
                 return;
             }
 
+            // Guardar estado anterior antes de actualizar
+            int? estadoAnteriorTemp = ChequeSeleccionado.Estado;
             ChequeSeleccionado.Estado = EstadoSeleccionado;
 
             try
             {
+                // Buscar coincidencias en Egresos y Pasivos antes de actualizar
+                string descripcionCheque = $"Cheque-{ChequeSeleccionado.Proveedor}-{ChequeSeleccionado.NumCheque ?? "Sin número"}";
+                
+                // Buscar en Egresos
+                var egresoEncontrado = await _egresoController.BuscarEgresoPorCheque(descripcionCheque, ChequeSeleccionado.Monto, ChequeSeleccionado.FechaPago);
+                
+                if (egresoEncontrado != null)
+                {
+                    var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+                    if (mainPage != null)
+                    {
+                        string detallesEgreso = $"Descripción: {egresoEncontrado.DescripEgreso}\n" +
+                                                $"Monto: ${egresoEncontrado.Monto:N2}\n" +
+                                                $"Fecha: {egresoEncontrado.Fecha:dd/MM/yyyy}\n" +
+                                                $"Comentario: {egresoEncontrado.Comentario ?? "Sin comentario"}";
+                        
+                        bool modificarEgreso = await mainPage.DisplayAlert(
+                            "Coincidencia encontrada",
+                            $"Se ha encontrado coincidencia con un cheque en egresos, ¿desea modificar su estado?\n\n{detallesEgreso}",
+                            "Sí", "No");
+                        
+                        if (modificarEgreso)
+                        {
+                            string nuevoComentario = (EstadoSeleccionado == 1) ? "Pagado" : "Sin pagar";
+                            // Crear una copia con el nuevo comentario para actualizar
+                            Egreso egresoParaActualizar = new Egreso
+                            {
+                                EgresoId = egresoEncontrado.EgresoId,
+                                DescripEgreso = egresoEncontrado.DescripEgreso,
+                                Fecha = egresoEncontrado.Fecha,
+                                Monto = egresoEncontrado.Monto,
+                                Factura = egresoEncontrado.Factura,
+                                SumaIva = egresoEncontrado.SumaIva,
+                                Mes = egresoEncontrado.Mes,
+                                Comentario = nuevoComentario
+                            };
+                            bool resultadoEgreso = await _egresoController.UpdateEgreso(egresoParaActualizar);
+                            if (resultadoEgreso)
+                            {
+                                await MostrarAlerta("Éxito", "Egreso actualizado correctamente");
+                            }
+                            else
+                            {
+                                await MostrarAlerta("Error", "No se pudo actualizar el egreso");
+                            }
+                        }
+                    }
+                }
+
+                // Buscar en Pasivos
+                var pasivoEncontrado = await _activoPasivoController.BuscarPasivoPorCheque(descripcionCheque, ChequeSeleccionado.Monto, ChequeSeleccionado.FechaPago);
+                
+                if (pasivoEncontrado != null)
+                {
+                    var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+                    if (mainPage != null)
+                    {
+                        string detallesPasivo = $"ID: {pasivoEncontrado.ActivoPasivoId}\n" +
+                                                $"Descripción: {pasivoEncontrado.Descripcion}\n" +
+                                                $"Monto: ${pasivoEncontrado.Monto:N2}\n" +
+                                                $"Fecha: {pasivoEncontrado.Fecha:dd/MM/yyyy}\n" +
+                                                $"Estado: {pasivoEncontrado.Estado ?? "Sin estado"}";
+                        
+                        bool modificarPasivo = await mainPage.DisplayAlert(
+                            "Coincidencia encontrada",
+                            $"Se ha encontrado coincidencia con un cheque en pasivos, ¿desea modificar su estado?\n\n{detallesPasivo}",
+                            "Sí", "No");
+                        
+                        if (modificarPasivo)
+                        {
+                            string nuevoEstado = (EstadoSeleccionado == 1) ? "Pagado" : "Sin Pagar";
+                            // Crear una copia con el nuevo estado para actualizar
+                            ActivoPasivo pasivoParaActualizar = new ActivoPasivo
+                            {
+                                ActivoPasivoId = pasivoEncontrado.ActivoPasivoId,
+                                Descripcion = pasivoEncontrado.Descripcion,
+                                Fecha = pasivoEncontrado.Fecha,
+                                Mes = pasivoEncontrado.Mes,
+                                Monto = pasivoEncontrado.Monto,
+                                Categoria = pasivoEncontrado.Categoria,
+                                Estado = nuevoEstado
+                            };
+                            var resultadoPasivo = await _activoPasivoController.UpdateActivoPasivo(pasivoParaActualizar);
+                            if (resultadoPasivo.Title == MessageConstants.Titles.Success)
+                            {
+                                await MostrarAlerta("Éxito", "Pasivo actualizado correctamente");
+                            }
+                            else
+                            {
+                                await MostrarAlerta("Error", resultadoPasivo.Message);
+                            }
+                        }
+                    }
+                }
+
                 var resultado = await _chequeController.UpdateCheque(ChequeSeleccionado);
 
                 if (resultado)

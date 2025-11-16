@@ -88,11 +88,28 @@
 
             <Grid
                 ColumnDefinitions="0.2*,*,0.3*"
+                RowDefinitions="Auto,*"
                 HorizontalOptions="Center">
 
-                <dg:DataGrid
+                <!-- Botón Modificar Cheque arriba de la tabla -->
+                <Button
+                    Grid.Row="0"
                     Grid.Column="1"
-                    Margin="0,50"
+                    Margin="0,20,0,10"
+                    Command="{Binding MostrarPopupChequeModificarCommand}"
+                    StyleClass="FilledButton"
+                    BackgroundColor="#374151"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Text="Modificar Cheque"
+                    WidthRequest="200"
+                    HeightRequest="45"
+                    HorizontalOptions="Start" />
+
+                <dg:DataGrid
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,50"
                     BorderColor="Transparent"
                     IsRefreshing="{Binding IsBusy}"
                     ItemsSource="{Binding ListaCheques}"
@@ -185,6 +202,7 @@
 
                 <!--  Mensaje cuando la lista está vacía  -->
                 <Label
+                    Grid.Row="1"
                     Grid.Column="1"
                     Margin="0,50"
                     FontSize="18"
@@ -195,27 +213,27 @@
                     VerticalOptions="Center" />
 
 
-                <VerticalStackLayout
-                    Grid.Column="2"
-                    HorizontalOptions="Center"
-                    Spacing="15"
-                    VerticalOptions="Start"
-                    Margin="20,10,20,0">
+                <ScrollView Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" VerticalScrollBarVisibility="Default">
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        Spacing="15"
+                        VerticalOptions="Start"
+                        Margin="20,10,20,20">
 
-                    <!-- Panel de Resumen por Estado -->
-                    <Border
-                        BackgroundColor="#F6F1EB"
-                        Padding="15"
-                        Stroke="#D0B595"
-                        StrokeThickness="2"
-                        StrokeShape ="5">
-                        <VerticalStackLayout Spacing="12">
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="18"
-                                HorizontalOptions="Center"
-                                Text="Resumen por Estado"
-                                TextColor="Black" />
+                        <!-- Panel de Resumen por Estado -->
+                        <Border
+                            BackgroundColor="#F6F1EB"
+                            Padding="15"
+                            Stroke="#D0B595"
+                            StrokeThickness="2"
+                            StrokeShape ="5">
+                            <VerticalStackLayout Spacing="12">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="18"
+                                    HorizontalOptions="Center"
+                                    Text="Resumen por Estado"
+                                    TextColor="Black" />
 
                             <!-- Sin Estado -->
                             <Border
@@ -364,17 +382,11 @@
                                         TextColor="#F6F1EB" />
                                 </VerticalStackLayout>
                             </Border>
-                        </VerticalStackLayout>
-                    </Border>
+                            </VerticalStackLayout>
+                        </Border>
 
-                    <Button
-                        Margin="40,0"
-                        Command="{Binding MostrarPopupChequeModificarCommand}"
-                        StyleClass="OutlinedButton"
-                        Text="Modificar cheque"
-                        WidthRequest="180" />
-
-                </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </ScrollView>
 
             </Grid>
         </Grid>

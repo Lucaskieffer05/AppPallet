@@ -13,127 +13,140 @@
     x:DataType="viewModels:PresupuestoMostrarViewModel"
     Shell.NavBarIsVisible="False">
 
-
-
     <ContentPage.Resources>
         <converters:NullToZeroConverter x:Key="NullToZeroConverter" />
     </ContentPage.Resources>
 
-
-
     <Grid RowDefinitions="Auto,*">
-
-        <!--  Header  -->
+        <!-- Header -->
         <Border Grid.Row="0" Stroke="Black">
-            <Grid BackgroundColor="#374151" ColumnDefinitions="*,*">
-
+            <Grid BackgroundColor="#374151" ColumnDefinitions="*,Auto" Padding="20,15">
                 <Label
                     Grid.Column="0"
-                    Margin="10,0,0,0"
                     FontAttributes="Bold"
-                    FontSize="25"
+                    FontSize="24"
                     HorizontalOptions="Start"
                     Text="{Binding Titulo}"
                     TextColor="#F6F1EB"
                     VerticalOptions="Center" />
 
-                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Start">
+                <HorizontalStackLayout
+                    Grid.Column="1"
+                    Spacing="10"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center">
                     <Label
-                        FontSize="15"
-                        Text="Filtrar por mes:"
+                        FontSize="14"
+                        Text="Filtrar:"
                         TextColor="White"
                         VerticalOptions="Center" />
-
                     <material:PickerField
                         x:Name="MesPicker"
-                        Padding="5"
+                        Padding="8,5"
                         AccentColor="White"
                         AllowClear="False"
                         BorderColor="White"
                         InputBackgroundColor="#F6F1EB"
                         ItemsSource="{Binding FiltroMeses}"
                         SelectedIndex="{Binding MesIngresado, Mode=TwoWay}"
-                        TextColor="White" />
-
+                        TextColor="White"
+                        WidthRequest="130" />
                     <material:PickerField
                         x:Name="AñoPicker"
-                        Padding="5"
+                        Padding="8,5"
                         AccentColor="White"
                         AllowClear="False"
                         BorderColor="White"
                         InputBackgroundColor="#F6F1EB"
                         ItemsSource="{Binding FiltroAños}"
                         SelectedItem="{Binding AñoIngresado, Mode=TwoWay}"
-                        TextColor="White" />
+                        TextColor="White"
+                        WidthRequest="100" />
                 </HorizontalStackLayout>
             </Grid>
         </Border>
 
-        <!--  No hay Presupuestos  -->
-        <Border Grid.Row="1" IsVisible="{Binding NoHayPresu}">
-            <Label
-                Margin="0,30,0,0"
-                FontSize="15"
+        <!-- No hay Presupuestos -->
+        <Border Grid.Row="1" IsVisible="{Binding NoHayPresu}" Padding="20">
+            <VerticalStackLayout
                 HorizontalOptions="Center"
-                Text="No se encontraron presupuesto para esta fecha o empresa"
-                TextColor="Gray" />
-
+                Spacing="15"
+                VerticalOptions="Center">
+                <Label
+                    FontSize="48"
+                    HorizontalTextAlignment="Center"
+                    Text="📋" />
+                <Label
+                    FontSize="16"
+                    HorizontalTextAlignment="Center"
+                    Text="No se encontraron presupuestos para esta fecha o empresa"
+                    TextColor="#9CA3AF" />
+            </VerticalStackLayout>
         </Border>
 
-        <!--  Presupuestos  -->
-
-        <Border Grid.Row="1" Stroke="Transparent">
-
+        <!-- Presupuestos -->
+        <ScrollView Grid.Row="1" Padding="20,15">
             <CollectionView ItemsSource="{Binding Resultado}">
-
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" />
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="20" />
                 </CollectionView.ItemsLayout>
-
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:GastosYCostosDTO">
+                        <Border
+                            Padding="0"
+                            BackgroundColor="White"
+                            Stroke="#E5E7EB"
+                            StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
 
-                        <Grid>
-                            <Border
-                                Margin="40,20,40,0"
-                                Padding="10"
-                                BackgroundColor="#F8F6F2">
-
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="14" />
-                                </Border.StrokeShape>
-
-
-                                <VerticalStackLayout>
-
-                                    <Grid ColumnDefinitions="*,*">
-
-                                        <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
+                            <Grid RowDefinitions="Auto,*,Auto">
+                                <!-- Header del presupuesto -->
+                                <Border
+                                    Grid.Row="0"
+                                    BackgroundColor="#D0B595"
+                                    HeightRequest="70">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="16,16,0,0" />
+                                    </Border.StrokeShape>
+                                    <Grid
+                                        Padding="20,15"
+                                        ColumnDefinitions="*,Auto"
+                                        ColumnSpacing="15">
+                                        <HorizontalStackLayout
+                                            Grid.Column="0"
+                                            Spacing="10"
+                                            VerticalOptions="Center">
                                             <Label
                                                 FontAttributes="Bold"
-                                                FontSize="18"
+                                                FontSize="20"
                                                 Text="{Binding Costo.NombrePalletCliente}"
-                                                TextColor="#90894A"
+                                                TextColor="White"
                                                 VerticalTextAlignment="Center" />
-
                                             <ImageButton
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=MostrarPresupuestoCommand}"
                                                 CommandParameter="{Binding .}"
-                                                StyleClass="OutlinedButton"
+                                                BackgroundColor="Transparent"
+                                                HeightRequest="32"
+                                                WidthRequest="32"
                                                 VerticalOptions="Center">
                                                 <ImageButton.Source>
                                                     <FontImageSource
                                                         FontFamily="FASolid"
                                                         Glyph="{x:Static fa:Solid.PenToSquare}"
-                                                        Size="17"
-                                                        Color="#B5B28E" />
+                                                        Size="18"
+                                                        Color="White" />
                                                 </ImageButton.Source>
                                             </ImageButton>
-
                                         </HorizontalStackLayout>
 
-                                        <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
+                                        <HorizontalStackLayout
+                                            Grid.Column="1"
+                                            Spacing="8"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Center">
                                             <material:PickerField
                                                 x:Name="MesPicker"
                                                 Title="Mes"
@@ -142,11 +155,10 @@
                                                 BorderColor="#C9C9C9"
                                                 BorderThickness="1"
                                                 FontSize="11"
-                                                HeightRequest="60"
+                                                HeightRequest="50"
                                                 ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Meses}"
                                                 SelectedIndex="{Binding MesToCopy, Mode=TwoWay}"
-                                                WidthRequest="90" />
-
+                                                WidthRequest="80" />
                                             <material:PickerField
                                                 x:Name="AñoPicker"
                                                 Title="Año"
@@ -154,126 +166,213 @@
                                                 AllowClear="False"
                                                 BorderColor="#C9C9C9"
                                                 FontSize="11"
-                                                HeightRequest="60"
+                                                HeightRequest="50"
                                                 ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=Años}"
                                                 SelectedIndex="{Binding AñoToCopyIndex, Mode=TwoWay}"
-                                                WidthRequest="100" />
-
+                                                WidthRequest="90" />
                                             <ImageButton
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=CopiarPresupuestoCommand}"
                                                 CommandParameter="{Binding .}"
+                                                BackgroundColor="Transparent"
+                                                HeightRequest="50"
+                                                WidthRequest="50"
                                                 HorizontalOptions="End"
-                                                StyleClass="OutlinedButton"
                                                 VerticalOptions="Center">
                                                 <ImageButton.Source>
                                                     <FontImageSource
                                                         FontFamily="FASolid"
                                                         Glyph="{x:Static fa:Solid.ShareFromSquare}"
-                                                        Size="17"
-                                                        Color="#B5B28E" />
+                                                        Size="20"
+                                                        Color="White" />
                                                 </ImageButton.Source>
                                             </ImageButton>
-
                                         </HorizontalStackLayout>
-
-
                                     </Grid>
+                                </Border>
 
-
-                                    <Label
-                                        FontSize="14"
-                                        Text="{Binding Costo.Mes, StringFormat='Mes: {0:MM-yyyy}'}"
-                                        TextColor="#A2A2A2" />
-
-                                    <HorizontalStackLayout Spacing="16" VerticalOptions="Center">
-                                        <HorizontalStackLayout VerticalOptions="Center">
-                                            <Label Text="Precio: $" VerticalTextAlignment="Center" />
+                                <!-- Contenido principal -->
+                                <VerticalStackLayout Grid.Row="1" Padding="20,20" Spacing="15">
+                                    <!-- Fecha y precio principal -->
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                                        <Label
+                                            Grid.Column="0"
+                                            FontSize="14"
+                                            Text="{Binding Costo.Mes, StringFormat='📅 Mes: {0:MM/yyyy}'}"
+                                            TextColor="#6B7280"
+                                            VerticalOptions="Center" />
+                                        <HorizontalStackLayout
+                                            Grid.Column="1"
+                                            Spacing="10"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                FontSize="14"
+                                                Text="Precio:"
+                                                TextColor="#6B7280"
+                                                VerticalTextAlignment="Center" />
                                             <Editor
-                                                FontSize="16"
+                                                FontSize="18"
+                                                FontAttributes="Bold"
                                                 HorizontalTextAlignment="End"
                                                 Text="{Binding Costo.PrecioPallet}"
-                                                TextColor="#6D6D6D"
+                                                TextColor="#059669"
                                                 VerticalTextAlignment="Center"
-                                                WidthRequest="70" />
+                                                WidthRequest="100"
+                                                BackgroundColor="#F0FDF4"
+                                                HeightRequest="40" />
                                             <ImageButton
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PresupuestoMostrarViewModel}}, Path=GuardarPrecioCommand}"
                                                 CommandParameter="{Binding .}"
-                                                StyleClass="OutlinedButton"
+                                                BackgroundColor="#10B981"
+                                                HeightRequest="40"
+                                                WidthRequest="40"
                                                 VerticalOptions="Center">
                                                 <ImageButton.Source>
                                                     <FontImageSource
                                                         FontFamily="FASolid"
                                                         Glyph="{x:Static fa:Solid.FloppyDisk}"
-                                                        Size="17"
-                                                        Color="#8DB58F" />
+                                                        Size="18"
+                                                        Color="White" />
                                                 </ImageButton.Source>
                                             </ImageButton>
-
                                         </HorizontalStackLayout>
-                                        <Label
-                                            FontSize="16"
-                                            Text="{Binding Costo.GananciaPorCantPallet, StringFormat='Ganancia: ${0:N2}'}"
-                                            TextColor="#6D6D6D"
-                                            VerticalTextAlignment="Center" />
-                                        <Label
-                                            FontSize="16"
-                                            Text="{Binding GananciaPorCamion, StringFormat='Ganancia por camión: ${0:N2}'}"
-                                            TextColor="#6D6D6D"
-                                            VerticalTextAlignment="Center" />
-                                    </HorizontalStackLayout>
+                                    </Grid>
 
-                                    <Label FontSize="14" Text="{Binding CostoFinalPallet, StringFormat='Costo final del Pallet: ${0:N2}'}" />
+                                    <!-- Métricas principales en cards -->
+                                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                                        <Border
+                                            Grid.Column="0"
+                                            Padding="15,12"
+                                            BackgroundColor="#FEF3C7"
+                                            Stroke="#FCD34D"
+                                            StrokeThickness="1">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label
+                                                    FontSize="11"
+                                                    Text="GANANCIA"
+                                                    TextColor="#92400E"
+                                                    FontAttributes="Bold" />
+                                                <Label
+                                                    FontSize="18"
+                                                    FontAttributes="Bold"
+                                                    Text="{Binding Costo.GananciaPorCantPallet, StringFormat='${0:N2}'}"
+                                                    TextColor="#92400E" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                        <Border
+                                            Grid.Column="1"
+                                            Padding="15,12"
+                                            BackgroundColor="#DBEAFE"
+                                            Stroke="#60A5FA"
+                                            StrokeThickness="1">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label
+                                                    FontSize="11"
+                                                    Text="GANANCIA/CAMIÓN"
+                                                    TextColor="#1E40AF"
+                                                    FontAttributes="Bold" />
+                                                <Label
+                                                    FontSize="18"
+                                                    FontAttributes="Bold"
+                                                    Text="{Binding GananciaPorCamion, StringFormat='${0:N2}'}"
+                                                    TextColor="#1E40AF" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                        <Border
+                                            Grid.Column="2"
+                                            Padding="15,12"
+                                            BackgroundColor="#F3E8FF"
+                                            Stroke="#A78BFA"
+                                            StrokeThickness="1">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label
+                                                    FontSize="11"
+                                                    Text="COSTO FINAL"
+                                                    TextColor="#6B21A8"
+                                                    FontAttributes="Bold" />
+                                                <Label
+                                                    FontSize="18"
+                                                    FontAttributes="Bold"
+                                                    Text="{Binding CostoFinalPallet, StringFormat='${0:N2}'}"
+                                                    TextColor="#6B21A8" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </Grid>
 
-                                    <HorizontalStackLayout Padding="4" Spacing="16">
-                                        <Label
-                                            FontSize="14"
-                                            Text="{Binding Costo.CantidadPorDia, StringFormat='Cantidad/día: {0}'}"
-                                            TextColor="#A2A2A2" />
-                                        <Label
-                                            FontSize="14"
-                                            Text="{Binding Costo.HorasPorMes, StringFormat='Horas/mes: {0}'}"
-                                            TextColor="#A2A2A2" />
-                                        <Label
-                                            FontSize="14"
-                                            Text="{Binding TotalGasto.TotalGastoFijo, StringFormat='Gasto Fijo Total: ${0:N2}'}"
-                                            TextColor="#A2A2A2" />
-
-                                        <Label
-                                            FontSize="14"
-                                            Text="{Binding CantDiasCamion, StringFormat='Dias/Camion: {0:N2}'}"
-                                            TextColor="#A2A2A2" />
-                                        <Label
-                                            FontSize="14"
-                                            Text="{Binding HacenPorMes, StringFormat='Cantidad/Mes: {0:N0}'}"
-                                            TextColor="#A2A2A2" />
-                                        <Label
-                                            FontSize="14"
-                                            Text="{Binding GastoDelPallet, StringFormat='Gasto del Pallet: ${0:N2}'}"
-                                            TextColor="#A2A2A2" />
-                                        <Label
-                                            FontSize="14"
-                                            Text="{Binding CostoTotalCamion, StringFormat='Costo por Camión: ${0:N2}'}"
-                                            TextColor="#A2A2A2" />
-
-
-                                    </HorizontalStackLayout>
-
+                                    <!-- Detalles adicionales en grid organizado -->
+                                    <Border
+                                        Padding="15"
+                                        BackgroundColor="#F9FAFB"
+                                        Stroke="#E5E7EB"
+                                        StrokeThickness="1">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Grid
+                                            RowDefinitions="Auto,Auto,Auto"
+                                            ColumnDefinitions="*,*,*"
+                                            RowSpacing="12"
+                                            ColumnSpacing="15">
+                                            <Label
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                FontSize="13"
+                                                Text="{Binding Costo.CantidadPorDia, StringFormat='📦 Cantidad/día: {0}'}"
+                                                TextColor="#4B5563" />
+                                            <Label
+                                                Grid.Row="0"
+                                                Grid.Column="1"
+                                                FontSize="13"
+                                                Text="{Binding Costo.HorasPorMes, StringFormat='⏰ Horas/mes: {0}'}"
+                                                TextColor="#4B5563" />
+                                            <Label
+                                                Grid.Row="0"
+                                                Grid.Column="2"
+                                                FontSize="13"
+                                                Text="{Binding TotalGasto.TotalGastoFijo, StringFormat='💰 Gasto Fijo: ${0:N2}'}"
+                                                TextColor="#4B5563" />
+                                            <Label
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                FontSize="13"
+                                                Text="{Binding CantDiasCamion, StringFormat='🚚 Días/Camión: {0:N2}'}"
+                                                TextColor="#4B5563" />
+                                            <Label
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                FontSize="13"
+                                                Text="{Binding HacenPorMes, StringFormat='📊 Cantidad/Mes: {0:N0}'}"
+                                                TextColor="#4B5563" />
+                                            <Label
+                                                Grid.Row="1"
+                                                Grid.Column="2"
+                                                FontSize="13"
+                                                Text="{Binding GastoDelPallet, StringFormat='💵 Gasto Pallet: ${0:N2}'}"
+                                                TextColor="#4B5563" />
+                                            <Label
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="3"
+                                                FontSize="13"
+                                                FontAttributes="Bold"
+                                                Text="{Binding CostoTotalCamion, StringFormat='🚛 Costo por Camión: ${0:N2}'}"
+                                                TextColor="#1F2937" />
+                                        </Grid>
+                                    </Border>
                                 </VerticalStackLayout>
-
-
-                            </Border>
-                        </Grid>
-
-
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-
-
             </CollectionView>
-        </Border>
-
-
-
+        </ScrollView>
     </Grid>
-
 </ContentPage>

@@ -196,5 +196,26 @@ namespace AppPallet.Controllers
 
             }
         }
+
+        // Buscar egreso por descripción de cheque, monto y fecha
+        public async Task<Egreso?> BuscarEgresoPorCheque(string descripcionCheque, decimal monto, DateTime fechaPago)
+        {
+            try
+            {
+                // No usar AsNoTracking para que la entidad pueda ser modificada
+                return await _context.Egreso
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(e => 
+                        e.DescripEgreso == descripcionCheque &&
+                        e.Monto == monto &&
+                        e.Fecha.HasValue &&
+                        e.Fecha.Value.Date == fechaPago.Date);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al buscar egreso por cheque: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

@@ -20,6 +20,10 @@ namespace AppPallet.ViewModels
 
         readonly ChequeController _chequeController;
 
+        readonly EgresoController _egresoController;
+
+        readonly ActivoPasivoController _activoPasivoController;
+
 
         [ObservableProperty]
         public int estadoSeleccionado;
@@ -40,10 +44,12 @@ namespace AppPallet.ViewModels
         // ----------------------- Constructor -------------------------------
         // -------------------------------------------------------------------
 
-        public ChequeCrearViewModel(IPopupService popupService, ChequeController chequeController)
+        public ChequeCrearViewModel(IPopupService popupService, ChequeController chequeController, EgresoController egresoController, ActivoPasivoController activoPasivoController)
         {
             _popupService = popupService;
             _chequeController = chequeController;
+            _egresoController = egresoController;
+            _activoPasivoController = activoPasivoController;
             ChequeCreated = new Cheque();
             ChequeCreated.FechaEmision = DateTime.Today;
             ChequeCreated.FechaPago = DateTime.Today.AddDays(1);
@@ -78,6 +84,36 @@ namespace AppPallet.ViewModels
 
                 if (resultado)
                 {
+                    // Crear Egreso automáticamente
+                    string descripcionCheque = $"Cheque-{ChequeCreated.Proveedor}-{ChequeCreated.NumCheque ?? "Sin número"}";
+                    string comentarioEgreso = (ChequeCreated.Estado == 2) ? "Pagado" : "Sin pagar";
+
+                    Egreso nuevoEgreso = new Egreso
+                    {
+                        DescripEgreso = descripcionCheque,
+                        Fecha = ChequeCreated.FechaPago,
+                        Monto = ChequeCreated.Monto,
+                        Mes = ChequeCreated.FechaPago,
+                        Comentario = comentarioEgreso
+                    };
+
+                    await _egresoController.CreateEgreso(nuevoEgreso);
+
+                    // Crear Pasivo automáticamente
+                    string estadoPasivo = (ChequeCreated.Estado == 2) ? "Pagado" : "Sin Pagar";
+
+                    ActivoPasivo nuevoPasivo = new ActivoPasivo
+                    {
+                        Descripcion = descripcionCheque,
+                        Fecha = ChequeCreated.FechaPago,
+                        Mes = ChequeCreated.FechaPago,
+                        Monto = ChequeCreated.Monto,
+                        Categoria = "Pasivo",
+                        Estado = estadoPasivo
+                    };
+
+                    await _activoPasivoController.CreateActivoPasivo(nuevoPasivo);
+
                     await MostrarAlerta("Éxito", "Cheque creado correctamente");
                 }
                 else
