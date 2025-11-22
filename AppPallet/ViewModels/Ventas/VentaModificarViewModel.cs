@@ -221,9 +221,9 @@ namespace AppPallet.ViewModels
             {
                 Fecha = VentaModified.FechaEntrega ?? DateTime.Now,
                 DescripIngreso = descripcionIngreso,
-                Op = string.Empty,
-                Remito = string.Empty,
-                Factura = string.Empty,
+                Op = VentaModified.NumeroOrden,
+                Remito = VentaModified.NumeroRemito,
+                Factura = VentaModified.NumeroFactura,
                 Monto = montoTotal,
                 Comentario = comentarioEstado
             };

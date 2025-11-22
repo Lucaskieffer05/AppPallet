@@ -342,7 +342,7 @@ namespace AppPallet.ViewModels
                         Descripcion = pasivo.Descripcion,
                         Monto = pasivo.Monto,
                         Categoria = pasivo.Categoria,
-                        Estado = pasivo.Estado
+                        Estado = null
                     };
                     // Mirar si ya hay un pasivo con la misma descripción en el mes y año seleccionados
                     bool existe = await _activoPasivoController.ExistePasivoEnMes(nuevoPasivo.Descripcion, nuevoPasivo.Monto, nuevoPasivo.Mes);

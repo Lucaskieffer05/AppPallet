@@ -199,6 +199,9 @@ namespace AppPallet.Controllers
                                  ventaExistente.EmpresaId != ventaActualizada.EmpresaId ||
                                  ventaExistente.Comentario != ventaActualizada.Comentario ||
                                  ventaExistente.FechaEntregaEstimada != ventaActualizada.FechaEntregaEstimada ||
+                                 ventaExistente.NumeroFactura != ventaActualizada.NumeroFactura ||
+                                 ventaExistente.NumeroOrden != ventaActualizada.NumeroOrden ||
+                                 ventaExistente.NumeroRemito != ventaActualizada.NumeroRemito ||
                                  ventaExistente.FechaCobroEstimada != ventaActualizada.FechaCobroEstimada ||
                                  ventaExistente.FechaEntrega != ventaActualizada.FechaEntrega;
 
@@ -216,6 +219,9 @@ namespace AppPallet.Controllers
                 ventaExistente.PrecioManual = ventaActualizada.PrecioManual;
                 ventaExistente.EmpresaId = ventaActualizada.EmpresaId;
                 ventaExistente.Comentario = ventaActualizada.Comentario;
+                ventaExistente.NumeroFactura = ventaActualizada.NumeroFactura;
+                ventaExistente.NumeroOrden = ventaActualizada.NumeroOrden;
+                ventaExistente.NumeroRemito = ventaActualizada.NumeroRemito;
                 ventaExistente.FechaEntrega = ventaActualizada.FechaEntrega;
                 ventaExistente.FechaCobroEstimada = ventaActualizada.FechaCobroEstimada;
                 ventaExistente.FechaEntregaEstimada = ventaActualizada.FechaEntregaEstimada;
