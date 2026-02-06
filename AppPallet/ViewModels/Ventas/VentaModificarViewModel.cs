@@ -1,4 +1,4 @@
-﻿using AppPallet.Constants;
+using AppPallet.Constants;
 using AppPallet.Controllers;
 using AppPallet.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -130,37 +130,6 @@ namespace AppPallet.ViewModels
                         return;
                     }
 
-                    bool confirmarActivo = await mainPage.DisplayAlert("Confirmar", "¿Desea registrar también el activo de esta venta a partir de la fecha estimada de cobro?", "Sí", "No");
-
-                    var precioUnitario = (decimal)((VentaModified.CostoPorPallet?.PrecioPallet ?? VentaModified.PrecioManual) ?? 0);
-                    var nombrePalletCliente = VentaModified.CostoPorPallet?.NombrePalletCliente ?? "Sin presupuesto";
-                    var empresaNombre = VentaModified.CostoPorPallet?.Empresa?.NomEmpresa ?? VentaModified.Empresa?.NomEmpresa ?? "Sin empresa";
-                    var comentarioTexto = string.IsNullOrWhiteSpace(VentaModified.Comentario) ? "Sin comentarios" : VentaModified.Comentario;
-                    var montoTotal = VentaModified.CostoPorPalletId != null
-                        ? (decimal)(VentaModified.CantPallets * precioUnitario)
-                        : (decimal)(VentaModified.PrecioManual ?? 0);
-
-                    // Descripción según si hay presupuesto o precio manual
-                    var descripcionActivo = VentaModified.CostoPorPalletId != null
-                        ? $"Venta de {VentaModified.CantPallets} pallets - {empresaNombre}"
-                        : $"Venta a {empresaNombre} - {comentarioTexto}";
-
-                    //registrar activo
-                    if (confirmarActivo)
-                    {
-                        ActivoPasivo activo = new ActivoPasivo
-                        {
-                            Fecha = VentaModified.FechaCobroEstimada,
-                            Mes = (DateTime)VentaModified.FechaCobroEstimada,
-                            Descripcion = descripcionActivo,
-                            Monto = montoTotal,
-                            Categoria = "Activo",
-                            Estado = "Sin Pagar"
-                        };
-                        MessageResult resultActivo = await _activoPasivoController.CreateActivoPasivo(activo);
-                        await MostrarAlerta(resultActivo.Title, resultActivo.Message);
-                    }
-
                     // Restar stock
                     if (VentaModified.CostoPorPallet != null)
                     {
@@ -190,13 +159,18 @@ namespace AppPallet.ViewModels
                 await MostrarAlerta("Error", "No hay datos de venta para generar ingreso.");
                 return;
             }
+            if (VentaModified.FechaCobroEstimada == null)
+            {
+                await MostrarAlerta("Error", "No se puede generar ingreso y activo sin una fecha de cobro estimada o futura.");
+                return;
+            }
             var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
             if (mainPage == null)
             {
                 await MostrarAlerta("Error", "No se pudo obtener la página principal.");
                 return;
             }
-            bool confirmarIngreso = await mainPage.DisplayAlert("Confirmar", "¿Desea generar un ingreso para esta venta?", "Sí", "No");
+            bool confirmarIngreso = await mainPage.DisplayAlert("Confirmar", "¿Desea generar ingreso y activo para esta venta?", "Sí", "No");
             if (!confirmarIngreso)
             {
                 return;
@@ -229,6 +203,20 @@ namespace AppPallet.ViewModels
             };
             MessageResult resultIngreso = await _ingresoController.CreateIngreso(ingreso);
             await MostrarAlerta(resultIngreso.Title, resultIngreso.Message);
+
+            // Crear también el activo (cuentas por cobrar) - usa fecha de cobro estimada
+            var fechaActivo = (DateTime)VentaModified.FechaCobroEstimada;
+            ActivoPasivo activo = new ActivoPasivo
+            {
+                Fecha = fechaActivo,
+                Mes = fechaActivo,
+                Descripcion = descripcionIngreso,
+                Monto = montoTotal,
+                Categoria = "Activo",
+                Estado = "Sin Pagar"
+            };
+            MessageResult resultActivo = await _activoPasivoController.CreateActivoPasivo(activo);
+            await MostrarAlerta(resultActivo.Title, resultActivo.Message);
         }
 
         [RelayCommand]
