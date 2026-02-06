@@ -29,7 +29,17 @@ namespace AppPallet.ViewModels
         [ObservableProperty]
         public string tituloPage = string.Empty;
 
+        public bool EsPrecioManual => VentaModified?.CostoPorPalletId == null;
+
+        public bool MostrarPresupuesto => !EsPrecioManual;
+
         private string auxEstado = string.Empty;
+
+        partial void OnVentaModifiedChanged(Venta? value)
+        {
+            OnPropertyChanged(nameof(EsPrecioManual));
+            OnPropertyChanged(nameof(MostrarPresupuesto));
+        }
 
 
         // -------------------------------------------------------------------

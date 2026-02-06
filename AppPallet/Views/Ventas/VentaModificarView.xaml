@@ -13,6 +13,7 @@
 
     <ContentPage.Resources>
         <converters:NullableDateTimeConverter x:Key="NullableDateTimeConverter" />
+        <converters:DecimalToStringConverter x:Key="DecimalToStringConverter" />
     </ContentPage.Resources>
 
 
@@ -37,7 +38,15 @@
                 TextColor="Black" />
 
             <material:EditorField
+                Title="Precio final de venta ($) — no depende de la cantidad de pallets"
+                IsVisible="{Binding EsPrecioManual}"
+                Keyboard="Numeric"
+                Text="{Binding VentaModified.PrecioManual, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}"
+                TextColor="Black" />
+
+            <material:EditorField
                 Title="Cantidad Pallets:"
+                IsVisible="{Binding MostrarPresupuesto}"
                 Keyboard="Numeric"
                 Text="{Binding VentaModified.CantPallets, Mode=TwoWay}"
                 TextColor="Black" />
